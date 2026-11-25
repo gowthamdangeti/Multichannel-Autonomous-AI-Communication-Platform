@@ -1,0 +1,165 @@
+/* =============================================================================
+   POWDER BLUE — inspired by 21st.dev @serafimcloud/themes/powder-blue
+   A clean, calming ice-powder aesthetic. Soft airy powder blues, clean off-white
+   surfaces with subtle ice cyan/blue borders in light mode, and deep oceanic
+   midnight navy with glowing powder-blue highlights in dark mode.
+============================================================================= */
+[data-theme="powder-blue"],
+[data-theme="powder-blue"]:root {
+  --radius: 0.625rem;
+  --radius-sidebar: 0.75rem;
+  --radius-sidebar-item: 0.5rem;
+  --radius-card: 0.75rem;
+  --radius-button: 0.5rem;
+  --radius-input: 0.5rem;
+  --radius-badge: 0.5rem;
+
+  /* Surfaces & Core */
+  --background: #f4f8fb;
+  --foreground: #1e293b;
+  --card: #ffffff;
+  --card-foreground: #1e293b;
+  --popover: #ffffff;
+  --popover-foreground: #1e293b;
+
+  /* Powder Blue Primary */
+  --primary: #38bdf8;
+  --primary-foreground: #082f49;
+  --secondary: #e0f2fe;
+  --secondary-foreground: #0369a1;
+
+  --muted: #f0f7fc;
+  --muted-foreground: #64748b;
+  --text-faint: #94a3b8;
+  --accent: #e0f2fe;
+  --accent-foreground: #0284c7;
+
+  --destructive: #ef4444;
+  --destructive-foreground: #ffffff;
+
+  --border: #bae6fd;
+  --border-hover: #7dd3fc;
+  --input: #e0f2fe;
+  --ring: #38bdf8;
+
+  --text-body: #1e293b;
+  --text-description: #475569;
+  --text-muted: #64748b;
+
+  --cta: #0284c7;
+  --cta-foreground: #ffffff;
+  --accent-pink: #e0f2fe;
+  --accent-pink-foreground: #0369a1;
+  --archived-bar-bg: #f0f7fc;
+  --pink-50: #f0f9ff;
+  --pink-100: #e0f2fe;
+  --pink-200: #bae6fd;
+  --pink-300: #7dd3fc;
+
+  --status-success: #10b981;
+  --status-success-foreground: #ffffff;
+  --status-warning: #f59e0b;
+
+  --shadow-color: rgba(2, 132, 199, 0.08);
+  --surface-border-width: 1px;
+  --surface-shadow: 0 1px 3px var(--shadow-color);
+  --surface-shadow-lg: 0 10px 25px -5px var(--shadow-color);
+  --surface-shadow-sm: 0 1px 2px var(--shadow-color);
+  --button-shadow: 0 1px 2px var(--shadow-color);
+  --input-shadow: 0 1px 2px var(--shadow-color);
+  --surface-blur: 0px;
+  --press-offset: 1px;
+
+  --run-page: #f0f7fc;
+  --tabs-list: #e0f2fe;
+  --run-card-border: #bae6fd;
+  --run-child-surface: #f8fafc;
+  --run-nested-surface: #ffffff;
+  --run-chart-1: #0284c7;
+  --run-chart-2: #38bdf8;
+  --run-chart-3: #7dd3fc;
+  --table-header: #e0f2fe;
+
+  --sidebar: #f8fafc;
+  --sidebar-foreground: #1e293b;
+  --sidebar-primary: #0284c7;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #e0f2fe;
+  --sidebar-accent-foreground: #0369a1;
+  --sidebar-border: #e2e8f0;
+  --sidebar-ring: #38bdf8;
+}
+
+[data-theme="powder-blue"].dark,
+.dark[data-theme="powder-blue"] {
+  --background: #0b1329;
+  --foreground: #f0f9ff;
+  --card: #111d38;
+  --card-foreground: #f0f9ff;
+  --popover: #111d38;
+  --popover-foreground: #f0f9ff;
+
+  --primary: #38bdf8;
+  --primary-foreground: #082f49;
+  --secondary: #162646;
+  --secondary-foreground: #bae6fd;
+
+  --muted: #162646;
+  --muted-foreground: #94a3b8;
+  --text-faint: #64748b;
+  --accent: #192c52;
+  --accent-foreground: #7dd3fc;
+
+  --destructive: #f87171;
+  --destructive-foreground: #ffffff;
+
+  --border: #1e3a5f;
+  --border-hover: #295282;
+  --input: #1e3a5f;
+  --ring: #38bdf8;
+
+  --text-body: #f0f9ff;
+  --text-description: #94a3b8;
+  --text-muted: #64748b;
+
+  --cta: #38bdf8;
+  --cta-foreground: #082f49;
+  --accent-pink: #192c52;
+  --accent-pink-foreground: #7dd3fc;
+  --archived-bar-bg: #111d38;
+  --pink-50: #0f1c36;
+  --pink-100: #162646;
+  --pink-200: #1e3a5f;
+  --pink-300: #295282;
+
+  --status-success: #34d399;
+  --status-success-foreground: #064e3b;
+  --status-warning: #fbbf24;
+
+  --shadow-color: rgba(0, 0, 0, 0.45);
+  --surface-border-width: 1px;
+  --surface-shadow: 0 4px 6px -1px var(--shadow-color);
+  --surface-shadow-lg: 0 10px 25px -5px var(--shadow-color);
+  --surface-shadow-sm: 0 1px 2px var(--shadow-color);
+  --button-shadow: 0 2px 4px var(--shadow-color);
+  --input-shadow: none;
+
+  --run-page: #0b1329;
+  --tabs-list: #111d38;
+  --run-card-border: #1e3a5f;
+  --run-child-surface: #0f1c36;
+  --run-nested-surface: #162646;
+  --run-chart-1: #38bdf8;
+  --run-chart-2: #7dd3fc;
+  --run-chart-3: #bae6fd;
+  --table-header: #111d38;
+
+  --sidebar: #080f20;
+  --sidebar-foreground: #f0f9ff;
+  --sidebar-primary: #38bdf8;
+  --sidebar-primary-foreground: #082f49;
+  --sidebar-accent: #162646;
+  --sidebar-accent-foreground: #7dd3fc;
+  --sidebar-border: #162646;
+  --sidebar-ring: #38bdf8;
+}

@@ -91,9 +91,11 @@ export default function RootLayout({
                 }
                 try {
                   var designTheme = localStorage.getItem('design-theme-v2');
-                  var validThemes = ['monochrome', 'brutalist', 'minimalist', 'glassmorphism', 'modernism'];
+                  var validThemes = ['monochrome', 'powder-blue', 'brutalist', 'minimalist', 'glassmorphism', 'modernism'];
                   if (designTheme && validThemes.indexOf(designTheme) !== -1) {
                     document.documentElement.setAttribute('data-theme', designTheme);
+                  } else {
+                    document.documentElement.setAttribute('data-theme', 'powder-blue');
                   }
                 } catch (e) {
                   // data-theme="monochrome" from the server-rendered markup stands.

@@ -22,6 +22,7 @@ import {
   Smartphone,
   TrendingUp,
   Users,
+  Video,
   Wrench,
 } from "lucide-react";
 
@@ -69,6 +70,8 @@ export const NAV_TREE: SidebarTreeSection[] = [
       { title: "WhatsApp agents", url: "/whatsapp/agents", icon: MessageCircle },
       { title: "Chat agents", url: "/chat/agents", icon: MessageSquare },
       { title: "Email agents", url: "/email/agents", icon: Mail },
+      { title: "SMS agents", url: "/chat/agents?filter=sms", icon: Smartphone },
+      { title: "Meeting Intelligence", url: "/chat/agents?filter=meeting_intelligence", icon: Video },
     ],
   },
   {
@@ -80,6 +83,8 @@ export const NAV_TREE: SidebarTreeSection[] = [
       { title: "WhatsApp conversations", url: "/whatsapp/conversations", icon: MessageCircle },
       { title: "Chat conversations", url: "/chat/conversations", icon: MessageSquare },
       { title: "Email conversations", url: "/email/inbox", icon: Mail },
+      { title: "SMS logs", url: "/chat/conversations?filter=sms", icon: Smartphone },
+      { title: "Meeting notes", url: "/recordings", icon: Video },
     ],
   },
 ];

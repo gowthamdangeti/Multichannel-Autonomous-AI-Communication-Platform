@@ -500,9 +500,10 @@ export default function ViewAgentPage() {
                 if (numRange.min !== null || numRange.max !== null) {
                     // tokenUsage templates must compare against token usage,
                     // not call duration (previous code used duration for both).
+                    const runRecord = run as Record<string, unknown>;
                     const metric =
                         filter.attribute.id === "tokenUsage"
-                            ? (run as any).autonomous_ai_os_token_usage || (run as any).convozent_token_usage || 0
+                            ? (runRecord.autonomous_ai_os_token_usage as number) || (runRecord.convozent_token_usage as number) || 0
                             : run.call_duration_seconds || 0;
                     if (numRange.min !== null && metric < numRange.min) return false;
                     if (numRange.max !== null && metric > numRange.max) return false;
@@ -914,9 +915,11 @@ export default function ViewAgentPage() {
                                                         {formatDuration(run.call_duration_seconds || 0)}
                                                     </TableCell>
                                                     <TableCell className="text-xs font-medium text-right">
-                                                        {((run as any).autonomous_ai_os_token_usage ?? (run as any).convozent_token_usage) != null
-                                                            ? Number((run as any).autonomous_ai_os_token_usage ?? (run as any).convozent_token_usage).toLocaleString()
-                                                            : '—'}
+                                                        {(() => {
+                                                            const r = run as Record<string, unknown>;
+                                                            const tokenVal = r.autonomous_ai_os_token_usage ?? r.convozent_token_usage;
+                                                            return tokenVal != null ? Number(tokenVal).toLocaleString() : '—';
+                                                        })()}
                                                     </TableCell>
                                                     <TableCell>
                                                         <DispositionBadge disposition={run.disposition} />

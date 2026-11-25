@@ -10,11 +10,12 @@
 
 import { createContext, useContext, useEffect, useState } from "react";
 
-export const DESIGN_THEMES = ["monochrome", "brutalist", "minimalist", "glassmorphism", "modernism"] as const;
+export const DESIGN_THEMES = ["monochrome", "powder-blue", "brutalist", "minimalist", "glassmorphism", "modernism"] as const;
 export type DesignTheme = (typeof DESIGN_THEMES)[number];
 
 export const DESIGN_THEME_LABELS: Record<DesignTheme, string> = {
   monochrome: "Monochrome",
+  "powder-blue": "Powder Blue",
   brutalist: "Neo-Brutalism",
   minimalist: "Minimalist",
   glassmorphism: "Glassmorphism",
@@ -22,7 +23,7 @@ export const DESIGN_THEME_LABELS: Record<DesignTheme, string> = {
 };
 
 const STORAGE_KEY = "design-theme-v2";
-const DEFAULT_THEME: DesignTheme = "monochrome";
+const DEFAULT_THEME: DesignTheme = "powder-blue";
 
 interface DesignThemeContextType {
   theme: DesignTheme;

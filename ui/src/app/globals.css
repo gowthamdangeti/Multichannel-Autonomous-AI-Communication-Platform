@@ -4,6 +4,7 @@
 @import "./themes/glassmorphism.css";
 @import "./themes/modernism.css";
 @import "./themes/monochrome.css";
+@import "./themes/powder-blue.css";
 
 @plugin "tailwindcss-animate";
 

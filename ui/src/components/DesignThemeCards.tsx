@@ -12,6 +12,7 @@ import { cn } from "@/lib/utils";
 
 const PREVIEW_LABELS: Record<DesignTheme, string> = {
   monochrome: "Monochrome",
+  "powder-blue": "Powder Blue",
   brutalist: "Neo-Brutalism",
   minimalist: "Minimalist",
   glassmorphism: "Glassmorphism",
@@ -131,8 +132,29 @@ function ModernismPreview() {
   );
 }
 
+function PowderBluePreview() {
+  return (
+    <div className="flex h-full w-full gap-2 bg-[#f4f8fb] p-2">
+      <div className="w-1/4 space-y-1.5 pt-1">
+        <div className="h-1.5 w-full rounded-full bg-[#0284c7]/40" />
+        <div className="h-1.5 w-3/4 rounded-full bg-[#38bdf8]/30" />
+        <div className="h-1.5 w-3/4 rounded-full bg-[#38bdf8]/20" />
+      </div>
+      <div className="flex flex-1 flex-col gap-1.5 rounded-md bg-white p-1.5 border border-[#bae6fd]">
+        <div className="grid grid-cols-3 gap-1">
+          <div className="h-5 rounded-sm border border-[#bae6fd] bg-[#f0f9ff]" />
+          <div className="h-5 rounded-sm border border-[#bae6fd] bg-[#e0f2fe]" />
+          <div className="h-5 rounded-sm border border-[#bae6fd] bg-[#bae6fd]" />
+        </div>
+        <div className="flex-1 rounded-sm border border-[#bae6fd] bg-[#f0f9ff]" />
+      </div>
+    </div>
+  );
+}
+
 const PREVIEWS: Record<DesignTheme, React.FC> = {
   monochrome: MonochromePreview,
+  "powder-blue": PowderBluePreview,
   brutalist: NeoBrutalismPreview,
   minimalist: MinimalistPreview,
   glassmorphism: GlassmorphismPreview,

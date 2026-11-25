@@ -6,9 +6,9 @@
 import assert from "node:assert/strict";
 
 import {
+  accessibleUsersLabel,
   accessSources,
   accessStatusOf,
-  accessibleUsersLabel,
   collectDescendantIds,
   collectOrgMembers,
   computeAccessMatrix,
@@ -16,8 +16,8 @@ import {
   grantsForSelection,
   indexByManager,
   normalizePolicy,
-  recommendPolicyForTargets,
   type OrgMember,
+  recommendPolicyForTargets,
 } from "../src/app/teams/components/agentAccess.ts";
 import type { HierarchyNode } from "../src/app/teams/components/types.ts";
 

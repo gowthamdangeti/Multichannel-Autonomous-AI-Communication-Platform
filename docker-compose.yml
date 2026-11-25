@@ -1,12 +1,40 @@
+x-backend-base: &backend-base
+  restart: unless-stopped
+  build:
+    context: .
+    dockerfile: api/Dockerfile
+  env_file:
+    - api/.env
+  environment:
+    ENVIRONMENT: local
+    DEPLOYMENT_MODE: oss
+    DATABASE_URL: postgresql+asyncpg://postgres:postgres@postgres:5432/postgres
+    REDIS_URL: redis://:redissecret@redis:6379/0
+    MINIO_ENDPOINT: minio:9000
+    BACKEND_API_ENDPOINT: http://localhost:8000
+    UI_APP_URL: http://localhost:3000
+    OPENWA_BASE_URL: http://openwa:2785
+    OPENWA_WEBHOOK_CALLBACK_BASE_URL: http://backend:8000
+    LOG_TO_FILE: "false"
+    PYTHONPATH: /app
+    GMAIL_CLIENT_ID: ${GMAIL_CLIENT_ID:-${GOOGLE_CLIENT_ID:-}}
+    GMAIL_CLIENT_SECRET: ${GMAIL_CLIENT_SECRET:-${GOOGLE_CLIENT_SECRET:-}}
+    GMAIL_REDIRECT_URI: ${GMAIL_REDIRECT_URI:-http://localhost:3000/email/settings}
+    WATCHFILES_FORCE_POLLING: "true"
+  volumes:
+    - ./api:/app/api
+    - /app/api/mcp_server/ts_validator/node_modules
+  networks:
+    - app-network
+
 services:
   postgres:
-    image: pgvector/pgvector:pg16
-    container_name: ai_os_postgres
-    restart: always
+    image: pgvector/pgvector:pg17
+    restart: unless-stopped
     environment:
-      POSTGRES_DB: ${POSTGRES_DB:-autonomous_ai_os}
-      POSTGRES_USER: ${POSTGRES_USER:-postgres}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: postgres
     ports:
       - "5432:5432"
     volumes:
@@ -14,128 +42,139 @@ services:
       - ./infrastructure/postgres/init.sql:/docker-entrypoint-initdb.d/init.sql
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres"]
-      interval: 5s
-      timeout: 5s
-      retries: 5
+      interval: 3s
+      timeout: 3s
+      retries: 10
     networks:
-      - ai_os_network
+      - app-network
 
   redis:
-    image: redis:7-alpine
-    container_name: ai_os_redis
-    restart: always
+    image: redis:7
+    restart: unless-stopped
+    command: --requirepass redissecret
     ports:
       - "6379:6379"
     volumes:
       - redis_data:/data
     healthcheck:
-      test: ["CMD", "redis-cli", "ping"]
-      interval: 5s
-      timeout: 5s
-      retries: 5
+      test: ["CMD", "redis-cli", "-a", "redissecret", "ping"]
+      interval: 3s
+      timeout: 10s
+      retries: 10
     networks:
-      - ai_os_network
+      - app-network
 
   minio:
-    image: cgr.dev/chainguard/minio:latest
-    container_name: ai_os_minio
-    restart: always
-    environment:
-      MINIO_ROOT_USER: ${MINIO_ROOT_USER:-minioadmin}
-      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD:-minioadmin}
+    image: quay.io/minio/minio:latest
+    restart: unless-stopped
     command: server /data --console-address ":9001"
+    environment:
+      MINIO_ROOT_USER: minioadmin
+      MINIO_ROOT_PASSWORD: minioadmin
+      MINIO_API_CORS_ALLOW_ORIGIN: "*"
     ports:
       - "9000:9000"
       - "9001:9001"
     volumes:
       - minio_data:/data
     healthcheck:
-      test: ["CMD", "bash", "-c", "exec 3<>/dev/tcp/localhost/9000"]
+      test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
       interval: 10s
       timeout: 5s
       retries: 5
     networks:
-      - ai_os_network
+      - app-network
 
   backend:
-    build:
-      context: ./backend
-      dockerfile: ../docker/Dockerfile.backend
-    container_name: ai_os_backend
-    restart: unless-stopped
-    depends_on:
-      postgres:
-        condition: service_healthy
-      redis:
-        condition: service_healthy
-    env_file:
-      - .env
-    environment:
-      - DATABASE_URL=postgresql+asyncpg://postgres:postgres@postgres:5432/autonomous_ai_os
-      - REDIS_URL=redis://redis:6379/0
-      - MINIO_ENDPOINT=minio:9000
+    <<: *backend-base
+    command:
+      - sh
+      - -c
+      - >-
+        alembic -c api/alembic.ini upgrade head &&
+        exec uvicorn api.app:app --host 0.0.0.0 --port 8000
+        --reload --reload-dir /app/api
     ports:
       - "8000:8000"
-    volumes:
-      - ./backend:/app
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8000/api/v1/health"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-    networks:
-      - ai_os_network
-
-  worker:
-    build:
-      context: ./backend
-      dockerfile: ../docker/Dockerfile.worker
-    container_name: ai_os_worker
-    restart: unless-stopped
     depends_on:
       postgres:
         condition: service_healthy
       redis:
         condition: service_healthy
-    env_file:
-      - .env
-    environment:
-      - DATABASE_URL=postgresql+asyncpg://postgres:postgres@postgres:5432/autonomous_ai_os
-      - REDIS_URL=redis://redis:6379/0
-      - MINIO_ENDPOINT=minio:9000
-    volumes:
-      - ./backend:/app
-    networks:
-      - ai_os_network
+      minio:
+        condition: service_healthy
+    healthcheck:
+      test:
+        - CMD
+        - python
+        - -c
+        - import urllib.request; urllib.request.urlopen('http://localhost:8000/api/v1/health')
+      interval: 5s
+      timeout: 30s
+      retries: 10
+      start_period: 25s
 
-  frontend:
-    build:
-      context: ./ui
-      dockerfile: ../docker/Dockerfile.frontend
-    container_name: ai_os_frontend
-    restart: unless-stopped
+  arq:
+    <<: *backend-base
+    command:
+      - watchfiles
+      - --target-type
+      - command
+      - python -m arq api.tasks.arq.WorkerSettings --custom-log-dict api.tasks.arq.LOG_CONFIG
+      - /app/api
     depends_on:
       backend:
         condition: service_healthy
-    ports:
-      - "3000:3000"
+
+  campaign_orchestrator:
+    <<: *backend-base
+    command:
+      - watchfiles
+      - --target-type
+      - command
+      - python -m api.services.campaign.campaign_orchestrator
+      - /app/api
+    depends_on:
+      backend:
+        condition: service_healthy
+
+  ari_manager:
+    <<: *backend-base
+    command:
+      - watchfiles
+      - --target-type
+      - command
+      - python -m api.services.telephony.ari_manager
+      - /app/api
+    depends_on:
+      backend:
+        condition: service_healthy
+
+  ui:
+    restart: unless-stopped
+    build:
+      context: .
+      dockerfile: ui/Dockerfile.dev
+    env_file:
+      - ui/.env
+    environment:
+      BACKEND_URL: http://backend:8000
+      MINI_URL: http://minio:9000
+      NEXT_PUBLIC_BACKEND_URL: http://localhost:8000
+      NEXT_TELEMETRY_DISABLED: "1"
+      WATCHPACK_POLLING: "true"
+      CHOKIDAR_USEPOLLING: "true"
     volumes:
       - ./ui:/app
       - /app/node_modules
       - /app/.next
-    env_file:
-      - ui/.env
-    environment:
-      - BACKEND_URL=http://backend:8000
-      - MINI_URL=http://minio:9000
-      - NEXT_PUBLIC_BACKEND_URL=http://localhost:8000
-      - NEXT_PUBLIC_API_URL=http://localhost:8000/api/v1
-      - NEXT_PUBLIC_WS_URL=ws://localhost:8000/api/v1/ws
-      - NEXT_TELEMETRY_DISABLED=1
-      - WATCHPACK_POLLING=true
-      - CHOKIDAR_USEPOLLING=true
+    ports:
+      - "3000:3000"
+    depends_on:
+      backend:
+        condition: service_healthy
     networks:
-      - ai_os_network
+      - app-network
 
 volumes:
   postgres_data:
@@ -143,5 +182,5 @@ volumes:
   minio_data:
 
 networks:
-  ai_os_network:
+  app-network:
     driver: bridge

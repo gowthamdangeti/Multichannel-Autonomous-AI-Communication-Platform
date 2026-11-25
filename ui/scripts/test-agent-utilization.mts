@@ -4,8 +4,8 @@ import assert from "node:assert/strict";
 
 import {
   AGENT_UTILIZATION_OPTIONS,
-  DEFAULT_AGENT_UTILIZATION,
   agentUtilizationOption,
+  DEFAULT_AGENT_UTILIZATION,
 } from "../src/constants/agentUtilization.ts";
 
 // The three policies the backend accepts, in display order.

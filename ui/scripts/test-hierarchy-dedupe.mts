@@ -9,14 +9,14 @@ import {
   buildHierarchyLayout,
   collectRenderedUserIds,
 } from "../src/app/teams/components/hierarchyLayout.ts";
-import type {
-  HierarchyNode,
-  MemberItem,
-} from "../src/app/teams/components/types.ts";
 import {
   getRoleAvatarStyle,
   getRoleLabel,
 } from "../src/app/teams/components/roleStyles.ts";
+import type {
+  HierarchyNode,
+  MemberItem,
+} from "../src/app/teams/components/types.ts";
 
 function member(
   user_id: number,

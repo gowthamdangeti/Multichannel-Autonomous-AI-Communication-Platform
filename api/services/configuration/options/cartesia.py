@@ -1,0 +1,93 @@
+from api.services.configuration.locales import base_codes
+
+CARTESIA_TTS_MODELS = ("sonic-3.5", "sonic-turbo", "sonic-multilingual", "sonic")
+
+# Cartesia library voices: UUID -> (display name, gender). UUIDs must match Cartesia's
+# catalog exactly; custom/cloned voices can still be entered as custom input.
+CARTESIA_TTS_VOICE_INFO: dict[str, tuple[str, str]] = {
+    "694f9389-aac1-45b6-b726-9d9369183238": ("Sarah", "female"),
+    "a0e99841-438c-4a64-b679-ae501e7d6091": ("Barbershop Man", "male"),
+    "79a125e8-cd45-4c13-8a67-188112f4dd22": ("British Lady", "female"),
+    "b7d50908-b17c-442d-ad8d-810c63997ed9": ("California Girl", "female"),
+    "156fb8d2-335b-4950-9cb3-a2d33befec77": ("Helpful Woman", "female"),
+    "829ccd10-f8b3-43cd-b8a0-4aeaa81f3b30": ("Customer Support Lady", "female"),
+    "a167e0f3-df7e-4d52-a9c3-f949145efdab": ("Customer Support Man", "male"),
+    "95856005-0332-41b0-935f-352e296aa0df": ("Classy British Man", "male"),
+    "63ff761f-c1e8-414b-b969-d1833d1c870c": ("Confident British Man", "male"),
+    "71a7ad14-091c-4e8e-a314-022ece01c121": ("British Reading Lady", "female"),
+    "d46abd1d-2d02-43e8-819f-51fb652c1c61": ("Newsman", "male"),
+    "bf991597-6c13-47e4-8411-91ec2de5c466": ("Newslady", "female"),
+    "7360f116-6306-4e9a-b487-1235f35a0f21": ("Commercial Man", "male"),
+    "c2ac25f9-ecc4-4f56-9095-651354df60c0": ("Commercial Lady", "female"),
+    "b043dea0-a007-4bbe-a708-769dc0d0c569": ("Wise Man", "male"),
+    "c8605446-247c-4d39-acd4-8f4c28aa363c": ("Wise Lady", "female"),
+    "ee7ea9f8-c0c1-498c-9279-764d6b56d189": ("Polite Man", "male"),
+    "00a77add-48d5-4ef6-8157-71e5437b282d": ("Calm Lady", "female"),
+    "248be419-c632-4f23-adf1-5324ed7dbf1d": ("Professional Woman", "female"),
+    "3b554273-4299-48b9-9aaf-eefd438e3941": ("Indian Lady", "female"),
+    "638efaaa-4d0c-442e-b701-3fae16aad012": ("Indian Man", "male"),
+    "ff1bb1a9-c582-4570-9670-5f46169d0fc8": ("Indian Customer Support Lady", "female"),
+    "95d51f79-c397-46f9-b49a-23763d3eaa2d": ("Hinglish Speaking Lady", "female"),
+    "c1abd502-9231-4558-a054-10ac950c356d": ("Hindi Narrator Woman", "female"),
+    "7f423809-0011-4658-ba48-a411f5e516ba": ("Hindi Narrator Man", "male"),
+    "ac7ee4fa-25db-420d-bfff-f590d740aeb2": ("Hindi Calm Man", "male"),
+    "2deb3edf-b9d8-4d06-8db9-5742fb8a3cb2": ("Spanish Narrator Lady", "female"),
+    "a67e0421-22e0-4d5b-b586-bd4a64aee41d": ("Spanish Narrator Man", "male"),
+    "a249eaff-1e96-4d2c-b23b-12efa4f66f41": ("French Conversational Lady", "female"),
+    "ab7c61f5-3daa-47dd-a23b-4ac0aac5f5c3": ("Friendly French Man", "male"),
+    "b9de4a89-2257-424b-94c2-db18ba68c81a": ("German Woman", "female"),
+    "fb9fcab6-aba5-49ec-8d7e-3f1100296dde": ("Friendly German Man", "male"),
+}
+
+CARTESIA_TTS_VOICES = tuple(CARTESIA_TTS_VOICE_INFO)
+CARTESIA_TTS_VOICE_GENDERS = {k: v[1] for k, v in CARTESIA_TTS_VOICE_INFO.items()}
+CARTESIA_TTS_VOICE_NAMES = {k: v[0] for k, v in CARTESIA_TTS_VOICE_INFO.items()}
+
+# Cartesia sends plain languages (service_factory drops the region), so
+# en-US / en-GB / en-IN would all sound the same.
+CARTESIA_TTS_LANGUAGES = base_codes((
+    "en-US",
+    "en-GB",
+    "en-AU",
+    "en-IN",
+    "hi-IN",
+    "es-ES",
+    "es-MX",
+    "fr-FR",
+    "fr-CA",
+    "de-DE",
+    "ja-JP",
+    "pt-BR",
+    "pt-PT",
+    "zh-CN",
+    "zh-TW",
+    "it-IT",
+    "ko-KR",
+    "nl-NL",
+    "pl-PL",
+    "ru-RU",
+    "sv-SE",
+    "tr-TR",
+    "ar-SA",
+    "ar-AE",
+    "bn-IN",
+    "cs-CZ",
+    "da-DK",
+    "el-GR",
+    "fi-FI",
+    "he-IL",
+    "hu-HU",
+    "id-ID",
+    "ms-MY",
+    "no-NO",
+    "ro-RO",
+    "sk-SK",
+    "tl-PH",
+    "ta-IN",
+    "te-IN",
+    "th-TH",
+    "uk-UA",
+    "vi-VN",
+    "bg-BG",
+    "hr-HR",
+))
