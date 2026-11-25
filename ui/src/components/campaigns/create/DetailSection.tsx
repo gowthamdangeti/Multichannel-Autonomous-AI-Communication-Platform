@@ -13,7 +13,7 @@ export interface DetailSectionProps {
     className?: string;
 }
 
-/** A titled card inside an off-canvas drawer tab matching Convozent org drawer conventions. */
+/** A titled card inside an off-canvas drawer tab matching Autonomous AI OS org drawer conventions. */
 export function DetailSection({ title, description, action, children, className }: DetailSectionProps) {
     return (
         <section className={cn(DRAWER_CARD, "space-y-4", className)}>

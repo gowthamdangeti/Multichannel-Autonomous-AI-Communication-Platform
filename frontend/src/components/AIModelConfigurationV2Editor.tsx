@@ -11,9 +11,9 @@ import {
 } from "@/components/ServiceConfigurationForm";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
-type ModelMode = "realtime" | "convozent" | "byok";
+type ModelMode = "realtime" | "autonomous_ai_os" | "byok";
 
-interface ConvozentDefaults {
+interface Autonomous AI OSDefaults {
     voices: string[];
     allow_custom_input?: boolean;
     speeds: number[];
@@ -26,7 +26,7 @@ interface ConvozentDefaults {
 }
 
 export interface ModelConfigurationDefaultsV2 {
-    convozent: ConvozentDefaults;
+    autonomous_ai_os: Autonomous AI OSDefaults;
     byok: {
         pipeline: ServiceConfigurationDefaults;
         realtime: {
@@ -63,12 +63,12 @@ function asRecord(value: unknown): Record<string, unknown> | null {
         : null;
 }
 
-function isConvozentEffectiveConfig(config: Record<string, unknown> | null | undefined): boolean {
+function isAutonomous AI OSEffectiveConfig(config: Record<string, unknown> | null | undefined): boolean {
     if (!config || config.is_realtime) return false;
     const llm = asRecord(config.llm);
     const tts = asRecord(config.tts);
     const stt = asRecord(config.stt);
-    return llm?.provider === "convozent" && tts?.provider === "convozent" && stt?.provider === "convozent";
+    return llm?.provider === "autonomous_ai_os" && tts?.provider === "autonomous_ai_os" && stt?.provider === "autonomous_ai_os";
 }
 
 function byokDefaults(defaults: ModelConfigurationDefaultsV2): ServiceConfigurationDefaults {
@@ -146,7 +146,7 @@ function getByokInitialConfig(
         return matchesTab(byokConfiguration) ? byokConfiguration : emptyByokInitialConfig(wantRealtime);
     }
 
-    if (configuration?.mode === "convozent" || isConvozentEffectiveConfig(effectiveConfiguration)) {
+    if (configuration?.mode === "autonomous_ai_os" || isAutonomous AI OSEffectiveConfig(effectiveConfiguration)) {
         return emptyByokInitialConfig(wantRealtime);
     }
 
@@ -158,7 +158,7 @@ function preferredMode(
     configuration: Record<string, unknown> | null,
     effectiveConfiguration: Record<string, unknown> | null,
 ): ModelMode {
-    // Managed ("convozent") model services have been removed — legacy managed
+    // Managed ("autonomous_ai_os") model services have been removed — legacy managed
     // configs fall back to BYOK.
     if (configuration?.mode === "byok") {
         return asRecord(configuration.byok)?.mode === "realtime" ? "realtime" : "byok";
@@ -195,7 +195,7 @@ function requireByokService(
     if (
         !serviceConfiguration
         || !serviceConfiguration.provider
-        || serviceConfiguration.provider === "convozent"
+        || serviceConfiguration.provider === "autonomous_ai_os"
         || !hasRequiredApiKey(service, serviceConfiguration, defaults)
     ) {
         throw new Error(`${service} configuration is required`);
@@ -205,7 +205,7 @@ function requireByokService(
 
 function optionalByokService(config: Record<string, unknown>, service: ServiceSegment): Record<string, unknown> | undefined {
     const serviceConfiguration = asRecord(config[service]);
-    if (!serviceConfiguration?.provider || serviceConfiguration.provider === "convozent") return undefined;
+    if (!serviceConfiguration?.provider || serviceConfiguration.provider === "autonomous_ai_os") return undefined;
     return serviceConfiguration;
 }
 

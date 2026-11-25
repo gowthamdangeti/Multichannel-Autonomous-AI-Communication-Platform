@@ -103,8 +103,8 @@ assert.match(toUnreportedLlmNote({ ...usage, unreported_llm_requests: 11 }) ?? "
 assert.match(toUnreportedLlmNote({ ...usage, unreported_llm_requests: 1 }) ?? "", /^1 LLM reply ended early/);
 
 // The shortened ID keeps the run number, and short IDs stay whole.
-assert.equal(truncateClientReferenceId("convozent-local-run-240"), "convozent…run-240");
-assert.equal(truncateClientReferenceId("convozent-production-run-12345"), "convozent…run-12345");
+assert.equal(truncateClientReferenceId("autonomous_ai_os-local-run-240"), "autonomous_ai_os…run-240");
+assert.equal(truncateClientReferenceId("autonomous_ai_os-production-run-12345"), "autonomous_ai_os…run-12345");
 assert.equal(truncateClientReferenceId("short-id"), "short-id");
 
 console.log("provider usage tests passed");

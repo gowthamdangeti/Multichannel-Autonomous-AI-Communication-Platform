@@ -314,7 +314,7 @@ export default function RecordingsList({
                 subtitle={
                     <span>
                         Manage audio recordings for your organization.{" "}
-                        <a href="https://docs.convozent.ai/voice-agent/pre-recorded-audio" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-0.5 underline">
+                        <a href="https://docs.autonomous-ai-os.enterprise/voice-agent/pre-recorded-audio" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-0.5 underline">
                             Learn more <ExternalLink className="h-3 w-3" />
                         </a>
                     </span>

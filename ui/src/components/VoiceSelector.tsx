@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 
 import type { VoiceInfo } from "@/client/types.gen";
-import { VoiceCatalogTag } from "@/components/convozent/VoiceCatalogTag";
+import { VoiceCatalogTag } from "@/components/autonomous_ai_os/VoiceCatalogTag";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useProviderVoices } from "@/components/voice-selector/hooks/useProviderVoices";

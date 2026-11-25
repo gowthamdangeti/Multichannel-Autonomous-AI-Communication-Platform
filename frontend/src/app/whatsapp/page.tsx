@@ -122,7 +122,7 @@ export default function WhatsAppNumbersPage() {
                 }
                 setLoadError(`Could not load WhatsApp numbers (HTTP ${res.status}).`);
             } catch {
-                setLoadError("Could not reach the Convozent API.");
+                setLoadError("Could not reach the Autonomous AI OS API.");
             }
             if (attempt < 2) await new Promise((r) => setTimeout(r, 1000 * (attempt + 1)));
         }

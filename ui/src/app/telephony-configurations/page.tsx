@@ -228,7 +228,7 @@ export default function TelephonyConfigurationsPage() {
           <span>
             Connect and manage your telephony provider accounts.{" "}
             <a
-              href="https://docs.convozent.ai/integrations/telephony/overview"
+              href="https://docs.autonomous-ai-os.enterprise/integrations/telephony/overview"
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-0.5 underline hover:text-foreground"

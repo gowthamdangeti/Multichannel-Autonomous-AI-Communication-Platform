@@ -68,7 +68,7 @@ export default function FilesPage() {
                 subtitle={
                     <span>
                         Upload and manage documents for your voice agents to reference.{" "}
-                        <a href="https://docs.convozent.ai/voice-agent/knowledge-base" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-0.5 underline">
+                        <a href="https://docs.autonomous-ai-os.enterprise/voice-agent/knowledge-base" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-0.5 underline">
                             Learn more <ExternalLink className="h-3 w-3" />
                         </a>
                     </span>

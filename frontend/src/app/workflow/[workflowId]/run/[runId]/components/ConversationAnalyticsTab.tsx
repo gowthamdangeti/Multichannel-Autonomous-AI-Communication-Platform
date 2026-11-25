@@ -97,13 +97,13 @@ export function ConversationAnalyticsTab({
 
     const usageIssues = useMemo(() => {
         const issues = validateBreakdown(breakdown, {
-            convozentTokenUsage: workflowRun?.cost_info?.convozent_token_usage,
+            autonomous_ai_osTokenUsage: workflowRun?.cost_info?.autonomous_ai_os_token_usage,
         });
         const unreportedNote = toUnreportedLlmNote(providerUsage);
         return unreportedNote
             ? [...issues, { severity: 'warn' as const, code: 'llm_usage_unreported', detail: unreportedNote }]
             : issues;
-    }, [breakdown, workflowRun?.cost_info?.convozent_token_usage, providerUsage]);
+    }, [breakdown, workflowRun?.cost_info?.autonomous_ai_os_token_usage, providerUsage]);
 
     const qaSummary = useMemo(
         () => summarizeQaResults(workflowRun?.annotations),

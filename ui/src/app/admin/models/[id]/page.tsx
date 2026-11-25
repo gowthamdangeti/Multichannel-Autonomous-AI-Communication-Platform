@@ -16,7 +16,7 @@ import type {
     OrganizationAiModelConfigurationV2,
 } from "@/client/types.gen";
 import { AIModelConfigurationV2Editor, type ModelConfigurationDefaultsV2 } from "@/components/AIModelConfigurationV2Editor";
-import { VoiceCatalogManager } from "@/components/convozent/VoiceCatalogManager";
+import { VoiceCatalogManager } from "@/components/autonomous_ai_os/VoiceCatalogManager";
 import type { ServiceSegment } from "@/components/ServiceConfigurationForm";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";

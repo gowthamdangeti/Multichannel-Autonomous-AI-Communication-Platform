@@ -104,10 +104,10 @@ export function SidebarUserMenu() {
       }
     };
 
-    window.addEventListener("convozent:user-updated", handleProfileUpdate);
+    window.addEventListener("autonomous_ai_os:user-updated", handleProfileUpdate);
     return () => {
       isMounted = false;
-      window.removeEventListener("convozent:user-updated", handleProfileUpdate);
+      window.removeEventListener("autonomous_ai_os:user-updated", handleProfileUpdate);
     };
   }, [getAccessToken]);
 

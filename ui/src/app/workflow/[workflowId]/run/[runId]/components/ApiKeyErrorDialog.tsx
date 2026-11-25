@@ -43,7 +43,7 @@ export const ApiKeyErrorDialog = ({
                                 <p className="font-medium text-foreground">{error}</p>
                                 {isBillingCreditsError && (
                                     <p className="text-muted-foreground">
-                                        Purchase credits from Billing to continue using Convozent-managed models.
+                                        Purchase credits from Billing to continue using Platform-managed models.
                                     </p>
                                 )}
                             </div>

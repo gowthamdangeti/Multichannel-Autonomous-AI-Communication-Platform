@@ -92,7 +92,7 @@ export function extractConversationTelemetry(
         totalSttSec += Number(s) || 0;
     });
 
-    const fallbackConvoTokens = Number(workflowRun?.cost_info?.convozent_token_usage) || 0;
+    const fallbackConvoTokens = Number(workflowRun?.cost_info?.autonomous_ai_os_token_usage) || 0;
     if (totalPrompt === 0 && totalCompletion === 0 && fallbackConvoTokens > 0) {
         totalPrompt = Math.round(fallbackConvoTokens * 0.85);
         totalCompletion = Math.max(1, fallbackConvoTokens - totalPrompt);

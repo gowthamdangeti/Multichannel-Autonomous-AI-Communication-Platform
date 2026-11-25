@@ -81,7 +81,7 @@ function tenantOf(children: HierarchyNode[]): HierarchyNode {
   return {
     id: "tenant-root",
     type: "tenant",
-    name: "Tenant: Convozent Platform",
+    name: "Tenant: Autonomous AI OS Platform",
     direct_reports_count: 0,
     total_descendants_count: 0,
     children: [

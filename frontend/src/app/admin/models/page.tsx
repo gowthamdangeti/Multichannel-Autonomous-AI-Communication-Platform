@@ -36,7 +36,7 @@ function getModeString(config: Record<string, unknown> | null): string {
         const byok = config.byok as Record<string, unknown>;
         return byok?.mode === "realtime" ? "Speech to Speech" : "Bring Your Own Key";
     }
-    if (config.mode === "convozent") return "Legacy Managed";
+    if (config.mode === "autonomous_ai_os") return "Legacy Managed";
     if (config.mode === "realtime") return "Speech to Speech";
     return String(config.mode || "—");
 }
@@ -57,7 +57,7 @@ interface PresetVoiceInfo {
 // Configurations are stored in two shapes:
 //   v2 byok: { mode: "byok", byok: { mode: "pipeline", pipeline: { llm, tts, stt } } }
 //            { mode: "byok", byok: { mode: "realtime", realtime: { realtime, llm } } }
-//   legacy:  { mode: "realtime"|"convozent", realtime: {...}, tts: {...}, stt: {...} }
+//   legacy:  { mode: "realtime"|"autonomous_ai_os", realtime: {...}, tts: {...}, stt: {...} }
 function getPresetVoiceInfo(config: Record<string, unknown> | null): PresetVoiceInfo {
     const empty: PresetVoiceInfo = { voiceSegment: null, languageSegments: [] };
     if (!config) return empty;

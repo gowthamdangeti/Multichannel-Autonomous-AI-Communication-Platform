@@ -20,10 +20,10 @@ export function RecoveryCodesDialog({ codes, onDone }: RecoveryCodesDialogProps)
   };
 
   const handleDownload = () => {
-    const url = URL.createObjectURL(new Blob([`Convozent 2FA recovery codes\n\n${text}\n`], { type: "text/plain" }));
+    const url = URL.createObjectURL(new Blob([`Autonomous AI OS 2FA recovery codes\n\n${text}\n`], { type: "text/plain" }));
     const link = document.createElement("a");
     link.href = url;
-    link.download = "convozent-recovery-codes.txt";
+    link.download = "autonomous_ai_os-recovery-codes.txt";
     link.click();
     URL.revokeObjectURL(url);
   };

@@ -40,8 +40,8 @@ export default function DocumentUpload({ onUploadSuccess }: DocumentUploadProps)
       <div className="text-xs text-amber-900 dark:text-amber-200">
         <p className="font-medium">Processed by an external service</p>
         <p className="mt-1">
-          Uploaded documents are sent to Convozent&apos;s managed Model Proxy Service for
-          parsing and chunking. Convozent Model Proxy Service does not store or read your documents -
+          Uploaded documents are sent to Autonomous AI OS&apos;s managed Model Proxy Service for
+          parsing and chunking. Autonomous AI OS Model Proxy Service does not store or read your documents -
           the extracted text and embeddings are returned and stored locally in your
           self-hosted database.
         </p>

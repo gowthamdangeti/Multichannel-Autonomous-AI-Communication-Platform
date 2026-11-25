@@ -3,7 +3,7 @@ import { NextResponse } from 'next/server';
 
 import { getServerBackendUrl } from '@/lib/apiClient';
 
-const OSS_TOKEN_COOKIE = 'convozent_auth_token';
+const OSS_TOKEN_COOKIE = 'ai_os_auth_token';
 
 // Paths that don't require authentication in OSS mode
 const PUBLIC_PATHS = ['/auth/login', '/auth/signup', '/auth/forgot-password', '/voice-audio', '/smoke-select'];

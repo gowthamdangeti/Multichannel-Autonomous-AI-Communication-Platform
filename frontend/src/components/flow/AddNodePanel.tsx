@@ -156,7 +156,7 @@ export default function AddNodePanel({ isOpen, onNodeSelect, onClose }: AddNodeP
                 <SheetFooter className="justify-between">
                     <div>
                         <a
-                            href="https://docs.convozent.ai/voice-agent/introduction"
+                            href="https://docs.autonomous-ai-os.enterprise/voice-agent/introduction"
                             target="_blank"
                             rel="noopener noreferrer"
                             className="flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground transition-colors"

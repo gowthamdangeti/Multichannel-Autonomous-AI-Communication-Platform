@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 
-const GHCR_IMAGES = ["convozent-hq/convozent-ui", "convozent-hq/convozent-api"] as const;
+const GHCR_IMAGES = ["autonomous-ai-os/ai-os-ui", "autonomous-ai-os/ai-os-api"] as const;
 const SEMVER_RE = /^(\d+)\.(\d+)\.(\d+)$/;
 const REVALIDATE_SECONDS = 60 * 60;
 

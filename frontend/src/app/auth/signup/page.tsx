@@ -141,7 +141,7 @@ export default function SignupPage() {
     <AuthShell enterpriseSlot={<AuthEnterpriseCTA />}>
       <div className="space-y-1.5 text-center">
         <h1 className="text-2xl font-bold tracking-tight text-foreground">Create an account</h1>
-        <p className="text-xs text-muted-foreground">Enter your personal details to get started with Convozent</p>
+        <p className="text-xs text-muted-foreground">Enter your personal details to get started with Autonomous AI OS</p>
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-4">

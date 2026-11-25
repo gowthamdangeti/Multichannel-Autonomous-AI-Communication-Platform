@@ -204,7 +204,7 @@ function WorkflowSettingsDrawerContent({
                     <SheetFooter className="justify-between">
                         <div>
                             <a
-                                href="https://docs.convozent.ai/voice-agent/settings"
+                                href="https://docs.autonomous-ai-os.enterprise/voice-agent/settings"
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 className="flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground transition-colors"

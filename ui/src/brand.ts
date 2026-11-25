@@ -1,5 +1,5 @@
 /**
- * Convozent brand configuration — single source of truth.
+ * Autonomous AI OS brand configuration — single source of truth.
  *
  * Change anything here and it propagates everywhere:
  *   - BrandLogo component (name, monogram, font)
@@ -11,33 +11,33 @@
  * Colors and fonts are in globals.css (@theme block) so Tailwind picks
  * them up as utility classes — edit there for visual changes.
  *
- * This file is Convozent-owned: convozent updates never touch it.
+ * This file is Autonomous AI OS-owned: autonomous_ai_os updates never touch it.
  */
 
 export const BRAND = {
   /** Displayed name everywhere (sidebar, tab title, emails). */
-  name: "Convozent",
+  name: "Autonomous AI OS",
 
   /** Short monogram used in the collapsed sidebar and favicon. */
-  monogram: "C",
+  monogram: "A",
 
   /** One-line product description used in <meta> and login page. */
-  tagline: "The voice agent platform for production AI.",
+  tagline: "Enterprise Autonomous Multi-Agent AI Operating System.",
 
   /** Support / contact email. */
-  supportEmail: "hello@convozent.ai",
+  supportEmail: "hello@autonomous-ai-os.enterprise",
 
   /** Public website. */
-  website: "https://convozent.ai",
+  website: "https://autonomous-ai-os.enterprise",
 
   /** Documentation base URL. */
-  docsUrl: "https://docs.convozent.ai",
+  docsUrl: "https://docs.autonomous-ai-os.enterprise",
 
   /** Privacy policy page. */
-  privacyUrl: "https://convozent.ai/privacy",
+  privacyUrl: "https://autonomous-ai-os.enterprise/privacy",
 
   /** Terms of service page. */
-  termsUrl: "https://convozent.ai/terms",
+  termsUrl: "https://autonomous-ai-os.enterprise/terms",
 
   /**
    * CSS font-family string for the display / wordmark font.

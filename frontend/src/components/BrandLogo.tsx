@@ -2,7 +2,7 @@ import { BRAND } from "@/brand";
 import { cn } from "@/lib/utils";
 
 /**
- * Convozent wordmark / monogram component.
+ * Autonomous AI OS wordmark / monogram component.
  *
  * All text and style comes from src/brand.ts — edit there, not here.
  *

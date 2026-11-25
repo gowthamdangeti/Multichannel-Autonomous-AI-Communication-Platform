@@ -231,7 +231,7 @@ export default function APIKeysPage() {
         <div className="px-4 lg:px-6 pt-2 pb-6 space-y-4">
             <PageHeader
                 title="Developer Portal"
-                subtitle="Manage your API keys to access Convozent services programmatically"
+                subtitle="Manage your API keys to access Autonomous AI OS services programmatically"
                 onRefresh={() => void fetchApiKeys()}
                 isRefreshing={isLoading}
                 primaryAction={<Button onClick={() => setIsCreateDialogOpen(true)}>

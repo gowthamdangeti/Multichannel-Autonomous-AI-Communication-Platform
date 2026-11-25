@@ -101,7 +101,7 @@ export interface DetailedUsageBreakdownProps {
         call_duration_seconds?: number | null;
     } | null;
     costInfo?: {
-        convozent_token_usage?: number | null;
+        autonomous_ai_os_token_usage?: number | null;
         call_duration_seconds?: number | null;
         charge_usd?: number | null;
     } | null;
@@ -633,8 +633,8 @@ export function DetailedUsageBreakdown({
     }, [usageInfo, modelPricingRules]);
 
     // 4. Overall totals
-    const grandTotalTokens = (costInfo?.convozent_token_usage != null && costInfo.convozent_token_usage > 0)
-        ? costInfo.convozent_token_usage
+    const grandTotalTokens = (costInfo?.autonomous_ai_os_token_usage != null && costInfo.autonomous_ai_os_token_usage > 0)
+        ? costInfo.autonomous_ai_os_token_usage
         : (totalLLMTokens + totalTTSTokens);
 
     const grandTotalServiceCostUSD = totalLLMCostUSD + totalTTSCostUSD + totalSTTCostUSD;

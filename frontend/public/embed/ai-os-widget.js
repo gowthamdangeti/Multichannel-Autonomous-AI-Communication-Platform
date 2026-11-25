@@ -1,6 +1,6 @@
 /**
- * Convozent Voice Widget
- * Embeddable voice call widget for Convozent workflows
+ * Autonomous AI OS Voice Widget
+ * Embeddable voice call widget for Autonomous AI OS workflows
  * Version: 1.0.0
  */
 
@@ -14,7 +14,7 @@
    * Resolve the backend API base URL dynamically without hardcoded static production URLs.
    * Priority:
    * 1. Explicit parameter or attribute (apiEndpoint)
-   * 2. Window runtime injection (window.__CONVOZENT_API_URL__)
+   * 2. Window runtime injection (window.__AUTONOMOUS_AI_OS_API_URL__)
    * 3. Environment variable (process.env.NEXT_PUBLIC_API_URL or process.env.NEXT_PUBLIC_BACKEND_URL)
    * 4. Local development host and port detection (script origin or window origin)
    * Returns null if unconfigured (caller must display an initialization error).
@@ -30,8 +30,8 @@
       }
     }
 
-    if (typeof window !== 'undefined' && window.__CONVOZENT_API_URL__) {
-      return String(window.__CONVOZENT_API_URL__).trim().replace(/\/+$/, '');
+    if (typeof window !== 'undefined' && window.__AUTONOMOUS_AI_OS_API_URL__) {
+      return String(window.__AUTONOMOUS_AI_OS_API_URL__).trim().replace(/\/+$/, '');
     }
 
     if (typeof process !== 'undefined' && process.env) {
@@ -118,9 +118,9 @@
     if (state.isInitialized) return;
 
     // Get token from script URL
-    const script = document.currentScript || document.querySelector('script[src*="convozent-widget.js"]');
+    const script = document.currentScript || document.querySelector('script[src*="ai-os-widget.js"]');
     if (!script) {
-      console.error('Convozent Widget: Script not found');
+      console.error('Autonomous AI OS Widget: Script not found');
       return;
     }
 
@@ -133,7 +133,7 @@
     const channel = scriptUrl.searchParams.get('channel') || 'voice';
 
     if (!token) {
-      console.error('Convozent Widget: No token found in script URL');
+      console.error('Autonomous AI OS Widget: No token found in script URL');
       return;
     }
 
@@ -145,9 +145,9 @@
 
     if (!apiBaseUrl) {
       const configError = new Error(
-        'Convozent Widget initialization error: No API base URL configured. ' +
+        'Autonomous AI OS Widget initialization error: No API base URL configured. ' +
         'Please provide an apiEndpoint query parameter, a data-api-endpoint attribute, ' +
-        'or set window.__CONVOZENT_API_URL__.'
+        'or set window.__AUTONOMOUS_AI_OS_API_URL__.'
       );
       console.error(configError.message);
       if (state.callbacks.onError) {
@@ -164,7 +164,7 @@
       environment: environment || 'production',
       channel: channel,
       // Allow data attributes to override fetched config
-      contextVariables: parseContextVariables(script.getAttribute('data-convozent-context'))
+      contextVariables: parseContextVariables(script.getAttribute('data-autonomous_ai_os-context'))
     };
 
     // Chat agents are a fully separate widget with their own config endpoint.
@@ -192,7 +192,7 @@
         workflowId: configData.workflow_id,
         settings: configData.settings || {},
         embedMode: configData.settings?.embedMode || 'floating',
-        containerId: configData.settings?.containerId || 'convozent-inline-container',
+        containerId: configData.settings?.containerId || 'ai-os-inline-container',
         position: configData.position || DEFAULT_CONFIG.position,
         buttonColor: configData.settings?.buttonColor || '#10b981',
         buttonText: configData.settings?.buttonText || 'Talk to Agent',
@@ -203,7 +203,7 @@
       state.preCallForm = state.config.preCallForm;
       state.formValues = { ...(state.config.contextVariables || {}) };
     } catch (error) {
-      console.error('Convozent Widget: Failed to fetch configuration', error);
+      console.error('Autonomous AI OS Widget: Failed to fetch configuration', error);
       return;
     }
 
@@ -239,7 +239,7 @@
     try {
       return JSON.parse(contextStr);
     } catch (e) {
-      console.warn('Convozent Widget: Invalid context variables', e);
+      console.warn('Autonomous AI OS Widget: Invalid context variables', e);
       return {};
     }
   }
@@ -248,36 +248,36 @@
    * Inject widget styles
    */
   function injectStyles() {
-    if (document.getElementById('convozent-widget-styles')) return;
+    if (document.getElementById('autonomous_ai_os-widget-styles')) return;
 
     const styles = `
-      .convozent-widget-container {
+      .autonomous_ai_os-widget-container {
         position: fixed;
         z-index: 999999;
         font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
       }
 
-      .convozent-widget-container.bottom-right {
+      .autonomous_ai_os-widget-container.bottom-right {
         bottom: 20px;
         right: 20px;
       }
 
-      .convozent-widget-container.bottom-left {
+      .autonomous_ai_os-widget-container.bottom-left {
         bottom: 20px;
         left: 20px;
       }
 
-      .convozent-widget-container.top-right {
+      .autonomous_ai_os-widget-container.top-right {
         top: 20px;
         right: 20px;
       }
 
-      .convozent-widget-container.top-left {
+      .autonomous_ai_os-widget-container.top-left {
         top: 20px;
         left: 20px;
       }
 
-      .convozent-widget-cta {
+      .autonomous_ai_os-widget-cta {
         display: inline-flex;
         align-items: center;
         gap: 8px;
@@ -292,30 +292,30 @@
         max-width: calc(100vw - 40px);
         box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2);
         transition: filter 150ms ease, transform 100ms ease, box-shadow 200ms ease;
-        animation: convozent-cta-in 220ms ease-out;
+        animation: autonomous_ai_os-cta-in 220ms ease-out;
       }
 
-      .convozent-widget-cta:hover {
+      .autonomous_ai_os-widget-cta:hover {
         filter: brightness(1.08);
         box-shadow: 0 6px 18px rgba(0, 0, 0, 0.28);
       }
-      .convozent-widget-cta:active { transform: scale(0.98); }
+      .autonomous_ai_os-widget-cta:active { transform: scale(0.98); }
 
-      .convozent-widget-cta.convozent-state-connecting { background: #f59e0b !important; animation: convozent-pulse 1.6s infinite; }
-      .convozent-widget-cta.convozent-state-connected  { background: #ef4444 !important; }
-      .convozent-widget-cta.convozent-state-failed     { background: #ef4444 !important; opacity: 0.85; }
+      .autonomous_ai_os-widget-cta.autonomous_ai_os-state-connecting { background: #f59e0b !important; animation: autonomous_ai_os-pulse 1.6s infinite; }
+      .autonomous_ai_os-widget-cta.autonomous_ai_os-state-connected  { background: #ef4444 !important; }
+      .autonomous_ai_os-widget-cta.autonomous_ai_os-state-failed     { background: #ef4444 !important; opacity: 0.85; }
 
-      @keyframes convozent-pulse {
+      @keyframes autonomous_ai_os-pulse {
         0%, 100% { opacity: 1; }
         50% { opacity: 0.6; }
       }
 
-      @keyframes convozent-cta-in {
+      @keyframes autonomous_ai_os-cta-in {
         from { opacity: 0; transform: translateY(8px); }
         to { opacity: 1; transform: translateY(0); }
       }
 
-      .convozent-pre-call-root {
+      .autonomous_ai_os-pre-call-root {
         position: fixed;
         inset: 0;
         z-index: 2147483000;
@@ -327,7 +327,7 @@
         font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
       }
 
-      .convozent-pre-call-card {
+      .autonomous_ai_os-pre-call-card {
         width: 100%;
         max-width: 440px;
         max-height: calc(100vh - 32px);
@@ -339,7 +339,7 @@
         padding: 22px;
       }
 
-      .convozent-pre-call-head {
+      .autonomous_ai_os-pre-call-head {
         display: flex;
         align-items: flex-start;
         justify-content: space-between;
@@ -347,7 +347,7 @@
         margin-bottom: 16px;
       }
 
-      .convozent-pre-call-title {
+      .autonomous_ai_os-pre-call-title {
         margin: 0;
         font-size: 19px;
         line-height: 1.3;
@@ -355,14 +355,14 @@
         color: #111827;
       }
 
-      .convozent-pre-call-desc {
+      .autonomous_ai_os-pre-call-desc {
         margin: 6px 0 0;
         font-size: 13px;
         line-height: 1.5;
         color: #6b7280;
       }
 
-      .convozent-pre-call-close {
+      .autonomous_ai_os-pre-call-close {
         flex: 0 0 auto;
         width: 32px;
         height: 32px;
@@ -375,13 +375,13 @@
         cursor: pointer;
       }
 
-      .convozent-pre-call-close:hover { background: #e5e7eb; }
+      .autonomous_ai_os-pre-call-close:hover { background: #e5e7eb; }
 
-      .convozent-pre-call-field {
+      .autonomous_ai_os-pre-call-field {
         margin-bottom: 14px;
       }
 
-      .convozent-pre-call-label {
+      .autonomous_ai_os-pre-call-label {
         display: block;
         margin-bottom: 6px;
         font-size: 13px;
@@ -389,12 +389,12 @@
         color: #374151;
       }
 
-      .convozent-pre-call-required {
+      .autonomous_ai_os-pre-call-required {
         color: #dc2626;
         margin-left: 3px;
       }
 
-      .convozent-pre-call-input {
+      .autonomous_ai_os-pre-call-input {
         display: block;
         width: 100%;
         box-sizing: border-box;
@@ -408,17 +408,17 @@
         outline: none;
       }
 
-      .convozent-pre-call-input:focus {
+      .autonomous_ai_os-pre-call-input:focus {
         border-color: #2563eb;
         box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.14);
       }
 
-      .convozent-pre-call-textarea {
+      .autonomous_ai_os-pre-call-textarea {
         resize: vertical;
         min-height: 76px;
       }
 
-      .convozent-pre-call-check {
+      .autonomous_ai_os-pre-call-check {
         display: flex;
         align-items: center;
         gap: 8px;
@@ -426,18 +426,18 @@
         color: #374151;
       }
 
-      .convozent-pre-call-check input {
+      .autonomous_ai_os-pre-call-check input {
         width: 16px;
         height: 16px;
       }
 
-      .convozent-pre-call-error {
+      .autonomous_ai_os-pre-call-error {
         margin: 6px 0 0;
         font-size: 12px;
         color: #dc2626;
       }
 
-      .convozent-pre-call-field-locked {
+      .autonomous_ai_os-pre-call-field-locked {
         display: flex;
         align-items: center;
         justify-content: space-between;
@@ -448,18 +448,18 @@
         background: #f9fafb;
       }
 
-      .convozent-pre-call-field-locked .convozent-pre-call-label {
+      .autonomous_ai_os-pre-call-field-locked .autonomous_ai_os-pre-call-label {
         margin-bottom: 0;
       }
 
-      .convozent-pre-call-locked {
+      .autonomous_ai_os-pre-call-locked {
         font-size: 12px;
         font-weight: 600;
         color: #6b7280;
         white-space: nowrap;
       }
 
-      .convozent-pre-call-submit {
+      .autonomous_ai_os-pre-call-submit {
         width: 100%;
         margin-top: 4px;
         padding: 12px 16px;
@@ -473,15 +473,15 @@
         transition: filter 150ms ease;
       }
 
-      .convozent-pre-call-submit:hover { filter: brightness(1.08); }
+      .autonomous_ai_os-pre-call-submit:hover { filter: brightness(1.08); }
 
       @media (max-width: 480px) {
-        .convozent-pre-call-card { padding: 18px; }
+        .autonomous_ai_os-pre-call-card { padding: 18px; }
       }
     `;
 
     const styleSheet = document.createElement('style');
-    styleSheet.id = 'convozent-widget-styles';
+    styleSheet.id = 'autonomous_ai_os-widget-styles';
     styleSheet.textContent = styles;
     document.head.appendChild(styleSheet);
   }
@@ -501,11 +501,11 @@
    */
   function createFloatingWidget() {
     const container = document.createElement('div');
-    container.className = `convozent-widget-container ${state.config.position}`;
-    container.id = 'convozent-widget-root';
+    container.className = `autonomous_ai_os-widget-container ${state.config.position}`;
+    container.id = 'autonomous_ai_os-widget-root';
 
     const audio = document.createElement('audio');
-    audio.id = 'convozent-widget-audio';
+    audio.id = 'autonomous_ai_os-widget-audio';
     audio.autoplay = true;
     audio.style.display = 'none';
     container.appendChild(audio);
@@ -520,7 +520,7 @@
    * element so an in-progress call is not interrupted on status changes.
    */
   function renderFloating() {
-    const container = document.getElementById('convozent-widget-root');
+    const container = document.getElementById('autonomous_ai_os-widget-root');
     if (!container) return;
 
     Array.from(container.children).forEach((child) => {
@@ -530,9 +530,9 @@
     const status = state.connectionStatus || 'idle';
 
     const button = document.createElement('button');
-    button.id = 'convozent-widget-cta';
+    button.id = 'autonomous_ai_os-widget-cta';
     button.type = 'button';
-    button.className = `convozent-widget-cta convozent-state-${status}`;
+    button.className = `autonomous_ai_os-widget-cta autonomous_ai_os-state-${status}`;
     // Idle uses configured color; status states use CSS-defined colors.
     if (status === 'idle') {
       button.style.backgroundColor = state.config.buttonColor;
@@ -553,11 +553,11 @@
   }
 
   /**
-   * Create headless widget (no UI — host page drives everything via window.ConvozentWidget API)
+   * Create headless widget (no UI — host page drives everything via window.AIOSWidget API)
    */
   function createHeadlessWidget() {
     const audio = document.createElement('audio');
-    audio.id = 'convozent-widget-audio';
+    audio.id = 'autonomous_ai_os-widget-audio';
     audio.autoplay = true;
     audio.style.display = 'none';
     document.body.appendChild(audio);
@@ -587,7 +587,7 @@
     // Find container element
     const container = document.getElementById(state.config.containerId);
     if (!container) {
-      console.error(`Convozent Widget: Container element with id "${state.config.containerId}" not found`);
+      console.error(`Autonomous AI OS Widget: Container element with id "${state.config.containerId}" not found`);
       if (state.callbacks.onError) {
         state.callbacks.onError(new Error('Container element not found'));
       }
@@ -596,11 +596,11 @@
 
     // Clear container
     container.innerHTML = '';
-    container.className = 'convozent-inline-container';
+    container.className = 'ai-os-inline-container';
 
     // Add minimal inline styles
     const inlineStyles = `
-      .convozent-inline-container {
+      .ai-os-inline-container {
         min-height: 200px;
         padding: 20px;
         display: flex;
@@ -608,38 +608,38 @@
         justify-content: center;
       }
 
-      .convozent-inline-status {
+      .autonomous_ai_os-inline-status {
         text-align: center;
         font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
       }
 
-      .convozent-inline-status-icon {
+      .autonomous_ai_os-inline-status-icon {
         width: 64px;
         height: 64px;
         margin: 0 auto 20px;
       }
 
-      .convozent-inline-status-text {
+      .autonomous_ai_os-inline-status-text {
         font-size: 18px;
         font-weight: 500;
         margin: 0 0 8px;
         color: #111827;
       }
 
-      .convozent-inline-status-subtext {
+      .autonomous_ai_os-inline-status-subtext {
         font-size: 14px;
         color: #6b7280;
         margin: 0 0 20px;
       }
 
-      .convozent-inline-button-container {
+      .autonomous_ai_os-inline-button-container {
         display: flex;
         gap: 12px;
         justify-content: center;
         margin-top: 20px;
       }
 
-      .convozent-inline-btn {
+      .autonomous_ai_os-inline-btn {
         padding: 12px 32px;
         border-radius: 8px;
         border: none;
@@ -651,28 +651,28 @@
         box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
       }
 
-      .convozent-inline-btn:hover {
+      .autonomous_ai_os-inline-btn:hover {
         transform: translateY(-2px);
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
       }
 
-      .convozent-inline-btn:active {
+      .autonomous_ai_os-inline-btn:active {
         transform: translateY(0);
       }
 
-      .convozent-inline-btn-start {
+      .autonomous_ai_os-inline-btn-start {
         background: #10b981;
       }
 
-      .convozent-inline-btn-start:hover {
+      .autonomous_ai_os-inline-btn-start:hover {
         background: #059669;
       }
 
-      .convozent-inline-btn-end {
+      .autonomous_ai_os-inline-btn-end {
         background: #ef4444;
       }
 
-      .convozent-inline-btn-end:hover {
+      .autonomous_ai_os-inline-btn-end:hover {
         background: #dc2626;
       }
 
@@ -681,15 +681,15 @@
         50% { opacity: 0.5; }
       }
 
-      .convozent-inline-pulse {
+      .autonomous_ai_os-inline-pulse {
         animation: pulse 2s infinite;
       }
     `;
 
     // Add inline styles if not already added
-    if (!document.getElementById('convozent-inline-styles')) {
+    if (!document.getElementById('autonomous_ai_os-inline-styles')) {
       const styleSheet = document.createElement('style');
-      styleSheet.id = 'convozent-inline-styles';
+      styleSheet.id = 'autonomous_ai_os-inline-styles';
       styleSheet.textContent = inlineStyles;
       document.head.appendChild(styleSheet);
     }
@@ -737,14 +737,14 @@
     if (status === 'idle' || status === 'failed') {
       // Button to start with configured color
       buttonHTML = `
-        <button class="convozent-inline-btn convozent-inline-btn-start" id="convozent-inline-start-btn" style="background: ${state.config.buttonColor};">
+        <button class="autonomous_ai_os-inline-btn autonomous_ai_os-inline-btn-start" id="autonomous_ai_os-inline-start-btn" style="background: ${state.config.buttonColor};">
           ${status === 'failed' ? 'Retry' : state.config.buttonText}
         </button>
       `;
     } else if (status === 'connecting' || status === 'connected') {
       // Red button to end
       buttonHTML = `
-        <button class="convozent-inline-btn convozent-inline-btn-end" id="convozent-inline-end-btn">
+        <button class="autonomous_ai_os-inline-btn autonomous_ai_os-inline-btn-end" id="autonomous_ai_os-inline-end-btn">
           End Call
         </button>
       `;
@@ -753,13 +753,13 @@
     // Update container content (preserve audio element)
     const audioElement = state.audioElement;
     container.innerHTML = `
-      <div class="convozent-inline-status">
-        <div class="convozent-inline-status-icon ${status === 'connecting' ? 'convozent-inline-pulse' : ''}">
+      <div class="autonomous_ai_os-inline-status">
+        <div class="autonomous_ai_os-inline-status-icon ${status === 'connecting' ? 'autonomous_ai_os-inline-pulse' : ''}">
           ${getStatusIcon(status)}
         </div>
-        <p class="convozent-inline-status-text">${displayText}</p>
-        <p class="convozent-inline-status-subtext">${displaySubtext}</p>
-        <div class="convozent-inline-button-container">
+        <p class="autonomous_ai_os-inline-status-text">${displayText}</p>
+        <p class="autonomous_ai_os-inline-status-subtext">${displaySubtext}</p>
+        <div class="autonomous_ai_os-inline-button-container">
           ${buttonHTML}
         </div>
       </div>
@@ -771,10 +771,10 @@
     }
 
     // Attach event handlers
-    const startBtn = document.getElementById('convozent-inline-start-btn');
+    const startBtn = document.getElementById('autonomous_ai_os-inline-start-btn');
     if (startBtn) startBtn.onclick = startCall;
 
-    const endBtn = document.getElementById('convozent-inline-end-btn');
+    const endBtn = document.getElementById('autonomous_ai_os-inline-end-btn');
     if (endBtn) endBtn.onclick = stopCall;
 
     // Trigger status change callback
@@ -794,7 +794,7 @@
         <line x1="12" y1="19" x2="12" y2="23"/>
         <line x1="8" y1="23" x2="16" y2="23"/>
       </svg>`,
-      connecting: `<svg class="convozent-widget-spinner" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      connecting: `<svg class="autonomous_ai_os-widget-spinner" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
         <path d="M12 2v4"/>
         <path d="M12 18v4"/>
         <path d="M4.93 4.93l2.83 2.83"/>
@@ -890,7 +890,7 @@
       document.removeEventListener('keydown', state.formKeyHandler);
       state.formKeyHandler = null;
     }
-    const root = document.getElementById('convozent-pre-call-root');
+    const root = document.getElementById('autonomous_ai_os-pre-call-root');
     if (root) root.remove();
   }
 
@@ -898,7 +898,7 @@
     const form = getPublicForm();
     if (!form) return;
 
-    const existing = document.getElementById('convozent-pre-call-root');
+    const existing = document.getElementById('autonomous_ai_os-pre-call-root');
     if (existing) existing.remove();
     if (state.formKeyHandler) {
       document.removeEventListener('keydown', state.formKeyHandler);
@@ -909,15 +909,15 @@
       .map((field) => {
         const error = state.formErrors[field.name];
         const errorHtml = error
-          ? `<p class="convozent-pre-call-error" data-error-for="${escapeHtml(field.name)}">${escapeHtml(error)}</p>`
-          : `<p class="convozent-pre-call-error" data-error-for="${escapeHtml(field.name)}" style="display:none"></p>`;
+          ? `<p class="autonomous_ai_os-pre-call-error" data-error-for="${escapeHtml(field.name)}">${escapeHtml(error)}</p>`
+          : `<p class="autonomous_ai_os-pre-call-error" data-error-for="${escapeHtml(field.name)}" style="display:none"></p>`;
 
         if (!field.editable) {
           if (!form.show_locked_fields) return '';
           return `
-            <div class="convozent-pre-call-field convozent-pre-call-field-locked">
-              <span class="convozent-pre-call-label">${escapeHtml(field.label)}</span>
-              <span class="convozent-pre-call-locked">
+            <div class="autonomous_ai_os-pre-call-field autonomous_ai_os-pre-call-field-locked">
+              <span class="autonomous_ai_os-pre-call-label">${escapeHtml(field.label)}</span>
+              <span class="autonomous_ai_os-pre-call-locked">
                 ${field.has_value ? 'Provided by the site' : 'Not provided'}
               </span>
             </div>
@@ -931,11 +931,11 @@
         const required = field.required ? ' required' : '';
         const placeholder = field.placeholder ? ` placeholder="${escapeHtml(field.placeholder)}"` : '';
         const maxLength = field.max_length ? ` maxlength="${field.max_length}"` : '';
-        const inputId = `convozent-pre-call-${field.name}`;
+        const inputId = `autonomous_ai_os-pre-call-${field.name}`;
         let control = '';
 
         if (field.type === 'textarea') {
-          control = `<textarea id="${inputId}" name="${escapeHtml(field.name)}" class="convozent-pre-call-input convozent-pre-call-textarea" rows="3"${required}${placeholder}${maxLength}>${value === null || value === undefined ? '' : escapeHtml(String(value))}</textarea>`;
+          control = `<textarea id="${inputId}" name="${escapeHtml(field.name)}" class="autonomous_ai_os-pre-call-input autonomous_ai_os-pre-call-textarea" rows="3"${required}${placeholder}${maxLength}>${value === null || value === undefined ? '' : escapeHtml(String(value))}</textarea>`;
         } else if (field.type === 'select') {
           const options = (field.options || [])
             .map((option) => {
@@ -943,25 +943,25 @@
               return `<option value="${escapeHtml(option)}"${selected}>${escapeHtml(option)}</option>`;
             })
             .join('');
-          control = `<select id="${inputId}" name="${escapeHtml(field.name)}" class="convozent-pre-call-input"${required}>
+          control = `<select id="${inputId}" name="${escapeHtml(field.name)}" class="autonomous_ai_os-pre-call-input"${required}>
             <option value="">Select…</option>${options}
           </select>`;
         } else if (field.type === 'checkbox') {
           const checked = value === true || value === 'true' || value === 1 ? ' checked' : '';
-          control = `<label class="convozent-pre-call-check">
+          control = `<label class="autonomous_ai_os-pre-call-check">
             <input id="${inputId}" type="checkbox" name="${escapeHtml(field.name)}"${required}${checked}>
             <span>${escapeHtml(field.placeholder || 'Yes')}</span>
           </label>`;
         } else {
           const type = field.type === 'number' ? 'number' : 'text';
           const step = field.type === 'number' ? ' step="any"' : '';
-          control = `<input id="${inputId}" type="${type}" name="${escapeHtml(field.name)}" class="convozent-pre-call-input" value="${value === null || value === undefined ? '' : escapeHtml(String(value))}"${required}${placeholder}${maxLength}${step}>`;
+          control = `<input id="${inputId}" type="${type}" name="${escapeHtml(field.name)}" class="autonomous_ai_os-pre-call-input" value="${value === null || value === undefined ? '' : escapeHtml(String(value))}"${required}${placeholder}${maxLength}${step}>`;
         }
 
         return `
-          <div class="convozent-pre-call-field">
-            <label class="convozent-pre-call-label" for="${inputId}">
-              ${escapeHtml(field.label)}${field.required ? '<span class="convozent-pre-call-required">*</span>' : ''}
+          <div class="autonomous_ai_os-pre-call-field">
+            <label class="autonomous_ai_os-pre-call-label" for="${inputId}">
+              ${escapeHtml(field.label)}${field.required ? '<span class="autonomous_ai_os-pre-call-required">*</span>' : ''}
             </label>
             ${control}
             ${errorHtml}
@@ -972,27 +972,27 @@
 
     const generalErrors = Object.entries(state.formErrors)
       .filter(([name]) => !form.fields.some((field) => field.name === name))
-      .map(([, message]) => `<p class="convozent-pre-call-error">${escapeHtml(message)}</p>`)
+      .map(([, message]) => `<p class="autonomous_ai_os-pre-call-error">${escapeHtml(message)}</p>`)
       .join('');
 
     const root = document.createElement('div');
-    root.id = 'convozent-pre-call-root';
-    root.className = 'convozent-pre-call-root';
+    root.id = 'autonomous_ai_os-pre-call-root';
+    root.className = 'autonomous_ai_os-pre-call-root';
     root.setAttribute('role', 'dialog');
     root.setAttribute('aria-modal', 'true');
     root.innerHTML = `
-      <div class="convozent-pre-call-card">
-        <div class="convozent-pre-call-head">
+      <div class="autonomous_ai_os-pre-call-card">
+        <div class="autonomous_ai_os-pre-call-head">
           <div>
-            <h2 class="convozent-pre-call-title">${escapeHtml(form.title || 'Before we start')}</h2>
-            ${form.description ? `<p class="convozent-pre-call-desc">${escapeHtml(form.description)}</p>` : ''}
+            <h2 class="autonomous_ai_os-pre-call-title">${escapeHtml(form.title || 'Before we start')}</h2>
+            ${form.description ? `<p class="autonomous_ai_os-pre-call-desc">${escapeHtml(form.description)}</p>` : ''}
           </div>
-          <button type="button" class="convozent-pre-call-close" aria-label="Close">×</button>
+          <button type="button" class="autonomous_ai_os-pre-call-close" aria-label="Close">×</button>
         </div>
-        <form id="convozent-pre-call-form" novalidate>
+        <form id="autonomous_ai_os-pre-call-form" novalidate>
           ${generalErrors}
           ${fields}
-          <button type="submit" class="convozent-pre-call-submit" style="background-color: ${escapeHtml(state.config.buttonColor)};">
+          <button type="submit" class="autonomous_ai_os-pre-call-submit" style="background-color: ${escapeHtml(state.config.buttonColor)};">
             ${escapeHtml(form.submit_label || 'Start call')}
           </button>
         </form>
@@ -1001,9 +1001,9 @@
 
     document.body.appendChild(root);
 
-    const formElement = root.querySelector('#convozent-pre-call-form');
+    const formElement = root.querySelector('#autonomous_ai_os-pre-call-form');
     formElement.addEventListener('submit', handlePreCallSubmit);
-    root.querySelector('.convozent-pre-call-close').addEventListener('click', closePreCallForm);
+    root.querySelector('.autonomous_ai_os-pre-call-close').addEventListener('click', closePreCallForm);
     root.addEventListener('click', (event) => {
       if (event.target === root) closePreCallForm();
     });
@@ -1029,7 +1029,7 @@
     if (!state.formErrors[name]) return;
     delete state.formErrors[name];
     const el = document.querySelector(
-      `#convozent-pre-call-form [data-error-for="${name}"]`
+      `#autonomous_ai_os-pre-call-form [data-error-for="${name}"]`
     );
     if (el) {
       el.textContent = '';
@@ -1049,7 +1049,7 @@
     form.fields.forEach((field) => {
       if (!field.editable) return;
       const input = document.querySelector(
-        `#convozent-pre-call-form [name="${field.name}"]`
+        `#autonomous_ai_os-pre-call-form [name="${field.name}"]`
       );
       if (!input) return;
 
@@ -1082,7 +1082,7 @@
       renderPreCallForm();
       if (firstInvalid) {
         const el = document.querySelector(
-          `#convozent-pre-call-form [name="${firstInvalid}"]`
+          `#autonomous_ai_os-pre-call-form [name="${firstInvalid}"]`
         );
         if (el) el.focus();
       }
@@ -1194,7 +1194,7 @@
       await negotiate();
 
     } catch (error) {
-      console.error('Convozent Widget: Failed to start call', error);
+      console.error('Autonomous AI OS Widget: Failed to start call', error);
 
       // Release anything acquired before the failure so a retry starts clean.
       // getUserMedia may have succeeded before a later step (WebSocket /
@@ -1308,7 +1308,7 @@
    */
   async function fetchTurnCredentials() {
     if (!state.sessionToken) {
-      console.warn('Convozent Widget: No session token available for TURN credentials');
+      console.warn('Autonomous AI OS Widget: No session token available for TURN credentials');
       return;
     }
 
@@ -1367,7 +1367,7 @@
       if (event.track.kind === 'audio' && state.audioElement) {
         state.audioElement.srcObject = event.streams[0];
         state.audioElement.play().catch((err) => {
-          console.warn('Convozent Widget: Audio playback error', err);
+          console.warn('Autonomous AI OS Widget: Audio playback error', err);
         });
       }
     };
@@ -1671,7 +1671,7 @@
   }
 
   // Public API
-  window.ConvozentWidget = {
+  window.AIOSWidget = {
     // Core methods
     init: init,
     start: startCall,
@@ -1718,7 +1718,7 @@
     // Initialize inline mode manually (for advanced use cases)
     initInline: (options) => {
       if (options.container) {
-        state.config.containerId = options.container.id || 'convozent-inline-container';
+        state.config.containerId = options.container.id || 'ai-os-inline-container';
       }
       state.config.embedMode = 'inline';
 
@@ -1774,7 +1774,7 @@
       chatState.appearance = cfg.appearance || {};
       chatState.name = cfg.name || '';
     } catch (e) {
-      console.error('Convozent Chat: failed to load config', e);
+      console.error('Autonomous AI OS Chat: failed to load config', e);
       return;
     }
     state.isInitialized = true;
@@ -1799,7 +1799,7 @@
     if (chatState.host) return;
     const settings = chatSettings();
     const host = document.createElement('div');
-    host.id = 'convozent-chat-widget';
+    host.id = 'autonomous_ai_os-chat-widget';
     host.style.position = 'fixed';
     host.style.bottom = '20px';
     host.style.zIndex = '2147483000';
@@ -2027,7 +2027,7 @@
             '<div class="bar"><button class="plus" aria-label="Start a new chat" title="New chat">' + PLUS_ICON + '</button>' +
             '<button class="send" aria-label="Send">' + SEND_ICON + '</button></div>' +
           '</div>' +
-          '<div class="footer">Powered by Convozent</div>' +
+          '<div class="footer">Powered by Autonomous AI OS</div>' +
         '</div>' +
         '<button class="launcher' + (s.launcherText ? ' has-text' : '') + '" aria-label="' + escapeHtml(s.launcherText || 'Open chat') + '"' +
           (s.brandColor ? ' style="background:' + s.brandColor + ';color:' + readableOn(s.brandColor) + '"' : '') + '>' +

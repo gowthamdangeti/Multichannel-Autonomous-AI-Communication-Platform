@@ -653,8 +653,8 @@ export function buildTokenBreakdown(
 // ============================================================================
 
 export interface ValidationInputs {
-    /** `cost_info.convozent_token_usage` — Σ LLM total_tokens + ceil(tts_chars/4). */
-    convozentTokenUsage?: number | null;
+    /** `cost_info.autonomous_ai_os_token_usage` — Σ LLM total_tokens + ceil(tts_chars/4). */
+    autonomous_ai_osTokenUsage?: number | null;
 }
 
 export function validateBreakdown(
@@ -663,18 +663,18 @@ export function validateBreakdown(
 ): UsageIssue[] {
     const issues: UsageIssue[] = [...breakdown.issues];
 
-    const convozent = finite(inputs.convozentTokenUsage).value;
-    if (convozent > 0) {
+    const autonomous_ai_os = finite(inputs.autonomous_ai_osTokenUsage).value;
+    if (autonomous_ai_os > 0) {
         const ttsEquivalent = breakdown.groups
             .flatMap((group) => group.entries)
             .filter((entry) => entry.type === 'TTS' || entry.type === 'STS')
             .reduce((a, entry) => (entry.unitLabel === 'chars' ? a + Math.ceil(entry.totalUnits / 4) : a), 0);
-        const expectedLlmTokens = convozent - ttsEquivalent;
+        const expectedLlmTokens = autonomous_ai_os - ttsEquivalent;
         const delta = Math.abs(expectedLlmTokens - breakdown.totals.totalTokens);
         if (delta > 0.01) {
             issues.push({
                 severity: 'warn',
-                code: 'convozent_mismatch',
+                code: 'autonomous_ai_os_mismatch',
                 detail:
                     `Table sums to ${breakdown.totals.totalTokens.toLocaleString()} LLM tokens but ` +
                     `cost_info implies ${expectedLlmTokens.toLocaleString()} ` +

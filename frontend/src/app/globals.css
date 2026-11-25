@@ -254,7 +254,7 @@
 @layer components {
   /* Flat brutalist app background — stark white (light) / near-black (dark),
      NO gradients, NO tinted paper. One subtle graphic in BOTH themes: the
-     giant faded "Convozent" wordmark (--brand-imprint, defined in
+     giant faded "Autonomous AI OS" wordmark (--brand-imprint, defined in
      :root/.dark) pinned to the bottom of the viewport, echoing the brand
      footer. */
   /* NOTE: background-attachment: fixed positions in VIEWPORT space but only

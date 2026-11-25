@@ -242,7 +242,7 @@ export default function BillingPage() {
           order_id: d.order_id,
           amount: d.amount,
           currency: "INR",
-          name: "Convozent",
+          name: "Autonomous AI OS",
           description: `${mins} minutes`,
           modal: {
             backdropclose: true,
@@ -302,7 +302,7 @@ export default function BillingPage() {
         new (window as any).Razorpay({
           key: d.key_id,
           subscription_id: d.subscription_id,
-          name: "Convozent",
+          name: "Autonomous AI OS",
           description: `${plan.name} plan`,
           modal: {
             backdropclose: true,

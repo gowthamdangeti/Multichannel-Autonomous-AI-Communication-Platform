@@ -239,8 +239,8 @@ export function WorkflowRunsTable({
         },
         tokens: {
             id: "tokens", label: "Token Usage", head: sortHead("Token Usage", "tokens"), cellClassName: "text-sm tabular-nums whitespace-nowrap",
-            cell: (run) => (typeof run.cost_info?.convozent_token_usage === 'number' ? run.cost_info.convozent_token_usage.toLocaleString() : "-"),
-            cellTitle: (run) => (typeof run.cost_info?.convozent_token_usage === 'number' ? run.cost_info.convozent_token_usage.toLocaleString() : undefined),
+            cell: (run) => (typeof run.cost_info?.autonomous_ai_os_token_usage === 'number' ? run.cost_info.autonomous_ai_os_token_usage.toLocaleString() : "-"),
+            cellTitle: (run) => (typeof run.cost_info?.autonomous_ai_os_token_usage === 'number' ? run.cost_info.autonomous_ai_os_token_usage.toLocaleString() : undefined),
         },
         status: { id: "status", label: "Status", head: sortHead("Status", "status"), cell: (run) => <RunStatusBadge completed={Boolean(run.is_completed)} /> },
     };

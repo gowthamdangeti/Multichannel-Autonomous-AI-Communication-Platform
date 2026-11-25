@@ -169,7 +169,7 @@ export function ProfileSettings() {
             if (res.error) throw new Error("Failed to save profile");
             toast.success("Profile updated");
             if (res.data && typeof window !== "undefined") {
-                window.dispatchEvent(new CustomEvent("convozent:user-updated", { detail: res.data }));
+                window.dispatchEvent(new CustomEvent("autonomous_ai_os:user-updated", { detail: res.data }));
             }
             await loadProfile();
             if (isSetup) {

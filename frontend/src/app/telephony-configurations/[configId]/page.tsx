@@ -283,7 +283,7 @@ export default function TelephonyConfigurationDetailPage() {
               <span className="mt-0.5 text-xs font-normal leading-normal text-muted-foreground">
                 Connect and manage your telephony provider accounts.{" "}
                 <a
-                  href="https://docs.convozent.ai/integrations/telephony/overview"
+                  href="https://docs.autonomous-ai-os.enterprise/integrations/telephony/overview"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-0.5 underline hover:text-foreground"
@@ -377,7 +377,7 @@ export default function TelephonyConfigurationDetailPage() {
           <p className="text-xs text-muted-foreground">
             Numbers used as caller ID for outbound and accepted for inbound matching.{" "}
             <a
-              href="https://docs.convozent.ai/integrations/telephony/inbound"
+              href="https://docs.autonomous-ai-os.enterprise/integrations/telephony/inbound"
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-0.5 underline hover:text-foreground"

@@ -28,7 +28,7 @@ const HIGHLIGHTS = [
   },
   {
     title: "BYOK - any model",
-    description: "Bring Your Own Key — run any model over Convozent.",
+    description: "Bring Your Own Key — run any model over Autonomous AI OS.",
   },
 ];
 

@@ -8,8 +8,8 @@ import { NextResponse } from 'next/server';
 
 import { getAuthProvider } from '@/lib/auth/config';
 
-const OSS_TOKEN_COOKIE = 'convozent_auth_token';
-const OSS_USER_COOKIE = 'convozent_auth_user';
+const OSS_TOKEN_COOKIE = 'ai_os_auth_token';
+const OSS_USER_COOKIE = 'ai_os_auth_user';
 
 export async function GET() {
   const authProvider = await getAuthProvider();

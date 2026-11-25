@@ -91,14 +91,14 @@ export const OnboardingProvider = ({ children }: { children: React.ReactNode }) 
                 setLoaded(true);
                 return;
             }
-            if (res.data) {
+            if (res && res.data) {
                 const data = res.data as Partial<OnboardingState>;
                 setState((prev) => absorb(prev, data));
                 setLoaded(true);
             } else {
-                // API returned an error (4xx/5xx) — stay in loading so
-                // one-time UI stays suppressed for an already-onboarded user.
-                console.error('[onboarding] failed to fetch onboarding state', res.error);
+                // If API returned an error or is uninitialized, graceful fallback with defaults
+                console.warn('[onboarding] onboarding state uninitialized, using fallback defaults', res?.error);
+                setLoaded(true);
             }
         })();
     }, [auth.loading, auth.isAuthenticated]);

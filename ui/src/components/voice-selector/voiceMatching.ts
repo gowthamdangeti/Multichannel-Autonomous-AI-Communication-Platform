@@ -5,7 +5,7 @@ import { resolveVoiceGender } from "@/lib/voiceMetadata";
 const INDIAN_LANGUAGE_CODES = ["hi", "ta", "te", "kn", "bn", "gu", "mr", "ml", "pa", "or", "od", "as", "ur", "sa"];
 
 /** Providers whose voices speak every language they support. */
-const MULTILINGUAL_PROVIDERS = ["elevenlabs", "openai", "cartesia", "convozent", "camb", "minimax", "soniox", "rime"];
+const MULTILINGUAL_PROVIDERS = ["elevenlabs", "openai", "cartesia", "autonomous_ai_os", "camb", "minimax", "soniox", "rime"];
 
 export const GENDER_FILTER_VALUES = ["female", "male", "neutral"];
 

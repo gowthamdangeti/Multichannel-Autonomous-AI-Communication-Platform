@@ -511,7 +511,7 @@ export default function RunsPage() {
                                                                         }),
                                                                     );
                                                                     window.open(
-                                                                        `https://app.axiom.co/convozent/stream/${process.env.NEXT_PUBLIC_AXIOM_LOG_DATASET}?q=${query}`,
+                                                                        `https://app.axiom.co/autonomous_ai_os/stream/${process.env.NEXT_PUBLIC_AXIOM_LOG_DATASET}?q=${query}`,
                                                                         '_blank',
                                                                     );
                                                                 }}>Axiom logs</RowAction>

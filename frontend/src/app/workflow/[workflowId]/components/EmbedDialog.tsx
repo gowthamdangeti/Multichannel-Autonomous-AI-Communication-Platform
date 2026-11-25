@@ -473,7 +473,7 @@ export function EmbedDialog({
                             callToActionText,
                             size: "medium",
                             autoStart: false,
-                            containerId: embedMode === "inline" ? "convozent-inline-container" : undefined,
+                            containerId: embedMode === "inline" ? "ai-os-inline-container" : undefined,
                             preCallForm: {
                                 enabled: preCallEnabled,
                                 title: preCallTitle || undefined,
@@ -748,7 +748,7 @@ export function EmbedDialog({
                                                         <div className="space-y-0.5">
                                                             <h4 className="font-semibold text-xs">Headless mode renders no UI</h4>
                                                             <p className="text-[11px] text-muted-foreground max-w-xl leading-relaxed">
-                                                                Convozent supplies the voice engine in the background. You design 100% of your own buttons and interfaces using the JS API.
+                                                                Autonomous AI OS supplies the voice engine in the background. You design 100% of your own buttons and interfaces using the JS API.
                                                             </p>
                                                         </div>
                                                         <Button
@@ -1326,7 +1326,7 @@ export function EmbedDialog({
                                                 <div className="space-y-0.5">
                                                     <p className="text-xs font-medium text-foreground">Headless Integration Examples</p>
                                                     <p className="text-[11px] text-muted-foreground">
-                                                        Invoke <code className="font-mono bg-muted px-1 rounded">window.ConvozentWidget.start()</code> and <code className="font-mono bg-muted px-1 rounded">end()</code> from your own custom UI.
+                                                        Invoke <code className="font-mono bg-muted px-1 rounded">window.AIOSWidget.start()</code> and <code className="font-mono bg-muted px-1 rounded">end()</code> from your own custom UI.
                                                     </p>
                                                 </div>
 
@@ -1352,19 +1352,19 @@ export function EmbedDialog({
 
   // Subscribe to voice status events
   window.addEventListener('load', () => {
-    window.ConvozentWidget?.onStatusChange((status) => {
+    window.AIOSWidget?.onStatusChange((status) => {
       callStatus = status;
       render();
     });
-    window.ConvozentWidget?.onError((err) => console.error(err.message));
+    window.AIOSWidget?.onError((err) => console.error(err.message));
   });
 
   // User click trigger (required for browser mic permissions)
   btn.addEventListener('click', () => {
     if (callStatus === 'connected' || callStatus === 'connecting') {
-      window.ConvozentWidget.end();
+      window.AIOSWidget.end();
     } else {
-      window.ConvozentWidget.start();
+      window.AIOSWidget.start();
     }
   });
 </script>`}</pre>
@@ -1382,15 +1382,15 @@ export function VoiceAgentButton() {
   const [status, setStatus] = useState('idle');
 
   useEffect(() => {
-    window.ConvozentWidget?.onStatusChange(setStatus);
-    window.ConvozentWidget?.onError((err) => console.error(err.message));
+    window.AIOSWidget?.onStatusChange(setStatus);
+    window.AIOSWidget?.onError((err) => console.error(err.message));
   }, []);
 
   const isLive = status === 'connected' || status === 'connecting';
   const label = { idle: 'Talk to AI', connecting: 'Connecting…', connected: 'End Call', failed: 'Retry' }[status];
 
   return (
-    <button onClick={() => isLive ? window.ConvozentWidget.end() : window.ConvozentWidget.start()}>
+    <button onClick={() => isLive ? window.AIOSWidget.end() : window.AIOSWidget.start()}>
       {label}
     </button>
   );
@@ -1409,7 +1409,7 @@ export function VoiceAgentButton() {
                                                 </div>
                                                 <div className="rounded-md bg-zinc-950 p-3 border border-zinc-800 text-zinc-100 overflow-x-auto">
                                                     <pre className="text-xs font-mono leading-relaxed">{`<!-- Place where you want the agent widget to appear -->
-<div id="convozent-inline-container" style="min-height: 400px; width: 100%;"></div>`}</pre>
+<div id="ai-os-inline-container" style="min-height: 400px; width: 100%;"></div>`}</pre>
                                                 </div>
                                             </div>
                                         ) : (

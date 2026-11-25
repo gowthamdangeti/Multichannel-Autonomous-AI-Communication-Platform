@@ -60,7 +60,7 @@ export function DashboardMetricsAndTurns({
     // Extract turns and metrics from real event data
     const { turns, nodeStats, overall } = useMemo(() => {
         const events = (workflowRun?.logs?.realtime_feedback_events ?? []) as RealtimeFeedbackEvent[];
-        const rawTokens = Number(workflowRun?.cost_info?.convozent_token_usage) || 0;
+        const rawTokens = Number(workflowRun?.cost_info?.autonomous_ai_os_token_usage) || 0;
         const parsedTurns = parseTurns(workflowRun);
 
         // Count unique nodes visited via node-transition events
