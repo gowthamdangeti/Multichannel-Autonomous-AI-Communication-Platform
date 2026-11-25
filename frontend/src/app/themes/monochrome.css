@@ -1,0 +1,393 @@
+/* =============================================================================
+   MONOCHROME — quiet neutral dashboard theme. Dark values are sampled from the
+   approved reference: near-black content panel on a charcoal sidebar, hairline
+   10% white borders, no shadows, and a light grey primary. Colour only appears
+   in brand, status and chart tokens.
+============================================================================= */
+[data-theme="monochrome"] {
+  --radius: 0.625rem;
+  --radius-sidebar: 0.75rem;
+  --radius-sidebar-item: 0.5rem;
+  --radius-card: 0.75rem;
+  --radius-button: 0.5rem;
+  --radius-input: 0.5rem;
+  --radius-badge: 0.5rem;
+
+  --background: #ffffff;
+  --foreground: #0a0a0a;
+  --card: #ffffff;
+  --card-foreground: #0a0a0a;
+  --popover: #ffffff;
+  --popover-foreground: #0a0a0a;
+  --primary: #171717;
+  --primary-foreground: #fafafa;
+  --secondary: #f5f5f5;
+  --secondary-foreground: #171717;
+  --muted: #f5f5f5;
+  --muted-foreground: #666666;
+  --text-faint: #707070;
+  --accent: #f5f5f5;
+  --accent-foreground: #171717;
+  --destructive: oklch(0.577 0.245 27.325);
+  --destructive-foreground: #fafafa;
+  --border: #e5e5e5;
+  --border-hover: #d4d4d4;
+  --input: #e5e5e5;
+  --ring: #a1a1a1;
+
+  --text-body: #0a0a0a;
+  --text-description: #666666;
+  --text-muted: #707070;
+
+  --cta: #171717;
+  --cta-foreground: #fafafa;
+  --accent-pink: #f5f5f5;
+  --accent-pink-foreground: #171717;
+  --archived-bar-bg: #f5f5f5;
+  --pink-50: #fafafa;
+  --pink-100: #f5f5f5;
+  --pink-200: #e5e5e5;
+  --pink-300: #d4d4d4;
+
+  --status-success: oklch(0.627 0.194 149.214);
+  --status-success-foreground: #fafafa;
+  --status-warning: oklch(0.666 0.179 58.318);
+
+  --shadow-color: transparent;
+  --surface-border-width: 1px;
+  --surface-shadow: none;
+  --surface-shadow-lg: none;
+  --surface-shadow-sm: none;
+  --button-shadow: none;
+  --input-shadow: none;
+  --surface-blur: 0px;
+  --press-offset: 0px;
+
+  --run-page: #f4f4f5;
+  --tabs-list: #e9e9eb;
+  --run-card-border: #e5e5e5;
+  --run-child-surface: #f7f7f7;
+  --run-nested-surface: #ffffff;
+  --run-chart-1: var(--chart-1);
+  --run-chart-2: var(--chart-2);
+  --run-chart-3: var(--chart-3);
+  --table-header: #f5f4f5;
+
+  --sidebar: #fafafa;
+  --sidebar-foreground: #0a0a0a;
+  --sidebar-primary: #171717;
+  --sidebar-primary-foreground: #fafafa;
+  --sidebar-accent: #f0f0f0;
+  --sidebar-accent-foreground: #171717;
+  --sidebar-selected: #ba3f61;
+  --sidebar-selected-foreground: #ffffff;
+  --sidebar-selected-hover: #a33554;
+  --sidebar-border: #e5e5e5;
+  --sidebar-ring: #a1a1a1;
+
+  --chart-grid: #e5e5e5;
+  --chart-line: #4f46e5;
+  --chart-1: #4f46e5;
+  --chart-2: #0d9488;
+  --chart-3: #f59e0b;
+  --chart-4: #ba3f61;
+  --chart-5: #7c3aed;
+  --chart-palette-1: var(--chart-1);
+  --chart-palette-2: var(--chart-2);
+  --chart-palette-3: var(--chart-3);
+  --chart-palette-4: var(--chart-4);
+  --chart-palette-5: var(--chart-5);
+
+  --brand-imprint: none;
+}
+
+[data-theme="monochrome"].dark {
+  --background: #0a0a0a;
+  --foreground: #fafafa;
+  --card: #171717;
+  --card-foreground: #fafafa;
+  --popover: #171717;
+  --popover-foreground: #fafafa;
+  --primary: #e5e5e5;
+  --primary-foreground: #171717;
+  --secondary: #262626;
+  --secondary-foreground: #fafafa;
+  --muted: #262626;
+  --muted-foreground: #a1a1a1;
+  --text-faint: #8f8f8f;
+  --accent: #262626;
+  --accent-foreground: #fafafa;
+  --destructive: oklch(0.704 0.191 22.216);
+  --destructive-foreground: #fafafa;
+  --border: oklch(1 0 0 / 10%);
+  --border-hover: oklch(1 0 0 / 20%);
+  --input: oklch(1 0 0 / 15%);
+  --ring: #737373;
+
+  --text-body: #fafafa;
+  --text-description: #a1a1a1;
+  --text-muted: #8f8f8f;
+
+  --cta: #e5e5e5;
+  --cta-foreground: #171717;
+  --accent-pink: #262626;
+  --accent-pink-foreground: #fafafa;
+  --archived-bar-bg: #171717;
+  --pink-50: #171717;
+  --pink-100: #262626;
+  --pink-200: #333333;
+  --pink-300: #404040;
+
+  --status-success: oklch(0.723 0.219 149.579);
+  --status-success-foreground: #0a0a0a;
+  --status-warning: oklch(0.769 0.188 70.08);
+
+  --run-page: #0a0a0a;
+  --tabs-list: #262626;
+  --run-card-border: oklch(1 0 0 / 12%);
+  --run-child-surface: #212121;
+  --run-nested-surface: #171717;
+  --table-header: #262626;
+
+  --sidebar: #171717;
+  --sidebar-foreground: #fafafa;
+  --sidebar-primary: #e5e5e5;
+  --sidebar-primary-foreground: #171717;
+  --sidebar-accent: #262626;
+  --sidebar-accent-foreground: #fafafa;
+  --sidebar-border: oklch(1 0 0 / 10%);
+  --sidebar-ring: #737373;
+
+  --chart-grid: oklch(1 0 0 / 10%);
+  --chart-line: #818cf8;
+  --chart-1: #818cf8;
+  --chart-2: #2dd4bf;
+  --chart-3: #fbbf24;
+  --chart-4: #e0718f;
+  --chart-5: #a78bfa;
+}
+
+/* Text has three levels: foreground for main text, --muted-foreground for
+   subtext and --text-faint for sub-subtext. Faded utilities resolve to the
+   lowest level so small text stays at 4.5:1 on every surface. Icons keep their
+   fade because they are decorative. */
+[data-theme="monochrome"] :not(svg).text-muted-foreground\/30,
+[data-theme="monochrome"] :not(svg).text-muted-foreground\/40,
+[data-theme="monochrome"] :not(svg).text-muted-foreground\/50,
+[data-theme="monochrome"] :not(svg).text-muted-foreground\/60,
+[data-theme="monochrome"] :not(svg).text-muted-foreground\/70,
+[data-theme="monochrome"] :not(svg).text-muted-foreground\/75,
+[data-theme="monochrome"] :not(svg).text-muted-foreground\/80,
+[data-theme="monochrome"] :not(svg).text-muted-foreground\/90 {
+  color: var(--text-faint);
+}
+
+/* Light mode only: these status shades are too pale on white, so they move one
+   step darker. Dark mode already uses the lighter 300/400 shades. */
+[data-theme="monochrome"]:not(.dark) {
+  --color-amber-500: #b45309;
+  --color-amber-600: #b45309;
+  --color-amber-700: #92400e;
+  --color-yellow-600: #a16207;
+  --color-emerald-500: #047857;
+  --color-emerald-600: #047857;
+  --color-green-600: #15803d;
+  --color-red-500: #c81e1e;
+  --color-blue-500: #1d5fe0;
+}
+
+/* Detail pages: these were styled for the display themes, so their
+   forced capitals, typewriter labels, shadows and rainbow accents are reset here
+   in one place. Green, amber and red keep their status meaning; code stays mono. */
+/* Navigation pages sit on the same grey as detail pages. */
+[data-theme="monochrome"] [data-page-content] {
+  background-color: var(--run-page);
+}
+/* Off-canvas drawers (Sheet and Drawer) sit on the same grey as the page they
+   open over, footer included. Content cards inside stay white (bg-card). */
+[data-theme="monochrome"] [data-slot="sheet-content"],
+[data-theme="monochrome"] [data-slot="sheet-footer"],
+[data-theme="monochrome"] [data-slot="drawer-content"],
+[data-theme="monochrome"] [data-slot="drawer-footer"] {
+  background-color: var(--run-page);
+}
+/* --muted matches that grey, so a tab bar needs its own step to stay visible. */
+[data-theme="monochrome"] [data-slot="tabs-list"].bg-muted {
+  background-color: var(--tabs-list);
+}
+[data-theme="monochrome"] [data-detail-page] {
+  --color-sky-300: var(--muted-foreground);
+  --color-sky-400: var(--muted-foreground);
+  --color-sky-500: var(--muted-foreground);
+  --color-sky-600: var(--muted-foreground);
+  --color-sky-700: var(--muted-foreground);
+  --color-cyan-300: var(--muted-foreground);
+  --color-cyan-400: var(--muted-foreground);
+  --color-cyan-500: var(--muted-foreground);
+  --color-cyan-600: var(--muted-foreground);
+  --color-cyan-700: var(--muted-foreground);
+  --color-blue-300: var(--muted-foreground);
+  --color-blue-400: var(--muted-foreground);
+  --color-blue-500: var(--muted-foreground);
+  --color-blue-600: var(--muted-foreground);
+  --color-blue-700: var(--muted-foreground);
+  --color-indigo-300: var(--muted-foreground);
+  --color-indigo-400: var(--muted-foreground);
+  --color-indigo-500: var(--muted-foreground);
+  --color-indigo-600: var(--muted-foreground);
+  --color-indigo-700: var(--muted-foreground);
+  --color-violet-300: var(--muted-foreground);
+  --color-violet-400: var(--muted-foreground);
+  --color-violet-500: var(--muted-foreground);
+  --color-violet-600: var(--muted-foreground);
+  --color-violet-700: var(--muted-foreground);
+  --color-purple-300: var(--muted-foreground);
+  --color-purple-400: var(--muted-foreground);
+  --color-purple-500: var(--muted-foreground);
+  --color-purple-600: var(--muted-foreground);
+  --color-purple-700: var(--muted-foreground);
+  --color-fuchsia-300: var(--muted-foreground);
+  --color-fuchsia-400: var(--muted-foreground);
+  --color-fuchsia-500: var(--muted-foreground);
+  --color-fuchsia-600: var(--muted-foreground);
+  --color-fuchsia-700: var(--muted-foreground);
+  --color-teal-300: var(--muted-foreground);
+  --color-teal-400: var(--muted-foreground);
+  --color-teal-500: var(--muted-foreground);
+  --color-teal-600: var(--muted-foreground);
+  --color-teal-700: var(--muted-foreground);
+}
+[data-theme="monochrome"]:not(.dark) [data-detail-page] {
+  --color-amber-300: #b45309;
+  --color-amber-400: #b45309;
+  --color-emerald-300: #047857;
+  --color-emerald-400: #047857;
+  --color-red-300: #c81e1e;
+  --color-red-400: #c81e1e;
+}
+[data-theme="monochrome"] [data-detail-page] .uppercase {
+  text-transform: none;
+}
+[data-theme="monochrome"] [data-detail-page] [class*="tracking-wide"] {
+  letter-spacing: normal;
+}
+/* Four clear levels: grey page, white parent card, grey child card, and white
+   boxes inside a child. Each gets its own surface and a solid border. */
+[data-theme="monochrome"] [data-detail-page] {
+  /* Pulls up over the layout's page gutter so no white strip shows. */
+  margin-top: -1rem;
+  background-color: var(--run-page);
+}
+[data-theme="monochrome"] [data-detail-page] [data-slot="card"],
+[data-theme="monochrome"] [data-detail-page] [class*="border-border/"] {
+  border-color: var(--run-card-border);
+}
+[data-theme="monochrome"] [data-detail-page] [data-slot="card"] :is(.bg-muted\/10, .bg-muted\/15, .bg-muted\/20, .bg-muted\/30, .bg-muted\/50) {
+  background-color: var(--run-child-surface);
+  border-color: var(--run-card-border);
+}
+[data-theme="monochrome"] [data-detail-page] [data-slot="card"] :is(.bg-muted\/10, .bg-muted\/15, .bg-muted\/20, .bg-muted\/30, .bg-muted\/50) :is(.bg-muted\/10, .bg-muted\/15, .bg-muted\/20, .bg-muted\/30, .bg-muted\/40, .bg-muted\/50) {
+  background-color: var(--run-nested-surface);
+  border-color: var(--run-card-border);
+}
+
+/* Card headers and footers belong to the parent card, not the child level. */
+[data-theme="monochrome"] [data-detail-page] [data-slot="card"] > :is(.bg-muted\/10, .bg-muted\/15, .bg-muted\/20, .bg-muted\/30, .bg-muted\/50) {
+  background-color: transparent;
+}
+
+/* Card titles were tiny capitals, so one size keeps every card title even. */
+[data-theme="monochrome"] [data-detail-page] :is(.text-xs, .text-sm).font-bold.uppercase {
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+[data-theme="monochrome"] [data-detail-page] .font-mono:not(pre, pre *, code) {
+  font-family: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  font-variant-numeric: tabular-nums;
+}
+[data-theme="monochrome"] [data-detail-page] :is(.text-\[9px\], .text-\[10px\], .text-\[11px\]) {
+  font-size: 0.75rem;
+}
+[data-theme="monochrome"] [data-detail-page] [data-slot="card"],
+[data-theme="monochrome"] [data-detail-page] [data-slot="card"]:hover {
+  box-shadow: none;
+  backdrop-filter: none;
+}
+
+/* The serif default used to suit the display themes only; the UI font is now
+   a user preference (Settings → Theme → Font family), applied via --app-font-ui. */
+
+/* Cards stay solid under the KPI gradient, which is partly transparent. */
+[data-theme="monochrome"] [data-slot="sidebar-inset"] [data-slot="card"] {
+  background-color: var(--card);
+}
+
+/* The sidebar sits flat on the app background instead of floating as a card. */
+[data-theme="monochrome"] .app-sidebar-dock [data-slot="sidebar-inner"] {
+  border-width: 0;
+  border-radius: 0;
+  box-shadow: none;
+  backdrop-filter: none;
+}
+
+/* The selected page is solid brand pink; hover is neutral grey, so the two
+   never look the same. */
+[data-theme="monochrome"] .nb-sidebar-active {
+  background-color: var(--sidebar-selected);
+  color: var(--sidebar-selected-foreground);
+}
+[data-theme="monochrome"] .nb-sidebar-active:hover {
+  background-color: var(--sidebar-selected-hover);
+  color: var(--sidebar-selected-foreground);
+}
+[data-theme="monochrome"] .nb-sidebar-active .active-sidebar-icon {
+  color: currentColor;
+}
+
+/* Secondary sub-sidebar navigation (e.g. Agent Settings, Admin Models, Sub-navs) */
+[data-theme="monochrome"] .nb-secondary-nav-item {
+  border-radius: var(--radius-sidebar-item, 0.5rem);
+  color: var(--muted-foreground);
+  font-weight: 500;
+  border: 1px solid transparent;
+  transition: all 0.15s ease;
+}
+
+[data-theme="monochrome"] .nb-secondary-nav-item:hover:not(.nb-secondary-nav-active) {
+  background-color: var(--accent);
+  color: var(--foreground);
+}
+
+[data-theme="monochrome"] .nb-secondary-nav-active {
+  background-color: color-mix(in srgb, var(--sidebar-selected) 12%, transparent);
+  color: var(--sidebar-selected);
+  border: 1px solid color-mix(in srgb, var(--sidebar-selected) 24%, transparent);
+  font-weight: 600;
+}
+
+[data-theme="monochrome"] .nb-secondary-nav-active:hover {
+  background-color: color-mix(in srgb, var(--sidebar-selected) 18%, transparent);
+  color: var(--sidebar-selected);
+}
+
+[data-theme="monochrome"].dark .nb-secondary-nav-active {
+  background-color: color-mix(in srgb, var(--sidebar-selected) 22%, transparent);
+  color: #ffb3c6;
+  border: 1px solid color-mix(in srgb, var(--sidebar-selected) 38%, transparent);
+}
+
+[data-theme="monochrome"].dark .nb-secondary-nav-active:hover {
+  background-color: color-mix(in srgb, var(--sidebar-selected) 28%, transparent);
+  color: #ffb3c6;
+}
+
+/* Every table gets the same header band, including plain <thead> tables and
+   pinned columns, whose own background would otherwise show through. */
+[data-theme="monochrome"] thead,
+[data-theme="monochrome"] thead th {
+  background-color: var(--table-header);
+}
+[data-theme="monochrome"] thead th {
+  color: var(--foreground);
+  font-weight: 500;
+}

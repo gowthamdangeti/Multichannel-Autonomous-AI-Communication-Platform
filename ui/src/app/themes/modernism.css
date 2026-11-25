@@ -1,0 +1,119 @@
+/* =============================================================================
+   MODERNISM — contemporary SaaS dashboard (Linear / Stripe / Vercel-adjacent):
+   near-neutral warm surfaces, the brand pink (#ed356d) as the accent, soft
+   two-layer pink-tinted elevation (no hard offset) and rounded corners.
+============================================================================= */
+[data-theme="modernism"] {
+  --radius: 0.75rem;
+  --background: oklch(0.99 0.003 20);
+  --foreground: oklch(0.19 0.008 20);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.19 0.008 20);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.19 0.008 20);
+  --primary: oklch(0.23 0.01 18);
+  --primary-foreground: oklch(0.985 0.002 20);
+  --secondary: oklch(0.966 0.004 20);
+  --secondary-foreground: oklch(0.23 0.01 18);
+  --muted: oklch(0.966 0.004 20);
+  --muted-foreground: oklch(0.5 0.008 20);
+  --accent: oklch(0.955 0.006 18);
+  --accent-foreground: oklch(0.23 0.01 18);
+  --destructive: oklch(0.577 0.245 27.325);
+  --border: oklch(0.905 0.005 20);
+  --input: oklch(0.905 0.005 20);
+  --ring: oklch(0.629 0.219 9);
+  --shadow-color: oklch(0.45 0.16 9 / 0.08);
+  --chart-grid: var(--border);
+  --chart-line: var(--cta);
+  --surface-border-width: 1px;
+  --surface-shadow: 0 1px 2px var(--shadow-color), 0 6px 16px var(--shadow-color);
+  --surface-shadow-lg: 0 2px 6px var(--shadow-color), 0 18px 44px var(--shadow-color);
+  --button-shadow: var(--surface-shadow);
+  --surface-blur: 0px;
+  --press-offset: 0px;
+  --chart-1: oklch(0.629 0.219 9);
+  --chart-2: oklch(0.7 0.15 32);
+  --chart-3: oklch(0.56 0.2 350);
+  --chart-4: oklch(0.8 0.13 75);
+  --chart-5: oklch(0.46 0.16 356);
+  --sidebar: oklch(0.985 0.004 20);
+  --sidebar-foreground: oklch(0.19 0.008 20);
+  --sidebar-primary: oklch(0.629 0.219 9);
+  --sidebar-primary-foreground: oklch(0.99 0 0);
+  --sidebar-accent: oklch(0.955 0.006 18);
+  --sidebar-accent-foreground: oklch(0.23 0.01 18);
+  --sidebar-border: oklch(0.905 0.005 20);
+  --sidebar-ring: oklch(0.629 0.219 9);
+  --cta: oklch(0.6 0.223 9);
+  --cta-foreground: oklch(0.99 0 0);
+  --brand-imprint: url("/brand-imprint-light.svg");
+}
+
+[data-theme="modernism"].dark {
+  --background: oklch(0.17 0.006 20);
+  --foreground: oklch(0.96 0.003 20);
+  --card: oklch(0.212 0.008 20);
+  --card-foreground: oklch(0.96 0.003 20);
+  --popover: oklch(0.212 0.008 20);
+  --popover-foreground: oklch(0.96 0.003 20);
+  --primary: oklch(0.91 0.003 20);
+  --primary-foreground: oklch(0.2 0.008 20);
+  --secondary: oklch(0.27 0.008 20);
+  --secondary-foreground: oklch(0.96 0.003 20);
+  --muted: oklch(0.27 0.008 20);
+  --muted-foreground: oklch(0.66 0.008 20);
+  --accent: oklch(0.28 0.01 20);
+  --accent-foreground: oklch(0.96 0.003 20);
+  --destructive: oklch(0.704 0.191 22.216);
+  --border: oklch(1 0 0 / 11%);
+  --input: oklch(1 0 0 / 15%);
+  --ring: oklch(0.68 0.2 9);
+  --shadow-color: oklch(0 0 0 / 0.5);
+  --chart-grid: var(--border);
+  --chart-line: var(--cta);
+  --chart-1: oklch(0.7 0.2 9);
+  --chart-2: oklch(0.76 0.14 32);
+  --chart-3: oklch(0.66 0.19 350);
+  --chart-4: oklch(0.82 0.13 75);
+  --chart-5: oklch(0.6 0.17 356);
+  --sidebar: oklch(0.195 0.007 20);
+  --sidebar-foreground: oklch(0.96 0.003 20);
+  --sidebar-primary: oklch(0.68 0.2 9);
+  --sidebar-primary-foreground: oklch(0.99 0 0);
+  --sidebar-accent: oklch(0.28 0.01 20);
+  --sidebar-accent-foreground: oklch(0.96 0.003 20);
+  --sidebar-border: oklch(1 0 0 / 11%);
+  --sidebar-ring: oklch(0.68 0.2 9);
+  --cta: oklch(0.68 0.2 9);
+  --cta-foreground: oklch(0.16 0.008 20);
+  --brand-imprint: url("/brand-imprint-dark.svg");
+}
+
+/* Secondary Sidebar */
+[data-theme="modernism"] .nb-secondary-sidebar {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background-color: var(--sidebar);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+}
+
+[data-theme="modernism"] .nb-secondary-nav-item {
+  border-radius: var(--radius);
+  color: var(--sidebar-foreground);
+  font-weight: 500;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+[data-theme="modernism"] .nb-secondary-nav-item:hover:not(.nb-secondary-nav-active) {
+  background-color: var(--accent);
+  color: var(--accent-foreground);
+  transform: translateX(4px);
+}
+
+[data-theme="modernism"] .nb-secondary-nav-active {
+  background-color: var(--primary);
+  color: var(--primary-foreground);
+  font-weight: 600;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}

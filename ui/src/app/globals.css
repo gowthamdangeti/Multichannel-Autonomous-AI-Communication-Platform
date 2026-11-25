@@ -1,0 +1,493 @@
+@import "tailwindcss";
+@import "./themes/brutalist.css";
+@import "./themes/minimalist.css";
+@import "./themes/glassmorphism.css";
+@import "./themes/modernism.css";
+@import "./themes/monochrome.css";
+
+@plugin "tailwindcss-animate";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--app-font-ui);
+  --font-mono: var(--font-geist-mono);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --color-cta: var(--cta);
+  --color-cta-foreground: var(--cta-foreground);
+  --color-status-success: var(--status-success);
+  --color-status-success-foreground: var(--status-success-foreground);
+  --color-status-warning: var(--status-warning);
+  --color-run-chart-1: var(--run-chart-1);
+  --color-run-chart-2: var(--run-chart-2);
+  --color-run-chart-3: var(--run-chart-3);
+  --color-accent-pink: var(--accent-pink, #fdecef);
+  --color-accent-pink-foreground: var(--accent-pink-foreground, #000000);
+  --color-pink-50: var(--pink-50, #fff7f9);
+  --color-pink-100: var(--pink-100, #fdecef);
+  --color-pink-200: var(--pink-200, #f9e4e8);
+  --color-pink-300: var(--pink-300, #f6dce2);
+  /* Generic "surface" shadow — every design theme (brutalist, minimalist,
+     glassmorphism, modernism) defines --surface-shadow/-lg with its own
+     shape and color, so components can stay theme-agnostic and just use
+     shadow-surface / shadow-surface-lg. */
+  --shadow-surface: var(--surface-shadow);
+  --shadow-surface-lg: var(--surface-shadow-lg);
+  --shadow-button: var(--button-shadow);
+  --color-auth-panel-foreground: var(--auth-panel-foreground);
+  --color-code-editor-bg: var(--code-editor-bg);
+  --color-code-editor-border: var(--code-editor-border);
+  --color-code-token-comment: var(--code-token-comment);
+  --color-code-token-tag-bracket: var(--code-token-tag-bracket);
+  --color-code-token-tag-name: var(--code-token-tag-name);
+  --color-code-token-keyword: var(--code-token-keyword);
+  --color-code-token-control: var(--code-token-control);
+  --color-code-token-string: var(--code-token-string);
+  --color-code-token-call: var(--code-token-call);
+  --color-code-token-property: var(--code-token-property);
+  --color-code-token-variable: var(--code-token-variable);
+  --color-code-token-literal: var(--code-token-literal);
+  --color-code-token-number: var(--code-token-number);
+  --color-code-token-punctuation: var(--code-token-punctuation);
+  --color-code-token-paren: var(--code-token-paren);
+  --color-code-token-gutter: var(--code-token-gutter);
+}
+
+/* Auth brand panel tokens — theme-independent (the panel is always dark). */
+:root {
+  --auth-panel-foreground: #fafafa;
+  /* Auth brand panel surface (AuthShell): plain black base. The colour comes
+     from the animated grain-gradient shader layered on top (AuthPanelShader);
+     this is also what shows if WebGL is unavailable. Same in light and dark. */
+  --auth-panel-surface: linear-gradient(165deg, #0f0f0f 0%, #000000 100%);
+  --code-editor-bg: #1e1e20;
+  --code-editor-border: #2e2e32;
+  --code-token-comment: #6a9955;
+  --code-token-tag-bracket: #808080;
+  --code-token-tag-name: #569cd6;
+  --code-token-keyword: #569cd6;
+  --code-token-control: #c586c0;
+  --code-token-string: #ce9178;
+  --code-token-call: #dcdcaa;
+  --code-token-property: #9cdcfe;
+  --code-token-variable: #9cdcfe;
+  --code-token-literal: #569cd6;
+  --code-token-number: #b5cea8;
+  --code-token-punctuation: #d4d4d4;
+  --code-token-paren: #ffd700;
+  --code-token-gutter: #6e7681;
+}
+
+/* Default theme (Brutalist) variables are located in ./themes/brutalist.css */
+
+/* Themes (Minimalist, Glassmorphism, and Modernism) have been moved to separate files in the ./themes directory */
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+    
+    /* Hide scrollbar for IE, Edge and Firefox */
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  /* Hide scrollbar for Chrome, Safari and Opera */
+  *::-webkit-scrollbar {
+    display: none;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+  }
+
+  /* Tailwind 4 leaves buttons on the default cursor; anything clickable shows the pointer. */
+  button:not(:disabled),
+  [role="button"]:not([aria-disabled="true"]) {
+    cursor: pointer;
+  }
+}
+
+/* Neo-Brutalism component accents.
+   These classes are theme-agnostic guards: they only apply the pink surface
+   when the active design theme is brutalist. */
+
+/* Active sidebar item: exact reference match — light pink bg, black text/icon,
+   no rail dot, rounded-md, bold. */
+
+.nb-sidebar-active {
+  background-color: color-mix(in oklch, var(--cta) 15%, transparent);
+  color: var(--foreground);
+  font-weight: 500;
+}
+.nb-sidebar-active:hover {
+  background-color: color-mix(in oklch, var(--cta) 20%, transparent);
+  color: var(--foreground);
+}
+.nb-sidebar-active .active-sidebar-icon {
+  color: var(--cta);
+}
+
+/* Parent section that owns the current page (e.g. "Teams" while a Teams tab is
+   open and its sub-list is expanded). Softer than .nb-sidebar-active so the
+   parent and its active child can both read as selected without two heavy
+   pills competing. */
+.nb-sidebar-section-active {
+  background-color: transparent;
+  color: var(--foreground);
+  font-weight: 600;
+}
+.nb-sidebar-section-active:hover {
+  background-color: var(--sidebar-accent);
+  color: var(--foreground);
+}
+.nb-sidebar-section-active .active-sidebar-icon {
+  color: var(--cta);
+}
+
+/* Secondary sub-sidebar navigation baseline */
+.nb-secondary-nav-item {
+  border-radius: var(--radius-md, 0.5rem);
+  color: var(--muted-foreground);
+  font-weight: 500;
+  border: 1px solid transparent;
+  transition: all 0.15s ease;
+}
+
+.nb-secondary-nav-item:hover:not(.nb-secondary-nav-active) {
+  background-color: var(--accent);
+  color: var(--foreground);
+}
+
+.nb-secondary-nav-active {
+  background-color: color-mix(in srgb, var(--sidebar-selected, var(--cta)) 12%, transparent);
+  color: var(--sidebar-selected, var(--cta));
+  border: 1px solid color-mix(in srgb, var(--sidebar-selected, var(--cta)) 24%, transparent);
+  font-weight: 600;
+}
+
+.dark .nb-secondary-nav-active {
+  background-color: color-mix(in srgb, var(--sidebar-selected, var(--cta)) 22%, transparent);
+  color: #ffb3c6;
+  border: 1px solid color-mix(in srgb, var(--sidebar-selected, var(--cta)) 38%, transparent);
+}
+
+[data-theme="brutalist"] .nb-table-header {
+  background-color: var(--accent-pink);
+}
+[data-theme="brutalist"] .nb-table-header th {
+  color: var(--foreground);
+  border-color: var(--border);
+}
+
+[data-theme="brutalist"] .nb-archived-section {
+  background-color: var(--accent-pink);
+}
+
+[data-theme="brutalist"] .nb-archived-bar {
+  background-color: var(--archived-bar-bg);
+}
+
+[data-theme="brutalist"] .nb-archived-trigger {
+  background-color: transparent;
+}
+[data-theme="brutalist"] .nb-archived-trigger:hover {
+  background-color: transparent;
+}
+[data-theme="brutalist"] .nb-archived-trigger svg,
+[data-theme="brutalist"] .nb-archived-trigger span {
+  color: var(--foreground);
+}
+
+[data-theme="brutalist"] .nb-badge {
+  background-color: var(--card);
+  color: var(--foreground);
+  border-color: var(--border);
+}
+
+@keyframes spin-slow {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-spin-slow {
+  animation: spin-slow 3s linear infinite;
+}
+
+@layer components {
+  /* Flat brutalist app background — stark white (light) / near-black (dark),
+     NO gradients, NO tinted paper. One subtle graphic in BOTH themes: the
+     giant faded "Convozent" wordmark (--brand-imprint, defined in
+     :root/.dark) pinned to the bottom of the viewport, echoing the brand
+     footer. */
+  /* NOTE: background-attachment: fixed positions in VIEWPORT space but only
+     paints inside .app-surface, which starts right of the ~270px sidebar —
+     the +135px x-shift recentres the wordmark on the VISIBLE canvas. */
+  .app-surface {
+    background-color: var(--background);
+    background-image: var(--brand-imprint);
+    background-size: min(68vw, 980px) auto;
+    background-position: calc(50% + 135px) calc(100% - 24px);
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+  }
+  /* Sidebar is offcanvas on small screens — true centre there. */
+  @media (max-width: 767px) {
+    .app-surface {
+      background-position: center calc(100% - 24px);
+    }
+  }
+
+}
+
+
+
+/* ---------------------------------------------------------------------------
+   UN-LAYERED overrides. These intentionally live OUTSIDE @layer blocks:
+   they restyle elements that carry Tailwind utility classes (bg-sidebar,
+   rounded-lg, shadow-sm, border-*) and utilities sit in a later cascade
+   layer than @layer components — un-layered author CSS beats both.
+--------------------------------------------------------------------------- */
+
+/* ---------------------------------------------------------------------------
+   UI font family. Set by Settings → Theme; `data-font` lives on <html>
+   (applied pre-hydration by the layout inline script from localStorage
+   "font-family-v2"), so the chosen font is in effect before first paint and
+   independently of any design theme. --app-font-ui feeds both the `font-sans`
+   Tailwind token (see @theme inline above) and the body rule below — the
+   body rule is un-layered, so it also wins over any theme-level font rules.
+--------------------------------------------------------------------------- */
+:root {
+  --app-font-ui: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+}
+:root[data-font="geist"] {
+  --app-font-ui: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+}
+:root[data-font="inter"] {
+  --app-font-ui: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+}
+:root[data-font="playfair"] {
+  --app-font-ui: var(--font-playfair), Georgia, "Times New Roman", serif;
+}
+:root[data-font="bricolage"] {
+  --app-font-ui: var(--font-bricolage), ui-sans-serif, system-ui, sans-serif;
+}
+:root[data-font="system"] {
+  --app-font-ui: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
+body {
+  font-family: var(--app-font-ui);
+}
+
+/* Floating-dock sidebar: detached panel, styled from the same per-theme
+   surface tokens as every other panel (border width, shadow, blur). Targets
+   the shadcn sidebar's inner panel; applied via .app-sidebar-dock on
+   <Sidebar variant="floating">. */
+.app-sidebar-dock [data-slot="sidebar-inner"] {
+  border-radius: var(--radius);
+  border-width: var(--surface-border-width);
+  overflow: hidden;
+  box-shadow: var(--surface-shadow-lg);
+  backdrop-filter: blur(var(--surface-blur));
+}
+/* Brutalist keeps the dock explicitly more rounded than the rest of its
+   sharp-cornered UI, per earlier design decision — a deliberate exception. */
+[data-theme="brutalist"] .app-sidebar-dock [data-slot="sidebar-inner"] {
+  border-radius: 1.25rem;
+}
+[data-theme="brutalist"] .app-sidebar-dock[data-state="collapsed"] [data-slot="sidebar-inner"] {
+  border-radius: 0.75rem;
+}
+.dark .app-sidebar-dock [data-slot="sidebar-inner"] {
+  background-color: var(--sidebar);
+}
+
+/* Lead-form shell ("Ledger" treatment, user-approved 2026-06-11): neutral
+   charcoal slab where ONLY the header band is darker (body and footer share
+   the slab colour), muted compact labels, and underline-only fields with an
+   amber underline on focus. Applied by LeadModalShell; CaptchaChallenge
+   reuses slab + underline. */
+.dark .lead-form-slab {
+  background-color: oklch(0.215 0 0);
+  border-color: rgb(255 255 255 / 0.1);
+}
+/* Align close button in lead form headers to match the horizontal badge center line */
+.lead-form-slab button[class*="absolute"] {
+  top: 1.2rem !important; /* Centered with the eyebrow badge */
+  right: 2rem !important; /* 32px to align with the right margin */
+  color: var(--muted-foreground) !important;
+  opacity: 0.8 !important;
+  transition: all 0.2s ease !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 1.5rem !important; /* 24px */
+  height: 1.5rem !important; /* 24px */
+  border-radius: 0.375rem !important; /* rounded-md */
+  background-color: rgba(0, 0, 0, 0.06) !important;
+}
+
+.lead-form-slab button[class*="absolute"]:hover {
+  opacity: 1 !important;
+  background-color: rgba(0, 0, 0, 0.12) !important;
+  color: var(--foreground) !important;
+}
+
+.dark .lead-form-slab button[class*="absolute"] {
+  background-color: rgba(255, 255, 255, 0.06) !important;
+}
+
+.dark .lead-form-slab button[class*="absolute"]:hover {
+  background-color: rgba(255, 255, 255, 0.12) !important;
+}
+/* Muted, compact labels — the big white default labels read amateurish. */
+.lead-form-underline label {
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--muted-foreground);
+}
+/* Readable placeholders: present on every field with proper contrast. */
+.lead-form-underline :is(input, textarea)::placeholder {
+  color: var(--muted-foreground);
+  opacity: 0.45;
+}
+.lead-form-underline [data-slot="select-trigger"][data-placeholder] {
+  color: color-mix(in oklab, var(--muted-foreground) 45%, transparent);
+}
+/* Underline-only fields: transparent box, hairline bottom border, amber
+   underline on the focused control. Compact heights keep rows tight. */
+.lead-form-underline :is(input, textarea, [data-slot="select-trigger"]) {
+  background-color: transparent;
+  border-top: 0;
+  border-left: 0;
+  border-right: 0;
+  border-bottom: 1px solid var(--border);
+  border-radius: 0;
+  box-shadow: none;
+  padding-left: 2px;
+  padding-right: 2px;
+}
+.lead-form-underline :is(input, [data-slot="select-trigger"]) {
+  height: 2.125rem;
+}
+.lead-form-underline textarea {
+  min-height: 3.25rem;
+}
+/* The phone country selector and input container overrides to match underline style */
+.lead-form-underline .react-international-phone-input-container {
+  border: 0 !important;
+  border-bottom: 1px solid var(--border) !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+.lead-form-underline .react-international-phone-input-container:focus-within {
+  border-bottom-color: var(--cta) !important;
+}
+.lead-form-underline .react-international-phone-country-selector-button {
+  border: 0 !important;
+  background: transparent !important;
+  border-radius: 0 !important;
+  height: 2.125rem !important;
+  padding-left: 2px !important;
+  padding-right: 2px !important;
+}
+.lead-form-underline .react-international-phone-input {
+  border: 0 !important;
+  background: transparent !important;
+  border-radius: 0 !important;
+  height: 2.125rem !important;
+  padding-left: 8px !important;
+  box-shadow: none !important;
+}
+.lead-form-underline .react-international-phone-input:focus {
+  outline: none !important;
+  box-shadow: none !important;
+}
+.lead-form-underline :is(input, textarea, [data-slot="select-trigger"]):focus-visible,
+.lead-form-underline [data-slot="select-trigger"][data-state="open"] {
+  outline: none;
+  box-shadow: none;
+  border-bottom-color: var(--cta);
+}
+
+.drawer-action-btn-active {
+  color: var(--primary) !important;
+  background-color: color-mix(in oklab, var(--primary) 10%, transparent) !important;
+}
+.drawer-action-btn-active:hover {
+  background-color: color-mix(in oklab, var(--primary) 20%, transparent) !important;
+}
+
+/* Razorpay checkout modal overlay & transparency fix (prevents opaque white screen in dark mode) */
+.razorpay-container {
+  color-scheme: light !important;
+  background-color: rgba(0, 0, 0, 0.7) !important;
+  background: rgba(0, 0, 0, 0.7) !important;
+  backdrop-filter: blur(4px) !important;
+  -webkit-backdrop-filter: blur(4px) !important;
+  position: fixed !important;
+  inset: 0 !important;
+  z-index: 2147483647 !important;
+}
+
+.razorpay-container *,
+.razorpay-checkout-frame,
+iframe[src*="razorpay"],
+iframe.razorpay-checkout-frame,
+[class*="razorpay"] {
+  color-scheme: light !important;
+  background-color: transparent !important;
+  background: transparent !important;
+}
+
+/* Prevent Radix UI Dialog / Sheet pointer-events lock freeze */
+body,
+body[data-scroll-locked] {
+  pointer-events: auto !important;
+}
+
+
+
+
+
+
+

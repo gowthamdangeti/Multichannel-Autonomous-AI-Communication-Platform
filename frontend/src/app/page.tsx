@@ -1,133 +1,96 @@
-"use client";
+import { isNextRouterError } from "next/dist/client/components/is-next-router-error";
+import { redirect } from "next/navigation";
 
-import { useEffect, useState } from "react";
-import ObjectiveInput from "@/components/ObjectiveInput";
-import AgentCard from "@/components/AgentCard";
-import { fetchAgents, fetchMetrics, Agent, PlatformMetrics } from "@/lib/api";
-import { Bot, CheckCircle2, Cpu, DollarSign, Sparkles, TrendingUp, Users } from "lucide-react";
+import { getWorkflowCountApiV1WorkflowCountGet } from "@/client/sdk.gen";
+import { getServerAccessToken,getServerAuthProvider,getServerUser } from "@/lib/auth/server";
+import logger from '@/lib/logger';
+import { getRedirectUrl } from "@/lib/utils";
 
-export default function OverviewPage() {
-  const [agents, setAgents] = useState<Agent[]>([]);
-  const [metrics, setMetrics] = useState<PlatformMetrics | null>(null);
-  const [loading, setLoading] = useState(true);
+export const dynamic = 'force-dynamic';
 
-  useEffect(() => {
-    let isMounted = true;
-    const load = async () => {
-      try {
-        const [agentsData, metricsData] = await Promise.all([
-          fetchAgents().catch(() => []),
-          fetchMetrics().catch(() => null),
-        ]);
-        if (isMounted) {
-          setAgents(agentsData);
-          setMetrics(metricsData);
+export default async function Home() {
+  logger.debug('[HomePage] Starting Home page render');
+  const authProvider = await getServerAuthProvider();
+  logger.debug('[HomePage] Auth provider:', authProvider);
+
+  // For local/OSS provider, check if user has workflows
+  if (authProvider === 'local') {
+    logger.debug('[HomePage] Local provider detected, checking for workflows');
+
+    try {
+      const accessToken = await getServerAccessToken();
+      if (accessToken) {
+        const countResponse = await getWorkflowCountApiV1WorkflowCountGet({
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        });
+
+        logger.debug('[HomePage] Found workflows for local provider:', {
+          total: countResponse.data?.total,
+          active: countResponse.data?.active
+        });
+
+        if (countResponse.data && countResponse.data.active > 0) {
+          logger.debug('[HomePage] Redirecting to /workflow - user has workflows');
+          redirect('/workflow');
+        } else {
+          logger.debug('[HomePage] Redirecting to /workflow/create - no workflows found');
+          redirect('/workflow/create');
         }
-      } finally {
-        if (isMounted) setLoading(false);
+      } else {
+        redirect('/auth/login');
       }
-    };
-    load();
-  }, []);
+    } catch (error) {
+      // Re-throw navigation errors (redirects, not found, etc.) - they're intentional
+      if (isNextRouterError(error)) {
+        throw error;
+      }
 
-  return (
-    <div className="space-y-8">
-      {/* Title & Description */}
-      <div className="flex flex-col space-y-1">
-        <div className="flex items-center space-x-2">
-          <span className="w-2 h-2 rounded-full bg-brand-500 animate-ping" />
-          <span className="text-xs font-mono uppercase tracking-widest text-brand-500 font-semibold">
-            Enterprise Command Center
-          </span>
-        </div>
-        <h1 className="text-2xl font-bold tracking-tight text-white">
-          Autonomous Multi-Agent Operating System
-        </h1>
-        <p className="text-xs text-slate-400">
-          Supervised autonomous workforce coordinating research, engineering, data analytics, and executive communications.
-        </p>
-      </div>
+      logger.error('[HomePage] Error checking workflows for local provider:', error);
+      // Default to /workflow/create on actual errors
+      logger.debug('[HomePage] Defaulting to /workflow/create due to error');
+      redirect('/workflow/create');
+    }
+  }
 
-      {/* Metrics Row */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <div className="glass-panel p-5 rounded-xl border border-surface-border">
-          <div className="flex items-center justify-between text-slate-400">
-            <span className="text-xs font-mono">Autonomous Agents</span>
-            <Bot className="w-4 h-4 text-brand-500" />
-          </div>
-          <div className="mt-2 text-2xl font-bold text-white font-mono">
-            {agents.length || 4}
-          </div>
-          <span className="text-[11px] text-emerald-400 flex items-center space-x-1 mt-1 font-mono">
-            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
-            <span>100% Ready & Registered</span>
-          </span>
-        </div>
+  logger.debug('[HomePage] Getting server user...');
+  const user = await getServerUser();
 
-        <div className="glass-panel p-5 rounded-xl border border-surface-border">
-          <div className="flex items-center justify-between text-slate-400">
-            <span className="text-xs font-mono">Execution Success</span>
-            <CheckCircle2 className="w-4 h-4 text-emerald-400" />
-          </div>
-          <div className="mt-2 text-2xl font-bold text-white font-mono">
-            {metrics?.performance.success_rate ?? 99.1}%
-          </div>
-          <span className="text-[11px] text-slate-400 mt-1 font-mono block">
-            With autonomous backoff retry
-          </span>
-        </div>
+  logger.debug('[HomePage] Server user result:', {
+    hasUser: !!user,
+    userId: user?.id,
+    authProvider
+  });
 
-        <div className="glass-panel p-5 rounded-xl border border-surface-border">
-          <div className="flex items-center justify-between text-slate-400">
-            <span className="text-xs font-mono">Avg Task Latency</span>
-            <Cpu className="w-4 h-4 text-accent-cyan" />
-          </div>
-          <div className="mt-2 text-2xl font-bold text-white font-mono">
-            {metrics?.performance.average_completion_sec ?? 3.8}s
-          </div>
-          <span className="text-[11px] text-slate-400 mt-1 font-mono block">
-            Parallel graph resolution
-          </span>
-        </div>
+  if (user) {
+    try {
+      // For Stack provider, get the token and permissions
+      if (authProvider === 'stack' && 'getAuthJson' in user) {
+        logger.debug('[HomePage] Getting auth token from Stack user...');
+        const token = await user.getAuthJson();
+        logger.debug('[HomePage] Got auth token:', { hasToken: !!token?.accessToken });
+        const permissions = 'listPermissions' in user && 'selectedTeam' in user
+          ? await user.listPermissions(user.selectedTeam!) ?? []
+          : [];
+        logger.debug('[HomePage] Got permissions:', { count: permissions.length });
+        logger.debug('[HomePage] Getting redirect URL...');
+        const redirectUrl = await getRedirectUrl(token?.accessToken ?? "", permissions);
+        logger.debug('[HomePage] Redirecting to:', redirectUrl);
+        redirect(redirectUrl);
+      }
+    } catch (error) {
+      // If it's a Next.js redirect, let it through
+      if (error instanceof Error && 'digest' in error &&
+          typeof error.digest === 'string' && error.digest.startsWith('NEXT_REDIRECT')) {
+        throw error;
+      }
+      // Only catch actual API errors
+      console.error("API unavailable, showing sign-in:", error);
+      // Show sign-in page if API is unavailable
+    }
+  }
 
-        <div className="glass-panel p-5 rounded-xl border border-surface-border">
-          <div className="flex items-center justify-between text-slate-400">
-            <span className="text-xs font-mono">Est. Operational Savings</span>
-            <DollarSign className="w-4 h-4 text-amber-400" />
-          </div>
-          <div className="mt-2 text-2xl font-bold text-white font-mono">
-            ${(metrics?.performance.cost_saved_usd ?? 14250).toLocaleString()}
-          </div>
-          <span className="text-[11px] text-emerald-400 flex items-center space-x-1 mt-1 font-mono">
-            <TrendingUp className="w-3 h-3" />
-            <span>+38% vs Manual Workflows</span>
-          </span>
-        </div>
-      </div>
-
-      {/* Main Orchestration Input */}
-      <ObjectiveInput />
-
-      {/* Autonomous Workforce Catalog */}
-      <div className="space-y-4">
-        <div className="flex items-center justify-between border-b border-surface-border pb-3">
-          <div>
-            <h3 className="text-sm font-semibold text-white">Active Workforce Registry</h3>
-            <p className="text-xs text-slate-400">
-              Foundational agents with verified models, system prompts, and tool contracts.
-            </p>
-          </div>
-          <span className="text-xs font-mono text-slate-500">
-            {agents.length} Foundational Agents
-          </span>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-          {agents.map((agent) => (
-            <AgentCard key={agent.slug} agent={agent} />
-          ))}
-        </div>
-      </div>
-    </div>
-  );
+  logger.debug('[HomePage] Redirecting unauthenticated Stack user to /handler/sign-in');
+  redirect('/handler/sign-in');
 }

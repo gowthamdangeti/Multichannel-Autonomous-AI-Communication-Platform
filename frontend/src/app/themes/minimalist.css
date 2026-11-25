@@ -1,0 +1,126 @@
+/* =============================================================================
+   MINIMALIST — warm monochrome "paper" palette, crisp hairline borders, near-
+   invisible soft shadows, generous whitespace. No accent colour: the design
+   speaks through restraint, warm neutrals and typographic contrast alone.
+============================================================================= */
+[data-theme="minimalist"] {
+  --radius: 0.625rem;
+  --background: #FAFAFA;
+  --foreground: oklch(0.22 0.006 60);
+  --card: #FFFFFF;
+  --card-foreground: oklch(0.22 0.006 60);
+  --popover: #FFFFFF;
+  --popover-foreground: oklch(0.22 0.006 60);
+  --primary: oklch(0.24 0.006 60);
+  --primary-foreground: oklch(0.99 0.0025 83);
+  --secondary: #FFFFFF;
+  --secondary-foreground: oklch(0.24 0.006 60);
+  --muted: oklch(0.966 0.003 78);
+  --muted-foreground: oklch(0.545 0.006 65);
+  --accent: oklch(0.955 0.004 78);
+  --accent-foreground: oklch(0.24 0.006 60);
+  --destructive: oklch(0.577 0.245 27.325);
+  --border: oklch(0.902 0.004 78);
+  --input: oklch(0.902 0.004 78);
+  --ring: var(--border);
+  --shadow-color: oklch(0.22 0.01 60 / 0.055);
+  --chart-grid: var(--border);
+  --chart-line: var(--cta);
+  --surface-border-width: 1px;
+  --surface-shadow: 0 1px 2px var(--shadow-color);
+  --surface-shadow-lg: 0 6px 22px var(--shadow-color);
+  --button-shadow: var(--surface-shadow);
+  --surface-blur: 0px;
+  --press-offset: 0px;
+  --chart-1: oklch(0.629 0.219 9);
+  --chart-2: oklch(0.7 0.15 32);
+  --chart-3: oklch(0.56 0.2 350);
+  --chart-4: oklch(0.8 0.13 75);
+  --chart-5: oklch(0.46 0.16 356);
+  --sidebar: #FFFFFF;
+  --sidebar-foreground: oklch(0.22 0.006 60);
+  --sidebar-primary: oklch(0.629 0.219 9);
+  --sidebar-primary-foreground: oklch(0.99 0.0025 83);
+  --sidebar-accent: oklch(0.955 0.004 78);
+  --sidebar-accent-foreground: oklch(0.24 0.006 60);
+  --sidebar-border: oklch(0.902 0.004 78);
+  --sidebar-ring: oklch(0.629 0.219 9);
+  --cta: oklch(0.6 0.223 9);
+  --cta-foreground: oklch(0.99 0.0025 83);
+  --brand-imprint: url("/brand-imprint-light.svg");
+}
+
+[data-theme="minimalist"].dark {
+  --background: oklch(0.16 0.003 70);
+  --foreground: oklch(0.97 0.002 80);
+  --card: oklch(0.205 0.004 70);
+  --card-foreground: oklch(0.97 0.002 80);
+  --popover: oklch(0.205 0.004 70);
+  --popover-foreground: oklch(0.97 0.002 80);
+  --primary: oklch(0.93 0.002 80);
+  --primary-foreground: oklch(0.2 0.004 70);
+  --secondary: oklch(0.27 0.004 70);
+  --secondary-foreground: oklch(0.97 0.002 80);
+  --muted: oklch(0.27 0.004 70);
+  --muted-foreground: oklch(0.71 0.004 75);
+  --accent: oklch(0.27 0.004 70);
+  --accent-foreground: oklch(0.97 0.002 80);
+  --destructive: oklch(0.704 0.191 22.216);
+  --border: oklch(1 0 0 / 9%);
+  --input: oklch(1 0 0 / 13%);
+  --ring: oklch(0.68 0.2 9);
+  --shadow-color: oklch(0 0 0 / 0.4);
+  --chart-grid: var(--border);
+  --chart-line: var(--cta);
+  --chart-1: oklch(0.7 0.2 9);
+  --chart-2: oklch(0.76 0.14 32);
+  --chart-3: oklch(0.66 0.19 350);
+  --chart-4: oklch(0.82 0.13 75);
+  --chart-5: oklch(0.6 0.17 356);
+  --sidebar: oklch(0.205 0.004 70);
+  --sidebar-foreground: oklch(0.97 0.002 80);
+  --sidebar-primary: oklch(0.68 0.2 9);
+  --sidebar-primary-foreground: oklch(0.99 0 0);
+  --sidebar-accent: oklch(0.27 0.004 70);
+  --sidebar-accent-foreground: oklch(0.97 0.002 80);
+  --sidebar-border: oklch(1 0 0 / 9%);
+  --sidebar-ring: oklch(0.68 0.2 9);
+  --cta: oklch(0.68 0.2 9);
+  --cta-foreground: oklch(0.99 0 0);
+  --brand-imprint: url("/brand-imprint-dark.svg");
+}
+
+[data-theme="minimalist"] .nb-secondary-nav-item {
+  border-radius: var(--radius);
+  color: var(--sidebar-foreground);
+  font-weight: 500;
+}
+[data-theme="minimalist"] .nb-secondary-nav-item:hover:not(.nb-secondary-nav-active) {
+  background-color: var(--accent);
+  color: var(--accent-foreground);
+}
+
+[data-theme="minimalist"] .nb-secondary-nav-active {
+  background-color: color-mix(in oklch, var(--cta) 15%, transparent);
+  border: 1px solid color-mix(in oklch, var(--cta) 25%, transparent);
+  border-radius: var(--radius-button, 8px);
+  color: var(--foreground);
+  font-weight: 600;
+}
+
+[data-theme="minimalist"] .bg-secondary {
+  border: 1px solid var(--border);
+}
+
+/* Sidebar active item */
+[data-theme="minimalist"] .nb-sidebar-active {
+  background-color: #BA3F61 !important;
+  color: #ffffff !important;
+}
+[data-theme="minimalist"] .nb-sidebar-active:hover {
+  background-color: #A33554 !important;
+  color: #ffffff !important;
+}
+[data-theme="minimalist"] .nb-sidebar-active .active-sidebar-icon {
+  color: #ffffff !important;
+}

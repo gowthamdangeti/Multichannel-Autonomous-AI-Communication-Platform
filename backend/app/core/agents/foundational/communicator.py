@@ -19,21 +19,28 @@ class CommunicationAgent(BaseAutonomousAgent):
         "stakeholder_updates",
         "cross_channel_messaging"
     ]
-    tools: List[str] = ["template_engine", "markdown_formatter", "channel_notifier"]
+    tools: List[str] = ["document_parser"]
 
     async def execute_task(self, task: TaskContract) -> AgentExecutionResult:
         source_data = task.input_data.get("source_data", {})
         audience = task.input_data.get("audience", "Executive Leadership")
 
-        executive_summary = (
-            f"Autonomous Execution Summary prepared for {audience}. "
-            f"Objective '{task.objective}' has progressed through multi-agent analysis with validated governance."
+        # 1. Format executive briefing with LLM
+        prompt = (
+            f"Draft an executive briefing memo for: {audience}\n"
+            f"Objective: {task.objective}\n"
+            f"Context: {task.input_data}\n\n"
+            f"Include an Executive Summary, Key Milestones Achieved, and Concrete Action Items."
         )
+        llm_res = await self.call_llm(prompt)
+
+        # 2. Verify deliverable structure with DocumentParserTool
+        doc_result = await self.call_tool(task, "document_parser", content=llm_res.content, doc_type="markdown")
 
         deliverable = {
             "title": f"Executive Memo: {task.objective[:45]}",
             "type": "executive_memo",
-            "content": f"## Executive Briefing\n\n**Audience:** {audience}\n\n**Summary:**\n{executive_summary}\n\n### Action Items\n- Review automated recommendations\n- Authorize next milestone execution\n"
+            "content": f"# Executive Briefing\n\n**Audience:** {audience}\n\n{llm_res.content}\n"
         }
 
         return AgentExecutionResult(
@@ -43,10 +50,14 @@ class CommunicationAgent(BaseAutonomousAgent):
             confidence=0.98,
             structured_result={
                 "audience": audience,
-                "memo_length_words": 150,
+                "document_sections": doc_result.output.get("headings", []) if doc_result.success else [],
                 "status": "ready_for_distribution"
             },
-            evidence=[f"Formatted payload tailored to audience: {audience}"],
+            evidence=[
+                f"Generated strategic memo tailored for: {audience}",
+                f"DocumentParserTool structural verification: {'PASSED' if doc_result.success else 'FAILED'}",
+                f"Generated via {llm_res.provider} ({llm_res.model})"
+            ],
             artifacts=[deliverable],
             errors=[],
             next_recommended_action="distribute_or_await_approval"

@@ -1,0 +1,1273 @@
+<!DOCTYPE html>
+<html lang="en">
+
+{#
+╔══════════════════════════════════════════════════════════════════════════════╗
+║  HR INTERVIEW REPORT — TEMPLATE VARIABLE REFERENCE                         ║
+║  Agent: AI HR Outbound Call Agent                                          ║
+║  Generates: Executive Interview Report (PDF)                                ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+
+── VARIABLE INVENTORY ──────────────────────────────────────────────────────────
+Each variable below must be extracted from the AI conversation context or
+computed post-call.  Variables use the project's existing template syntax:
+  {{ variable_name }}          — simple substitution
+  {{ var | default }}          — value or "default" if empty/null
+  {% for item in list %}{% endfor %} — iteration over a list
+
+── HEADER ──────────────────────────────────────────────────────────────────────
+  {{ Name }}        STR   Candidate full name (from identity verification)
+  {{ Date }}        STR   Interview date (call start date/time)
+  {{ Score }}       NUM   Overall candidate score out of 5 (aggregated average)
+  {{ Cid }}         STR   Candidate ID (system-generated or applicant tracking ID)
+  {{ Position }}    STR   Position/job title the candidate applied for
+  {{ Summary }}     STR   One-paragraph AI summary of the entire interview
+
+── CANDIDATE PROFILE SECTION ──────────────────────────────────────────────────
+  {{ Candidate_Name }}   STR   Full name (confirmed during call)
+  {{ Email }}            STR   Email address (collected or confirmed)
+  {{ Phone }}            STR   Phone number (collected or confirmed)
+  {{ Experience_Years }} STR   Total years of work experience
+  {{ Education }}        STR   Highest educational qualification
+  {{ Notice_Period }}    STR   Current notice period (e.g. "30 days", "Immediate")
+  {{ Salary_Expectation }} STR Expected salary range or figure
+
+── EVALUATION CATEGORIES (C1–C5) ──────────────────────────────────────────────
+Each category follows the identical pattern below.  Repeat for C2, C3, C4, C5.
+
+  {{ C1_Title }}    STR  Custom category title (fallback: "Candidate Profile & Verification")
+  {{ C1_Desc }}     STR  Short description of what this category evaluates
+  {{ C1_Score }}    NUM  Category score out of 5
+  {{ C1_Score_5_100round }}  NUM  Score as percentage (e.g. 80 means 4.0/5)
+
+  Aspect 1 (e.g. Identity Verification):
+    {{ C1a1_Title }}              STR   Aspect title
+    {{ C1a1_Anchor }}             STR   Anchor/definition of what was assessed
+    {{ C1a1_Score }}              NUM   Aspect score out of 5
+    {{ C1a1_Score_5_100round }}   NUM   Aspect score as percentage
+    c1a1_str                      LIST  Strengths
+    c1a1_imp                      LIST  Areas of concern
+    {{ C1a1_Ev }}                 STR   Evidence paragraph (what the candidate said/did)
+    {{ C1a1_Quote }}              STR   Direct quote from conversation
+
+  Aspect 2 (e.g. Position Alignment):
+    Same as Aspect 1 with suffix a2 (C1a2_Title, C1a2_Anchor, etc.)
+
+── CATEGORY MAPPING ────────────────────────────────────────────────────────────
+  C1 → Candidate Profile & Verification
+        a1: Identity Verification  |  a2: Position & Application Alignment
+
+  C2 → Work Experience & Background
+        a1: Experience Relevance   |  a2: Career Progression & Achievements
+
+  C3 → Technical Skills & Qualifications
+        a1: Skills Match           |  a2: Education & Certifications
+
+  C4 → Communication & Soft Skills
+        a1: Verbal Communication   |  a2: Professionalism & Interpersonal
+
+  C5 → Career Fit & Availability
+        a1: Logistics & Timing     |  a2: Cultural & Salary Alignment
+
+── HIRING RECOMMENDATION ──────────────────────────────────────────────────────
+  Recommendations              LIST  List of dicts with keys:
+                                      { "Badge": "hire"|"consider"|"no",
+                                        "Text": "explanation" }
+  {{ Recommendation_Summary }}  STR  Fallback plain-text summary when no list
+
+── INTERVIEW TRANSCRIPT ────────────────────────────────────────────────────────
+  {{ Transcript }}  STR  Full conversation transcript (plain text, newlines ok)
+
+── FOOTER ─────────────────────────────────────────────────────────────────────
+  {{ Date }}  STR  Reuse same date as header
+#}
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interview Report - {{ Name }}</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
+    <style>
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        :root {
+            --navy: #1a2340;
+            --slate: #f5f6f9;
+            --border: #e2e6ef;
+            --text: #1e2432;
+            --muted: #6b7490;
+            --light: #9ba3bc;
+            --green: #059669;
+            --red: #dc2626;
+            --white: #ffffff;
+            --c1: #2563eb;
+            --c2: #7c3aed;
+            --c3: #db2777;
+            --c4: #0891b2;
+            --c5: #d97706;
+        }
+
+        body {
+            font-family: 'IBM Plex Sans', sans-serif;
+            background: var(--slate);
+            color: var(--text);
+            min-height: 100vh;
+            padding: 40px 16px 80px;
+        }
+
+        .page {
+            max-width: 960px;
+            margin: 0 auto;
+        }
+
+        /* ── HEADER ── */
+        .report-header {
+            background: var(--navy);
+            border-radius: 16px;
+            overflow: hidden;
+            margin-bottom: 32px;
+            position: relative;
+        }
+
+        .report-header::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: repeating-linear-gradient(45deg, transparent, transparent 40px, rgba(255, 255, 255, 0.015) 40px, rgba(255, 255, 255, 0.015) 80px);
+        }
+
+        .header-top {
+            padding: 36px 40px 28px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 24px;
+            position: relative;
+        }
+
+        .header-label {
+            font-size: 10px;
+            font-weight: 600;
+            letter-spacing: 0.18em;
+            color: rgba(255, 255, 255, 0.4);
+            text-transform: uppercase;
+            margin-bottom: 8px;
+        }
+
+        .header-title {
+            font-size: 28px;
+            font-weight: 700;
+            color: #fff;
+            letter-spacing: -0.02em;
+            line-height: 1.15;
+        }
+
+        .score-badge {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 12px;
+            padding: 16px 24px;
+            text-align: center;
+            min-width: 140px;
+            flex-shrink: 0;
+        }
+
+        .score-badge .lbl {
+            font-size: 9px;
+            font-weight: 700;
+            letter-spacing: 0.15em;
+            color: rgba(255, 255, 255, 0.4);
+            text-transform: uppercase;
+        }
+
+        .score-badge .val {
+            font-size: 36px;
+            font-weight: 700;
+            color: #fff;
+            line-height: 1.1;
+            margin-top: 4px;
+        }
+
+        .score-badge .den {
+            font-size: 14px;
+            font-weight: 300;
+            color: rgba(255, 255, 255, 0.35);
+        }
+
+        .header-meta {
+            background: rgba(255, 255, 255, 0.05);
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+            padding: 20px 40px;
+            display: flex;
+            align-items: center;
+            gap: 32px;
+            position: relative;
+        }
+
+        .avatar {
+            width: 44px;
+            height: 44px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .avatar svg {
+            width: 22px;
+            height: 22px;
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .meta-name {
+            font-size: 16px;
+            font-weight: 600;
+            color: #fff;
+        }
+
+        .meta-sub {
+            font-size: 11px;
+            color: rgba(255, 255, 255, 0.4);
+            margin-top: 2px;
+            font-family: 'IBM Plex Mono', monospace;
+        }
+
+        .divider {
+            width: 1px;
+            height: 36px;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .summary {
+            font-size: 11.5px;
+            color: rgba(255, 255, 255, 0.55);
+            line-height: 1.7;
+            max-width: 540px;
+        }
+
+        /* ── EVALUATION BLOCK ── */
+        .eval-block {
+            margin-bottom: 28px;
+        }
+
+        .eval-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px 20px;
+            border-radius: 10px 10px 0 0;
+            border-bottom: 2px solid rgba(0, 0, 0, 0.15);
+        }
+
+        .eval-icon {
+            width: 32px;
+            height: 32px;
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .eval-icon svg {
+            width: 16px;
+            height: 16px;
+            color: #fff;
+        }
+
+        .eval-title-wrap {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .eval-title {
+            font-size: 15px;
+            font-weight: 700;
+            color: #fff;
+            letter-spacing: -0.01em;
+        }
+
+        .eval-desc {
+            font-size: 10.5px;
+            font-weight: 400;
+            color: rgba(255, 255, 255, 0.52);
+            line-height: 1.45;
+            max-width: 520px;
+        }
+
+        .eval-score-wrap {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .eval-score-num {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 13px;
+            font-weight: 500;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .eval-bar-bg {
+            width: 80px;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 2px;
+        }
+
+        .eval-bar-fill {
+            height: 100%;
+            border-radius: 2px;
+            background: rgba(255, 255, 255, 0.75);
+        }
+
+        /* ── ASPECT CARDS ── */
+        .aspect-cards {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .aspect-card {
+            background: var(--white);
+            border: 1px solid var(--border);
+            border-top: none;
+        }
+
+        .aspect-card:last-child {
+            border-radius: 0 0 10px 10px;
+        }
+
+        .aspect-inner {
+            display: grid;
+            grid-template-columns: 220px 1fr;
+            min-height: 160px;
+        }
+
+        .aspect-left {
+            padding: 20px 22px;
+            border-right: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .asp-name {
+            font-size: 12.5px;
+            font-weight: 700;
+            color: var(--text);
+            line-height: 1.4;
+        }
+
+        .asp-anchor {
+            font-size: 10px;
+            color: var(--muted);
+            line-height: 1.5;
+            font-style: italic;
+            border-left: 2px solid var(--border);
+            padding-left: 8px;
+        }
+
+        .asp-score-block {
+            margin-top: auto;
+        }
+
+        .asp-score-lbl {
+            font-size: 9px;
+            font-weight: 600;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--light);
+            margin-bottom: 4px;
+        }
+
+        .asp-score-val {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 22px;
+            font-weight: 600;
+            line-height: 1;
+        }
+
+        .asp-score-den {
+            font-size: 11px;
+            font-weight: 400;
+            color: var(--light);
+        }
+
+        .asp-bar {
+            height: 3px;
+            border-radius: 2px;
+            background: var(--border);
+            margin-top: 6px;
+            overflow: hidden;
+        }
+
+        .asp-bar-fill {
+            height: 100%;
+            border-radius: 2px;
+        }
+
+        .aspect-right {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+        }
+
+        .asp-col {
+            padding: 20px 18px;
+            border-right: 1px solid var(--border);
+        }
+
+        .asp-col:last-child {
+            border-right: none;
+        }
+
+        .col-head {
+            font-size: 9px;
+            font-weight: 700;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+            padding-bottom: 6px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .col-head.g {
+            color: var(--green);
+        }
+
+        .col-head.r {
+            color: var(--red);
+        }
+
+        .col-head.b {
+            color: var(--muted);
+        }
+
+        .col-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 7px;
+        }
+
+        .col-list li {
+            font-size: 11px;
+            color: #3d4460;
+            line-height: 1.55;
+            padding-left: 10px;
+            position: relative;
+        }
+
+        .col-list li::before {
+            content: '\2014';
+            position: absolute;
+            left: 0;
+            color: var(--border);
+            font-size: 10px;
+        }
+
+        .ev-justify {
+            font-size: 11px;
+            color: #3d4460;
+            line-height: 1.6;
+            margin-bottom: 10px;
+        }
+
+        .ev-quote {
+            font-size: 11px;
+            color: var(--muted);
+            line-height: 1.6;
+            font-style: italic;
+        }
+
+        /* ── ADDITIONAL SECTIONS ── */
+        .section-block {
+            background: var(--white);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            margin-bottom: 28px;
+            overflow: hidden;
+        }
+
+        .section-header {
+            background: var(--navy);
+            padding: 14px 22px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-header .icon {
+            width: 28px;
+            height: 28px;
+            background: rgba(255, 255, 255, 0.12);
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .section-header .icon svg {
+            width: 14px;
+            height: 14px;
+            color: #fff;
+        }
+
+        .section-header .title {
+            font-size: 13px;
+            font-weight: 600;
+            color: #fff;
+        }
+
+        .section-body {
+            padding: 20px 22px;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px 32px;
+        }
+
+        .info-item {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .info-item .label {
+            font-size: 9px;
+            font-weight: 600;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--light);
+        }
+
+        .info-item .value {
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text);
+        }
+
+        .transcript-box {
+            max-height: 300px;
+            overflow-y: auto;
+            background: #fafbfc;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 16px 18px;
+            font-size: 11.5px;
+            line-height: 1.7;
+            color: #3d4460;
+            white-space: pre-wrap;
+        }
+
+        .rec-row {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            padding: 8px 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .rec-row:last-child {
+            border-bottom: none;
+        }
+
+        .rec-badge {
+            font-size: 9px;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            padding: 2px 8px;
+            border-radius: 4px;
+            flex-shrink: 0;
+            margin-top: 1px;
+        }
+
+        .rec-badge.hire {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .rec-badge.consider {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .rec-badge.no {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .rec-text {
+            font-size: 11px;
+            color: #3d4460;
+            line-height: 1.55;
+        }
+
+        /* ── COLOR THEMES ── */
+        .c1 .eval-header {
+            background: var(--c1);
+        }
+
+        .c1 .asp-score-val {
+            color: var(--c1);
+        }
+
+        .c1 .asp-bar-fill {
+            background: var(--c1);
+        }
+
+        .c2 .eval-header {
+            background: var(--c2);
+        }
+
+        .c2 .asp-score-val {
+            color: var(--c2);
+        }
+
+        .c2 .asp-bar-fill {
+            background: var(--c2);
+        }
+
+        .c3 .eval-header {
+            background: var(--c3);
+        }
+
+        .c3 .asp-score-val {
+            color: var(--c3);
+        }
+
+        .c3 .asp-bar-fill {
+            background: var(--c3);
+        }
+
+        .c4 .eval-header {
+            background: var(--c4);
+        }
+
+        .c4 .asp-score-val {
+            color: var(--c4);
+        }
+
+        .c4 .asp-bar-fill {
+            background: var(--c4);
+        }
+
+        .c5 .eval-header {
+            background: var(--c5);
+        }
+
+        .c5 .asp-score-val {
+            color: var(--c5);
+        }
+
+        .c5 .asp-bar-fill {
+            background: var(--c5);
+        }
+
+        .aspect-card+.aspect-card .aspect-inner {
+            border-top: 1px solid var(--border);
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 48px;
+            font-size: 10px;
+            font-weight: 600;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--light);
+        }
+
+        @media (max-width: 700px) {
+            .aspect-inner {
+                grid-template-columns: 1fr;
+            }
+
+            .aspect-left {
+                border-right: none;
+                border-bottom: 1px solid var(--border);
+            }
+
+            .aspect-right {
+                grid-template-columns: 1fr;
+            }
+
+            .asp-col {
+                border-right: none;
+                border-bottom: 1px solid var(--border);
+            }
+
+            .header-top {
+                flex-direction: column;
+            }
+
+            .header-meta {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .divider {
+                display: none;
+            }
+
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="page">
+
+        <!-- ══ REPORT HEADER ══ -->
+        <div class="report-header">
+            <div class="header-top">
+                <div>
+                    <div class="header-label">AI HR Screening &nbsp;·&nbsp; {{ Date }}</div>
+                    <div class="header-title">Executive Interview<br>Report</div>
+                </div>
+                <div class="score-badge">
+                    <div class="lbl">Overall Candidate Score</div>
+                    <div class="val">{{ Score }}<span class="den"> / 5</span></div>
+                </div>
+            </div>
+            <div class="header-meta">
+                <div class="avatar">
+                    <svg fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" />
+                    </svg>
+                </div>
+                <div>
+                    <div class="meta-name">{{ Name }}</div>
+                    <div class="meta-sub">Candidate ID: {{ Cid }} &nbsp;|&nbsp; {{ Position }}</div>
+                </div>
+                <div class="divider"></div>
+                <div class="summary">{{ Summary }}</div>
+            </div>
+        </div>
+
+        <!-- ══ CANDIDATE INFORMATION ══ -->
+        <div class="section-block">
+            <div class="section-header">
+                <div class="icon">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                    </svg>
+                </div>
+                <div class="title">Candidate Profile</div>
+            </div>
+            <div class="section-body">
+                <div class="info-grid">
+                    <div class="info-item">
+                        <span class="label">Full Name</span>
+                        <span class="value">{{ Candidate_Name }}</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="label">Position Applied</span>
+                        <span class="value">{{ Position }}</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="label">Email</span>
+                        <span class="value">{{ Email }}</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="label">Phone</span>
+                        <span class="value">{{ Phone }}</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="label">Years of Experience</span>
+                        <span class="value">{{ Experience_Years }}</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="label">Education</span>
+                        <span class="value">{{ Education }}</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="label">Notice Period</span>
+                        <span class="value">{{ Notice_Period }}</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="label">Salary Expectation</span>
+                        <span class="value">{{ Salary_Expectation }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ══ C1 — Candidate Profile & Verification ══ -->
+        <div class="eval-block c1">
+            <div class="eval-header">
+                <div class="eval-icon">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                    </svg>
+                </div>
+                <div class="eval-title-wrap">
+                    <div class="eval-title">{{ C1_Title | default("Candidate Profile & Verification") }}</div>
+                    <div class="eval-desc">{{ C1_Desc | default("Identity verification, application confirmation, and initial profile validation") }}</div>
+                </div>
+                <div class="eval-score-wrap">
+                    <span class="eval-score-num">{{ C1_Score }} / 5.0</span>
+                    <div class="eval-bar-bg">
+                        <div class="eval-bar-fill" style="width:{{ C1_Score_5_100round }}%"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="aspect-cards">
+                <div class="aspect-card">
+                    <div class="aspect-inner">
+                        <div class="aspect-left">
+                            <div class="asp-name">{{ C1a1_Title }}</div>
+                            <div class="asp-anchor">{{ C1a1_Anchor }}</div>
+                            <div class="asp-score-block">
+                                <div class="asp-score-lbl">Key Aspect Score</div>
+                                <div class="asp-score-val">{{ C1a1_Score }}<span class="asp-score-den"> / 5</span></div>
+                                <div class="asp-bar">
+                                    <div class="asp-bar-fill" style="width:{{ C1a1_Score_5_100round }}%"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="aspect-right">
+                            <div class="asp-col">
+                                <div class="col-head g">Strengths</div>
+                                <ul class="col-list">{% for s in c1a1_str %}<li>{{ s }}</li>{% endfor %}</ul>
+                            </div>
+                            <div class="asp-col">
+                                <div class="col-head r">Areas of Concern</div>
+                                <ul class="col-list">{% for i in c1a1_imp %}<li>{{ i }}</li>{% endfor %}</ul>
+                            </div>
+                            <div class="asp-col">
+                                <div class="col-head b">Evidence</div>
+                                <p class="ev-justify">{{ C1a1_Ev }}</p>
+                                {% if C1a1_Quote and C1a1_Quote != 'Assessment recorded.' %}<p class="ev-quote">"{{ C1a1_Quote }}"</p>{% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="aspect-card">
+                    <div class="aspect-inner">
+                        <div class="aspect-left">
+                            <div class="asp-name">{{ C1a2_Title }}</div>
+                            <div class="asp-anchor">{{ C1a2_Anchor }}</div>
+                            <div class="asp-score-block">
+                                <div class="asp-score-lbl">Key Aspect Score</div>
+                                <div class="asp-score-val">{{ C1a2_Score }}<span class="asp-score-den"> / 5</span></div>
+                                <div class="asp-bar">
+                                    <div class="asp-bar-fill" style="width:{{ C1a2_Score_5_100round }}%"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="aspect-right">
+                            <div class="asp-col">
+                                <div class="col-head g">Strengths</div>
+                                <ul class="col-list">{% for s in c1a2_str %}<li>{{ s }}</li>{% endfor %}</ul>
+                            </div>
+                            <div class="asp-col">
+                                <div class="col-head r">Areas of Concern</div>
+                                <ul class="col-list">{% for i in c1a2_imp %}<li>{{ i }}</li>{% endfor %}</ul>
+                            </div>
+                            <div class="asp-col">
+                                <div class="col-head b">Evidence</div>
+                                <p class="ev-justify">{{ C1a2_Ev }}</p>
+                                {% if C1a2_Quote and C1a2_Quote != 'Assessment recorded.' %}<p class="ev-quote">"{{ C1a2_Quote }}"</p>{% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ══ C2 — Work Experience & Background ══ -->
+        <div class="eval-block c2">
+            <div class="eval-header">
+                <div class="eval-icon">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                    </svg>
+                </div>
+                <div class="eval-title-wrap">
+                    <div class="eval-title">{{ C2_Title | default("Work Experience & Background") }}</div>
+                    <div class="eval-desc">{{ C2_Desc | default("Assessment of professional experience, career progression, and role relevance") }}</div>
+                </div>
+                <div class="eval-score-wrap">
+                    <span class="eval-score-num">{{ C2_Score }} / 5.0</span>
+                    <div class="eval-bar-bg">
+                        <div class="eval-bar-fill" style="width:{{ C2_Score_5_100round }}%"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="aspect-cards">
+                <div class="aspect-card">
+                    <div class="aspect-inner">
+                        <div class="aspect-left">
+                            <div class="asp-name">{{ C2a1_Title }}</div>
+                            <div class="asp-anchor">{{ C2a1_Anchor }}</div>
+                            <div class="asp-score-block">
+                                <div class="asp-score-lbl">Key Aspect Score</div>
+                                <div class="asp-score-val">{{ C2a1_Score }}<span class="asp-score-den"> / 5</span></div>
+                                <div class="asp-bar">
+                                    <div class="asp-bar-fill" style="width:{{ C2a1_Score_5_100round }}%"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="aspect-right">
+                            <div class="asp-col">
+                                <div class="col-head g">Strengths</div>
+                                <ul class="col-list">{% for s in c2a1_str %}<li>{{ s }}</li>{% endfor %}</ul>
+                            </div>
+                            <div class="asp-col">
+                                <div class="col-head r">Areas of Concern</div>
+                                <ul class="col-list">{% for i in c2a1_imp %}<li>{{ i }}</li>{% endfor %}</ul>
+                            </div>
+                            <div class="asp-col">
+                                <div class="col-head b">Evidence</div>
+                                <p class="ev-justify">{{ C2a1_Ev }}</p>
+                                {% if C2a1_Quote and C2a1_Quote != 'Assessment recorded.' %}<p class="ev-quote">"{{ C2a1_Quote }}"</p>{% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="aspect-card">
+                    <div class="aspect-inner">
+                        <div class="aspect-left">
+                            <div class="asp-name">{{ C2a2_Title }}</div>
+                            <div class="asp-anchor">{{ C2a2_Anchor }}</div>
+                            <div class="asp-score-block">
+                                <div class="asp-score-lbl">Key Aspect Score</div>
+                                <div class="asp-score-val">{{ C2a2_Score }}<span class="asp-score-den"> / 5</span></div>
+                                <div class="asp-bar">
+                                    <div class="asp-bar-fill" style="width:{{ C2a2_Score_5_100round }}%"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="aspect-right">
+                            <div class="asp-col">
+                                <div class="col-head g">Strengths</div>
+                                <ul class="col-list">{% for s in c2a2_str %}<li>{{ s }}</li>{% endfor %}</ul>
+                            </div>
+                            <div class="asp-col">
+                                <div class="col-head r">Areas of Concern</div>
+                                <ul class="col-list">{% for i in c2a2_imp %}<li>{{ i }}</li>{% endfor %}</ul>
+                            </div>
+                            <div class="asp-col">
+                                <div class="col-head b">Evidence</div>
+                                <p class="ev-justify">{{ C2a2_Ev }}</p>
+                                {% if C2a2_Quote and C2a2_Quote != 'Assessment recorded.' %}<p class="ev-quote">"{{ C2a2_Quote }}"</p>{% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ══ C3 — Technical Skills & Qualifications ══ -->
+        <div class="eval-block c3">
+            <div class="eval-header">
+                <div class="eval-icon">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.066 2.573c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.573 1.066c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.066-2.573c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                    </svg>
+                </div>
+                <div class="eval-title-wrap">
+                    <div class="eval-title">{{ C3_Title | default("Technical Skills & Qualifications") }}</div>
+                    <div class="eval-desc">{{ C3_Desc | default("Evaluation of technical competencies, certifications, education, and skill gaps") }}</div>
+                </div>
+                <div class="eval-score-wrap">
+                    <span class="eval-score-num">{{ C3_Score }} / 5.0</span>
+                    <div class="eval-bar-bg">
+                        <div class="eval-bar-fill" style="width:{{ C3_Score_5_100round }}%"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="aspect-cards">
+                <div class="aspect-card">
+                    <div class="aspect-inner">
+                        <div class="aspect-left">
+                            <div class="asp-name">{{ C3a1_Title }}</div>
+                            <div class="asp-anchor">{{ C3a1_Anchor }}</div>
+                            <div class="asp-score-block">
+                                <div class="asp-score-lbl">Key Aspect Score</div>
+                                <div class="asp-score-val">{{ C3a1_Score }}<span class="asp-score-den"> / 5</span></div>
+                                <div class="asp-bar">
+                                    <div class="asp-bar-fill" style="width:{{ C3a1_Score_5_100round }}%"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="aspect-right">
+                            <div class="asp-col">
+                                <div class="col-head g">Strengths</div>
+                                <ul class="col-list">{% for s in c3a1_str %}<li>{{ s }}</li>{% endfor %}</ul>
+                            </div>
+                            <div class="asp-col">
+                                <div class="col-head r">Areas of Concern</div>
+                                <ul class="col-list">{% for i in c3a1_imp %}<li>{{ i }}</li>{% endfor %}</ul>
+                            </div>
+                            <div class="asp-col">
+                                <div class="col-head b">Evidence</div>
+                                <p class="ev-justify">{{ C3a1_Ev }}</p>
+                                {% if C3a1_Quote and C3a1_Quote != 'Assessment recorded.' %}<p class="ev-quote">"{{ C3a1_Quote }}"</p>{% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="aspect-card">
+                    <div class="aspect-inner">
+                        <div class="aspect-left">
+                            <div class="asp-name">{{ C3a2_Title }}</div>
+                            <div class="asp-anchor">{{ C3a2_Anchor }}</div>
+                            <div class="asp-score-block">
+                                <div class="asp-score-lbl">Key Aspect Score</div>
+                                <div class="asp-score-val">{{ C3a2_Score }}<span class="asp-score-den"> / 5</span></div>
+                                <div class="asp-bar">
+                                    <div class="asp-bar-fill" style="width:{{ C3a2_Score_5_100round }}%"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="aspect-right">
+                            <div class="asp-col">
+                                <div class="col-head g">Strengths</div>
+                                <ul class="col-list">{% for s in c3a2_str %}<li>{{ s }}</li>{% endfor %}</ul>
+                            </div>
+                            <div class="asp-col">
+                                <div class="col-head r">Areas of Concern</div>
+                                <ul class="col-list">{% for i in c3a2_imp %}<li>{{ i }}</li>{% endfor %}</ul>
+                            </div>
+                            <div class="asp-col">
+                                <div class="col-head b">Evidence</div>
+                                <p class="ev-justify">{{ C3a2_Ev }}</p>
+                                {% if C3a2_Quote and C3a2_Quote != 'Assessment recorded.' %}<p class="ev-quote">"{{ C3a2_Quote }}"</p>{% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ══ C4 — Communication & Soft Skills ══ -->
+        <div class="eval-block c4">
+            <div class="eval-header">
+                <div class="eval-icon">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
+                    </svg>
+                </div>
+                <div class="eval-title-wrap">
+                    <div class="eval-title">{{ C4_Title | default("Communication & Soft Skills") }}</div>
+                    <div class="eval-desc">{{ C4_Desc | default("Assessment of verbal clarity, confidence, professionalism, and interpersonal skills") }}</div>
+                </div>
+                <div class="eval-score-wrap">
+                    <span class="eval-score-num">{{ C4_Score }} / 5.0</span>
+                    <div class="eval-bar-bg">
+                        <div class="eval-bar-fill" style="width:{{ C4_Score_5_100round }}%"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="aspect-cards">
+                <div class="aspect-card">
+                    <div class="aspect-inner">
+                        <div class="aspect-left">
+                            <div class="asp-name">{{ C4a1_Title }}</div>
+                            <div class="asp-anchor">{{ C4a1_Anchor }}</div>
+                            <div class="asp-score-block">
+                                <div class="asp-score-lbl">Key Aspect Score</div>
+                                <div class="asp-score-val">{{ C4a1_Score }}<span class="asp-score-den"> / 5</span></div>
+                                <div class="asp-bar">
+                                    <div class="asp-bar-fill" style="width:{{ C4a1_Score_5_100round }}%"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="aspect-right">
+                            <div class="asp-col">
+                                <div class="col-head g">Strengths</div>
+                                <ul class="col-list">{% for s in c4a1_str %}<li>{{ s }}</li>{% endfor %}</ul>
+                            </div>
+                            <div class="asp-col">
+                                <div class="col-head r">Areas of Concern</div>
+                                <ul class="col-list">{% for i in c4a1_imp %}<li>{{ i }}</li>{% endfor %}</ul>
+                            </div>
+                            <div class="asp-col">
+                                <div class="col-head b">Evidence</div>
+                                <p class="ev-justify">{{ C4a1_Ev }}</p>
+                                {% if C4a1_Quote and C4a1_Quote != 'Assessment recorded.' %}<p class="ev-quote">"{{ C4a1_Quote }}"</p>{% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="aspect-card">
+                    <div class="aspect-inner">
+                        <div class="aspect-left">
+                            <div class="asp-name">{{ C4a2_Title }}</div>
+                            <div class="asp-anchor">{{ C4a2_Anchor }}</div>
+                            <div class="asp-score-block">
+                                <div class="asp-score-lbl">Key Aspect Score</div>
+                                <div class="asp-score-val">{{ C4a2_Score }}<span class="asp-score-den"> / 5</span></div>
+                                <div class="asp-bar">
+                                    <div class="asp-bar-fill" style="width:{{ C4a2_Score_5_100round }}%"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="aspect-right">
+                            <div class="asp-col">
+                                <div class="col-head g">Strengths</div>
+                                <ul class="col-list">{% for s in c4a2_str %}<li>{{ s }}</li>{% endfor %}</ul>
+                            </div>
+                            <div class="asp-col">
+                                <div class="col-head r">Areas of Concern</div>
+                                <ul class="col-list">{% for i in c4a2_imp %}<li>{{ i }}</li>{% endfor %}</ul>
+                            </div>
+                            <div class="asp-col">
+                                <div class="col-head b">Evidence</div>
+                                <p class="ev-justify">{{ C4a2_Ev }}</p>
+                                {% if C4a2_Quote and C4a2_Quote != 'Assessment recorded.' %}<p class="ev-quote">"{{ C4a2_Quote }}"</p>{% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ══ C5 — Career Fit & Availability ══ -->
+        <div class="eval-block c5">
+            <div class="eval-header">
+                <div class="eval-icon">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                    </svg>
+                </div>
+                <div class="eval-title-wrap">
+                    <div class="eval-title">{{ C5_Title | default("Career Fit & Availability") }}</div>
+                    <div class="eval-desc">{{ C5_Desc | default("Evaluation of notice period, salary alignment, interview availability, and cultural fit") }}</div>
+                </div>
+                <div class="eval-score-wrap">
+                    <span class="eval-score-num">{{ C5_Score }} / 5.0</span>
+                    <div class="eval-bar-bg">
+                        <div class="eval-bar-fill" style="width:{{ C5_Score_5_100round }}%"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="aspect-cards">
+                <div class="aspect-card">
+                    <div class="aspect-inner">
+                        <div class="aspect-left">
+                            <div class="asp-name">{{ C5a1_Title }}</div>
+                            <div class="asp-anchor">{{ C5a1_Anchor }}</div>
+                            <div class="asp-score-block">
+                                <div class="asp-score-lbl">Key Aspect Score</div>
+                                <div class="asp-score-val">{{ C5a1_Score }}<span class="asp-score-den"> / 5</span></div>
+                                <div class="asp-bar">
+                                    <div class="asp-bar-fill" style="width:{{ C5a1_Score_5_100round }}%"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="aspect-right">
+                            <div class="asp-col">
+                                <div class="col-head g">Strengths</div>
+                                <ul class="col-list">{% for s in c5a1_str %}<li>{{ s }}</li>{% endfor %}</ul>
+                            </div>
+                            <div class="asp-col">
+                                <div class="col-head r">Areas of Concern</div>
+                                <ul class="col-list">{% for i in c5a1_imp %}<li>{{ i }}</li>{% endfor %}</ul>
+                            </div>
+                            <div class="asp-col">
+                                <div class="col-head b">Evidence</div>
+                                <p class="ev-justify">{{ C5a1_Ev }}</p>
+                                {% if C5a1_Quote and C5a1_Quote != 'Assessment recorded.' %}<p class="ev-quote">"{{ C5a1_Quote }}"</p>{% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="aspect-card">
+                    <div class="aspect-inner">
+                        <div class="aspect-left">
+                            <div class="asp-name">{{ C5a2_Title }}</div>
+                            <div class="asp-anchor">{{ C5a2_Anchor }}</div>
+                            <div class="asp-score-block">
+                                <div class="asp-score-lbl">Key Aspect Score</div>
+                                <div class="asp-score-val">{{ C5a2_Score }}<span class="asp-score-den"> / 5</span></div>
+                                <div class="asp-bar">
+                                    <div class="asp-bar-fill" style="width:{{ C5a2_Score_5_100round }}%"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="aspect-right">
+                            <div class="asp-col">
+                                <div class="col-head g">Strengths</div>
+                                <ul class="col-list">{% for s in c5a2_str %}<li>{{ s }}</li>{% endfor %}</ul>
+                            </div>
+                            <div class="asp-col">
+                                <div class="col-head r">Areas of Concern</div>
+                                <ul class="col-list">{% for i in c5a2_imp %}<li>{{ i }}</li>{% endfor %}</ul>
+                            </div>
+                            <div class="asp-col">
+                                <div class="col-head b">Evidence</div>
+                                <p class="ev-justify">{{ C5a2_Ev }}</p>
+                                {% if C5a2_Quote and C5a2_Quote != 'Assessment recorded.' %}<p class="ev-quote">"{{ C5a2_Quote }}"</p>{% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ══ HIRING RECOMMENDATION ══ -->
+        <div class="section-block">
+            <div class="section-header">
+                <div class="icon">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                </div>
+                <div class="title">Hiring Recommendation & Next Steps</div>
+            </div>
+            <div class="section-body">
+                {% for rec in Recommendations %}
+                <div class="rec-row">
+                    <span class="rec-badge {{ rec.Badge }}">{{ rec.Badge }}</span>
+                    <span class="rec-text">{{ rec.Text }}</span>
+                </div>
+                {% endfor %}
+                {% if not Recommendations %}
+                <p class="ev-justify">{{ Recommendation_Summary }}</p>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- ══ CONVERSATION TRANSCRIPT ══ -->
+        <div class="section-block">
+            <div class="section-header">
+                <div class="icon">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                    </svg>
+                </div>
+                <div class="title">Interview Transcript</div>
+            </div>
+            <div class="section-body">
+                <div class="transcript-box">{{ Transcript }}</div>
+            </div>
+        </div>
+
+        <div class="footer">End of Interview Report &nbsp;·&nbsp; Confidential &nbsp;·&nbsp; {{ Date }}</div>
+
+    </div>
+</body>
+
+</html>

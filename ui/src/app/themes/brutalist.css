@@ -1,0 +1,1317 @@
+/* =============================================================================
+   NEO-BRUTALISM — premium SaaS dashboard with clean black & white surfaces,
+   thin 1.5px borders, hard black offset shadows (no blur), a tactile
+   press-shift on interactive elements, rounded corners, and
+   very soft light pink accents only where the original layout already uses them
+   (selected sidebar item, table header, agent table background, archived section).
+============================================================================= */
+:root {
+  /* Core palette — black & white only for surfaces, text, borders, icons. */
+  --background: #ffffff;
+  --foreground: #2b2b2b;
+  --card: #ffffff;
+  --card-foreground: #2b2b2b;
+  --popover: #ffffff;
+  --popover-foreground: #2b2b2b;
+  --primary: #2b2b2b;
+  --primary-foreground: #ffffff;
+  --secondary: #ffffff;
+  --secondary-foreground: #2b2b2b;
+  --muted: #f4f4f5;
+  --muted-foreground: #404040;
+  --accent: #f4f4f5;
+  --accent-foreground: #2b2b2b;
+  --destructive: #2b2b2b;
+  --destructive-foreground: #ffffff;
+  --border: #2b2b2b;
+  --input: #2b2b2b;
+  --ring: #2b2b2b;
+  --border-hover: #1a1a1a;
+
+  /* Light pink accents — used ONLY in the same locations as the original design.
+     Never for text, icons, buttons, headings, labels, borders, or shadows. */
+  --pink-50: #fff7f9;
+  --pink-100: #fdecef;
+  --pink-200: #f9e4e8;
+  --pink-300: #f6dce2;
+
+  /* Text shades. */
+  --text-body: #111111;
+  --text-description: #404040;
+  --text-muted: #525252;
+
+  /* CTA is black/white in Neo-Brutalism; the pink accent is a separate token
+     applied only to selected nav / table header / archived section surfaces. */
+  --cta: #2b2b2b;
+  --cta-foreground: #ffffff;
+  --accent-pink: #fdecef;
+  --accent-pink-foreground: #2b2b2b;
+  --archived-bar-bg: #fff7f9;
+
+  /* Neo-Brutalist shadows: hard, pure-black offset — no blur. */
+  --shadow-color: #000000;
+  --surface-border-width: 1.5px;
+  --surface-shadow: 3px 3px 0 0 var(--shadow-color);
+  --surface-shadow-lg: 6px 6px 0 0 var(--shadow-color);
+  --surface-shadow-sm: 1.5px 1.5px 0 0 var(--shadow-color);
+  --button-shadow: 4px 4px 0 0 var(--shadow-color);
+  --input-shadow: 2.5px 2.5px 0 0 var(--shadow-color);
+  --surface-blur: 0px;
+  --press-offset: 2px;
+
+  /* Border radius: softer rounded corners (less brutal). */
+  --radius: 0.625rem;          /* 10px base */
+  --radius-sidebar: 1.25rem;   /* 20px */
+  --radius-sidebar-item: 0.5rem;   /* 8px */
+  --radius-card: 0.625rem;     /* 10px */
+  --radius-button: 0.5rem;     /* 8px */
+  --radius-input: 0.5rem;      /* 8px */
+  --radius-badge: 0.5rem;      /* 8px */
+
+  /* Sidebar tokens. */
+  --sidebar: #ffffff;
+  --sidebar-foreground: #2b2b2b;
+  --sidebar-primary: #2b2b2b;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #fdecef;
+  --sidebar-accent-foreground: #2b2b2b;
+  --sidebar-border: #2b2b2b;
+  --sidebar-ring: #2b2b2b;
+
+  /* Chart tokens: brand pink line + harmonised pink palette, dark grid. */
+  --status-success: oklch(0.627 0.194 149.214);
+  --status-success-foreground: #ffffff;
+  --status-warning: oklch(0.666 0.179 58.318);
+  --run-chart-1: #ec4899;
+  --run-chart-2: #3b82f6;
+  --run-chart-3: #f59e0b;
+  --chart-palette-1: var(--chart-1);
+  --chart-palette-2: oklch(0.69 0.19 350);
+  --chart-palette-3: oklch(0.78 0.14 352);
+  --chart-palette-4: oklch(0.58 0.21 345);
+  --chart-palette-5: oklch(0.87 0.08 355);
+  --chart-grid: #d9d9d9;
+  --chart-line: #ed356d;
+  --chart-1: #ed356d;
+  --chart-2: oklch(0.7 0.15 32);
+  --chart-3: oklch(0.56 0.2 350);
+  --chart-4: oklch(0.8 0.13 75);
+  --chart-5: oklch(0.46 0.16 356);
+
+  --brand-imprint: url("/brand-imprint-light.svg");
+}
+
+.dark {
+  --background: #161717;
+  --foreground: #f4f4f6;
+  --card: #09090B;
+  --card-foreground: #f4f4f6;
+  --popover: #09090B;
+  --popover-foreground: #f4f4f6;
+  --primary: #ffffff;
+  --primary-foreground: #000000;
+  --secondary: #09090B;
+  --secondary-foreground: #ffffff;
+  --muted: #181822;
+  --muted-foreground: #a0a0b4;
+  --accent: #181822;
+  --accent-foreground: #ffffff;
+  --destructive: #ff3355;
+  --destructive-foreground: #ffffff;
+  --border: #1D1E28;
+  --input: #09090B;
+  --ring: #1D1E28;
+  --shadow-color: #1D1E28;
+  --border-hover: #1D1E28;
+  --text-body: #f4f4f6;
+  --text-description: #a0a0b4;
+  --text-muted: #6e6e85;
+  --cta: #ff2a75;
+  --cta-foreground: #ffffff;
+  --accent-pink: #2a101b;
+  --accent-pink-foreground: #ff85b3;
+  --archived-bar-bg: #200c15;
+  --pink-50: #1b0910;
+  --pink-100: #2a101b;
+  --pink-200: #3a1524;
+  --pink-300: #4a192c;
+  --sidebar: #09090B;
+  --sidebar-foreground: #f4f4f6;
+  --sidebar-primary: #ff2a75;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #ff2a75;
+  --sidebar-accent-foreground: #ffffff;
+  --sidebar-border: #1D1E28;
+  --sidebar-ring: #ffffff;
+  --status-success: oklch(0.723 0.219 149.579);
+  --status-success-foreground: #0a0a0a;
+  --status-warning: oklch(0.769 0.188 70.08);
+  --chart-grid: #1D1E28;
+  --chart-line: #ff2a75;
+  --chart-1: #ff2a75;
+  --chart-2: #00f0ff;
+  --chart-3: #ffaa00;
+  --chart-4: #00ff88;
+  --chart-5: #b055ff;
+  --brand-imprint: url('/brand-imprint-dark.svg');
+}
+
+/* -----------------------------------------------------------------------------
+   Neo-Brutalism component overrides.
+   These make the UI match the reference screenshot exactly: thick black borders,
+   hard offset shadows, and soft pink accents only on selected nav / table header
+   / archived bar.
+----------------------------------------------------------------------------- */
+
+/* Cards: white surface, 3px black border, 8px hard shadow, 6px radius. */
+[data-theme="brutalist"] [data-slot="card"] {
+  border-radius: var(--radius-card);
+  border-width: var(--surface-border-width);
+  border-color: var(--border);
+  box-shadow: var(--surface-shadow-lg);
+  background-color: var(--card);
+}
+
+/* Disable card hover states globally */
+[data-theme="brutalist"] [data-slot="card"]:hover {
+  border-color: var(--border) !important;
+  box-shadow: var(--surface-shadow-lg) !important;
+  transform: none !important;
+}
+
+/* Buttons: 12px radius, 3px border (shadow comes from shadow-button). */
+[data-theme="brutalist"] [data-slot="button"] {
+  border-radius: var(--radius-button);
+  border-color: var(--border);
+  box-shadow: var(--button-shadow) !important;
+  transition: transform 0.1s ease, box-shadow 0.1s ease;
+}
+
+/* Enable button hover and press animation shifts globally */
+[data-theme="brutalist"] [data-slot="button"]:hover {
+  transform: translate(2px, 2px) !important;
+  box-shadow: 2px 2px 0 0 var(--shadow-color) !important;
+}
+
+[data-theme="brutalist"] [data-slot="button"]:active {
+  transform: translate(4px, 4px) !important;
+  box-shadow: 0px 0px 0 0 var(--shadow-color) !important;
+}
+
+/* Disable sidebar menu items hover effects globally */
+[data-theme="brutalist"] [data-slot="sidebar-menu-button"]:hover {
+  background-color: transparent !important;
+  color: var(--sidebar-foreground) !important;
+}
+
+/* Inputs: hard 4px shadow, 3px border. */
+[data-theme="brutalist"] [data-slot="input"] {
+  border-radius: var(--radius-input);
+  box-shadow: var(--input-shadow);
+  border-color: var(--border);
+  background-color: var(--background);
+  color: var(--text-body);
+  transition: transform 0.1s ease, box-shadow 0.1s ease;
+}
+[data-theme="brutalist"] [data-slot="input"]::placeholder {
+  color: var(--text-description);
+}
+[data-theme="brutalist"] [data-slot="input"]:focus {
+  transform: translate(1.5px, 1.5px) !important;
+  box-shadow: 1px 1px 0 0 var(--shadow-color) !important;
+  outline: none !important;
+}
+
+/* Select trigger: hard 4px shadow, 3px border. */
+[data-theme="brutalist"] [data-slot="select-trigger"] {
+  border-radius: var(--radius-input);
+  box-shadow: var(--input-shadow);
+  border-color: var(--border);
+  background-color: var(--background);
+  transition: transform 0.1s ease, box-shadow 0.1s ease;
+}
+[data-theme="brutalist"] [data-slot="select-trigger"]:hover {
+  transform: translate(1.5px, 1.5px) !important;
+  box-shadow: 1px 1px 0 0 var(--shadow-color) !important;
+}
+
+/* Sidebar: white bg, 3px black border, large radius, hard shadow. */
+[data-theme="brutalist"] [data-slot="sidebar-inner"] {
+  border-radius: var(--radius-sidebar);
+  border-width: var(--surface-border-width);
+  border-color: var(--sidebar-border);
+  background-color: var(--sidebar);
+  box-shadow: var(--surface-shadow-lg);
+}
+
+/* Table rows: black bottom border. */
+[data-theme="brutalist"] [data-slot="table-row"] {
+  border-color: var(--border);
+  border-bottom-width: var(--surface-border-width);
+}
+[data-theme="brutalist"] [data-slot="table-row"]:last-child {
+  border-bottom-width: 0;
+}
+[data-theme="brutalist"] [data-slot="table-head"] {
+  color: var(--foreground);
+  font-weight: 700;
+}
+[data-theme="brutalist"] [data-slot="table-cell"] {
+  color: var(--text-body);
+}
+
+/* -----------------------------------------------------------------------------
+   Additional Neo-Brutalism overrides for the rest of the component library.
+   These rules make every surfaced component match the black/white thick-border
+   hard-shadow language when the Brutalist design theme is active.
+   ----------------------------------------------------------------------------- */
+
+/* Badges: force white bg, black border, black text. */
+[data-theme="brutalist"] [data-slot="badge"] {
+  border-radius: var(--radius-badge);
+  border-width: var(--surface-border-width);
+  border-color: var(--border);
+  background-color: var(--card);
+  color: var(--foreground);
+  box-shadow: var(--surface-shadow-sm);
+}
+
+/* Dialog / Sheet / Popover / Dropdown panels: hard shadow, thick border. */
+[data-theme="brutalist"] [data-slot="dialog-content"],
+[data-theme="brutalist"] [data-slot="sheet-content"],
+[data-theme="brutalist"] [data-slot="popover-content"],
+[data-theme="brutalist"] [data-slot="dropdown-menu-content"] {
+  border-radius: var(--radius-card);
+  border-width: var(--surface-border-width);
+  border-color: var(--border);
+  box-shadow: var(--surface-shadow-lg);
+  background-color: var(--card);
+}
+
+/* Dropdown menu items: keep flat, remove default tint. */
+[data-theme="brutalist"] [data-slot="dropdown-menu-item"]:focus,
+[data-theme="brutalist"] [data-slot="dropdown-menu-item"][data-highlighted] {
+  background-color: var(--accent-pink) !important;
+  color: var(--accent-pink-foreground) !important;
+}
+
+/* Reset buttons/elements inside dropdown menus to prevent neobrutalist styles */
+[data-theme="brutalist"] [data-slot="dropdown-menu-content"] [data-slot="button"],
+[data-theme="brutalist"] [data-slot="dropdown-menu-sub-content"] [data-slot="button"],
+[data-theme="brutalist"] [data-slot="dropdown-menu-item"][data-slot="button"] {
+  border: none !important;
+  border-width: 0 !important;
+  box-shadow: none !important;
+  transform: none !important;
+  background-color: transparent !important;
+  color: inherit !important;
+  transition: none !important;
+  border-radius: var(--radius-sidebar-item) !important;
+}
+
+[data-theme="brutalist"] [data-slot="dropdown-menu-content"] [data-slot="button"]:hover,
+[data-theme="brutalist"] [data-slot="dropdown-menu-content"] [data-slot="button"]:focus,
+[data-theme="brutalist"] [data-slot="dropdown-menu-content"] [data-slot="button"]:active,
+[data-theme="brutalist"] [data-slot="dropdown-menu-sub-content"] [data-slot="button"]:hover,
+[data-theme="brutalist"] [data-slot="dropdown-menu-sub-content"] [data-slot="button"]:focus,
+[data-theme="brutalist"] [data-slot="dropdown-menu-sub-content"] [data-slot="button"]:active,
+[data-theme="brutalist"] [data-slot="dropdown-menu-item"][data-slot="button"]:hover,
+[data-theme="brutalist"] [data-slot="dropdown-menu-item"][data-slot="button"]:focus,
+[data-theme="brutalist"] [data-slot="dropdown-menu-item"][data-slot="button"]:active,
+[data-theme="brutalist"] [data-slot="dropdown-menu-item"][data-slot="button"][data-highlighted] {
+  transform: none !important;
+  box-shadow: none !important;
+  background-color: transparent !important;
+}
+
+/* Select content / option panels. */
+[data-theme="brutalist"] [data-slot="select-content"] {
+  border-radius: var(--radius-card);
+  border-width: var(--surface-border-width);
+  border-color: var(--border);
+  box-shadow: var(--surface-shadow-lg);
+  background-color: var(--popover);
+}
+
+[data-theme="brutalist"] [data-slot="select-item"][data-state="checked"],
+[data-theme="brutalist"] [data-slot="select-item"]:focus {
+  background-color: var(--accent-pink);
+  color: var(--accent-pink-foreground);
+}
+
+/* Textarea: same treatment as input. */
+[data-theme="brutalist"] [data-slot="textarea"] {
+  border-radius: var(--radius-input);
+  box-shadow: var(--input-shadow);
+  border-color: var(--border);
+  background-color: var(--background);
+  color: var(--text-body);
+  transition: transform 0.1s ease, box-shadow 0.1s ease;
+}
+[data-theme="brutalist"] [data-slot="textarea"]:focus {
+  transform: translate(1.5px, 1.5px) !important;
+  box-shadow: 1px 1px 0 0 var(--shadow-color) !important;
+  outline: none !important;
+}
+
+/* Tabs: pill list, active item gets the pink accent. */
+[data-theme="brutalist"] [data-slot="tabs-list"] {
+  border-radius: var(--radius-button);
+  border-width: var(--surface-border-width);
+  border-color: var(--border);
+  background-color: var(--muted);
+  box-shadow: var(--surface-shadow);
+  padding: 2px;
+}
+
+[data-theme="brutalist"] [data-slot="tabs-trigger"] {
+  border-radius: var(--radius-button);
+  border-color: transparent;
+  color: var(--foreground);
+}
+
+[data-theme="brutalist"] [data-slot="tabs-trigger"][data-state="active"] {
+  background-color: var(--card);
+  color: var(--foreground);
+  border-color: var(--border);
+  box-shadow: var(--surface-shadow-sm);
+}
+
+/* Switches, checkboxes, radios: thick borders, hard shadows. */
+[data-theme="brutalist"] [data-slot="switch"] {
+  border-width: var(--surface-border-width);
+  border-color: var(--border);
+  box-shadow: var(--surface-shadow-sm);
+}
+
+[data-theme="brutalist"] [data-slot="checkbox"],
+[data-theme="brutalist"] [data-slot="radio-group-item"] {
+  border-width: var(--surface-border-width);
+  border-color: var(--border);
+  box-shadow: var(--surface-shadow-sm);
+}
+
+[data-theme="brutalist"] [data-slot="checkbox"][data-state="checked"],
+[data-theme="brutalist"] [data-slot="radio-group-item"][data-state="checked"] {
+  background-color: var(--primary);
+  color: var(--primary-foreground);
+}
+
+/* Calendar: popover-like hard shadow. */
+[data-theme="brutalist"] [data-slot="calendar"] {
+  border-radius: var(--radius-card);
+  border-width: var(--surface-border-width);
+  border-color: var(--border);
+  box-shadow: var(--surface-shadow-lg);
+  background-color: var(--card);
+}
+
+/* Separator: use the thick border color. */
+[data-theme="brutalist"] [data-slot="separator-root"],
+[data-theme="brutalist"] [data-slot="separator"] {
+  background-color: var(--border);
+}
+
+[data-theme="brutalist"] [data-slot="dropdown-menu-separator"] {
+  background-color: var(--border);
+  height: 1px;
+  opacity: 0.15;
+  margin: 4px 0;
+}
+
+/* -----------------------------------------------------------------------------
+   React Flow workflow builder overrides.
+   ----------------------------------------------------------------------------- */
+
+/* Node cards already carry data-slot="card" through BaseNode; this rule
+   reinforces the brutalist shadow/border and removes the generic hover tint. */
+[data-theme="brutalist"] [data-slot="card"]:hover {
+  border-color: var(--border);
+}
+
+/* Selected / runtime-active nodes: keep the brand ring but swap the colored
+   glow for a black outline + offset shadow. */
+[data-theme="brutalist"] .react-flow__node.selected [data-slot="card"],
+[data-theme="brutalist"] .react-flow__node[data-selected="true"] [data-slot="card"] {
+  border-color: var(--border-hover) !important;
+  box-shadow: 0 0 0 2px var(--border-hover);
+}
+
+/* Invalid nodes: invert to destructive surface so they still stand out. */
+[data-theme="brutalist"] [data-slot="card"][data-invalid="true"],
+[data-theme="brutalist"] .react-flow__node[data-invalid="true"] [data-slot="card"] {
+  background-color: var(--destructive);
+  color: var(--destructive-foreground);
+  border-color: var(--border);
+  box-shadow: var(--surface-shadow-lg);
+}
+
+/* Hovered / edge-highlighted / runtime-active nodes: keep the ring but use
+   the theme's primary color (black/white) instead of a blue sky glow. */
+[data-theme="brutalist"] [data-slot="card"][data-hovered-through-edge="true"],
+[data-theme="brutalist"] [data-slot="card"][data-runtime-active="true"] {
+  border-color: var(--border-hover);
+  box-shadow: 0 0 0 2px var(--border-hover);
+}
+
+[data-theme="brutalist"] [data-slot="card"][data-selected-through-edge="true"] {
+  border-color: var(--border-hover);
+  box-shadow: 0 0 0 1px var(--border-hover);
+}
+
+/* Node handles: thick black/white rings. */
+[data-theme="brutalist"] .react-flow__handle {
+  width: 10px;
+  height: 10px;
+  background-color: var(--background);
+  border-width: var(--surface-border-width);
+  border-color: var(--border);
+  box-shadow: var(--surface-shadow-sm);
+}
+
+/* Edge labels and path: thick stroke, high contrast. */
+[data-theme="brutalist"] .react-flow__edge-path {
+  stroke: var(--border);
+  stroke-width: 2;
+}
+
+[data-theme="brutalist"] .react-flow__edge-label {
+  background-color: var(--card);
+  color: var(--foreground);
+  border-width: var(--surface-border-width);
+  border-color: var(--border);
+  border-radius: var(--radius-badge);
+  box-shadow: var(--surface-shadow-sm);
+}
+
+/* React Flow controls (zoom/fit) are rendered by the library; keep them in
+   line with our Button styling via a generic override. */
+[data-theme="brutalist"] .react-flow__controls-button {
+  background-color: var(--card);
+  color: var(--foreground);
+  border-width: var(--surface-border-width);
+  border-color: var(--border);
+  box-shadow: var(--surface-shadow);
+}
+
+[data-theme="brutalist"] .react-flow__controls-button:hover {
+  background-color: var(--accent-pink);
+}
+
+/* The default React Flow selection box. */
+[data-theme="brutalist"] .react-flow__selection {
+  background-color: var(--accent-pink);
+  border-width: var(--surface-border-width);
+  border-color: var(--border);
+}
+
+/* Canvas background: lower contrast dots so nodes pop. */
+[data-theme="brutalist"] .react-flow__background {
+  opacity: 0.35;
+}
+
+/* Node toolbar buttons (edit/delete). */
+[data-theme="brutalist"] .react-flow__node-toolbar [data-slot="button"] {
+  background-color: var(--card);
+  color: var(--foreground);
+  border-width: var(--surface-border-width);
+  border-color: var(--border);
+  box-shadow: var(--surface-shadow);
+}
+
+[data-theme="brutalist"] .react-flow__node-toolbar [data-slot="button"]:hover {
+  background-color: var(--accent-pink);
+}
+
+/* Expanded edge label card. */
+[data-theme="brutalist"] .react-flow__edge-label > div:first-child {
+  border-radius: var(--radius-card);
+  border-width: var(--surface-border-width);
+  border-color: var(--border);
+  box-shadow: var(--surface-shadow-lg);
+  background-color: var(--card);
+}
+
+/* -----------------------------------------------------------------------------
+   Workflow node badge overrides.
+   GenericNode injects colored classes (bg-emerald-500, bg-blue-500, …). In
+   Brutalist mode we force every node badge back to white surface/black border.
+   ----------------------------------------------------------------------------- */
+
+[data-theme="brutalist"] .node-badge {
+  background-color: var(--card) !important;
+  color: var(--foreground) !important;
+  border-width: var(--surface-border-width) !important;
+  border-color: var(--border) !important;
+  box-shadow: var(--surface-shadow-sm) !important;
+}
+
+/* Make sure icons inside the badge inherit the foreground color. */
+[data-theme="brutalist"] .node-badge svg,
+[data-theme="brutalist"] .node-badge [data-icon] {
+  color: var(--foreground) !important;
+}
+
+/* -----------------------------------------------------------------------------
+   Toasts and notifications.
+   ----------------------------------------------------------------------------- */
+
+[data-theme="brutalist"] [data-sonner-toast] {
+  border-radius: var(--radius-card);
+  border-width: var(--surface-border-width);
+  border-color: var(--border);
+  box-shadow: var(--surface-shadow-lg);
+  background-color: var(--card);
+  color: var(--foreground);
+}
+
+[data-theme="brutalist"] [data-sonner-toast][data-type="success"] {
+  background-color: var(--accent-pink);
+  color: var(--accent-pink-foreground);
+}
+
+[data-theme="brutalist"] [data-sonner-toast][data-type="error"] {
+  background-color: var(--destructive);
+  color: var(--destructive-foreground);
+}
+
+/* -----------------------------------------------------------------------------
+   Workflow tester panel & onboarding tooltip.
+   ----------------------------------------------------------------------------- */
+
+/* Empty-state card inside the tester already carries data-slot="card"; this
+   reinforces the brutalist look and removes the subtle border/background. */
+[data-theme="brutalist"] [data-slot="card"].workflow-tester-empty-state {
+  background-color: var(--card);
+  border-width: var(--surface-border-width);
+  border-color: var(--border);
+  box-shadow: var(--surface-shadow-lg);
+}
+
+/* Onboarding tooltip: hard shadow + thick border. */
+[data-theme="brutalist"] .onboarding-tooltip > div:last-child {
+  border-width: var(--surface-border-width);
+  border-color: var(--border);
+  box-shadow: var(--surface-shadow-lg);
+}
+
+/* -----------------------------------------------------------------------------
+   Custom helper classes for layout, buttons, sidebars and cards.
+   ----------------------------------------------------------------------------- */
+
+/* Custom close buttons */
+[data-theme="brutalist"] [data-slot="dialog-close-btn"],
+[data-theme="brutalist"] .custom-close-btn {
+  border-width: 1.5px !important;
+  border-color: var(--border) !important;
+  background-color: var(--background) !important;
+  color: var(--foreground) !important;
+  box-shadow: 2px 2px 0 0 var(--shadow-color) !important;
+  border-radius: 0.5rem !important;
+  padding: 0.375rem !important;
+  opacity: 1 !important;
+  flex-shrink: 0 !important;
+  transition: transform 0.1s ease, box-shadow 0.1s ease;
+}
+[data-theme="brutalist"] [data-slot="dialog-close-btn"]:hover,
+[data-theme="brutalist"] .custom-close-btn:hover {
+  background-color: var(--background) !important;
+  color: var(--foreground) !important;
+  transform: translate(1px, 1px) !important;
+  box-shadow: 1px 1px 0 0 var(--shadow-color) !important;
+}
+[data-theme="brutalist"] [data-slot="dialog-close-btn"]:active,
+[data-theme="brutalist"] .custom-close-btn:active {
+  transform: translate(2px, 2px) !important;
+  box-shadow: 0px 0px 0 0 var(--shadow-color) !important;
+}
+[data-theme="brutalist"] [data-slot="dialog-close-btn"]:focus,
+[data-theme="brutalist"] .custom-close-btn:focus {
+  outline: none !important;
+}
+
+/* Custom small close buttons */
+[data-theme="brutalist"] .custom-small-close-btn {
+  border-width: 2px !important;
+  border-color: var(--border) !important;
+  background-color: var(--background) !important;
+  color: var(--foreground) !important;
+  box-shadow: 1.5px 1.5px 0 0 var(--shadow-color) !important;
+  border-radius: 0.5rem !important;
+  opacity: 1 !important;
+  transition: transform 0.1s ease, box-shadow 0.1s ease;
+}
+[data-theme="brutalist"] .custom-small-close-btn:hover {
+  background-color: var(--background) !important;
+  color: var(--foreground) !important;
+  transform: translate(0.5px, 0.5px) !important;
+  box-shadow: 1px 1px 0 0 var(--shadow-color) !important;
+}
+[data-theme="brutalist"] .custom-small-close-btn:active {
+  transform: translate(1.5px, 1.5px) !important;
+  box-shadow: 0px 0px 0 0 var(--shadow-color) !important;
+}
+
+/* Active sidebar item — brand-pink surface, lifted out of the list. */
+[data-theme="brutalist"] .nb-sidebar-active {
+  height: 2.5rem !important; /* h-10 */
+  margin: 0 0 5px 0 !important;
+  background-color: #ed356d !important;
+  color: #ffffff !important;
+  border-width: 1.5px !important;
+  border-color: var(--border) !important;
+  box-shadow: 3px 3px 0 0 var(--shadow-color) !important;
+  transition: transform 0.1s ease, box-shadow 0.1s ease !important;
+}
+.dark[data-theme="brutalist"] .nb-sidebar-active {
+  background-color: #ed356d !important;
+  color: #ffffff !important;
+}
+
+[data-theme="brutalist"] .nb-sidebar-active:hover {
+  background-color: #ed356d !important;
+  color: #ffffff !important;
+  transform: translate(1.5px, 1.5px) !important;
+  box-shadow: 1.5px 1.5px 0 0 var(--shadow-color) !important;
+}
+.dark[data-theme="brutalist"] .nb-sidebar-active:hover {
+  background-color: #ed356d !important;
+  color: #ffffff !important;
+}
+
+[data-theme="brutalist"] .nb-sidebar-active .active-sidebar-icon {
+  color: #ffffff !important;
+}
+.dark[data-theme="brutalist"] .nb-sidebar-active .active-sidebar-icon {
+  color: #ffffff !important;
+}
+
+/* Sidebar user initials avatar */
+[data-theme="brutalist"] .user-avatar-trigger {
+  background-color: var(--background) !important;
+  border-width: 1px !important;
+  border-color: var(--border) !important;
+  color: var(--foreground) !important;
+  border-radius: 9999px !important;
+  box-shadow: none !important;
+  transform: none !important;
+}
+[data-theme="brutalist"] .user-avatar-trigger:hover,
+[data-theme="brutalist"] .user-avatar-trigger:focus,
+[data-theme="brutalist"] .user-avatar-trigger:active {
+  background-color: var(--background) !important;
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+/* Sidebar profile panel card — brand-pink surface. */
+[data-theme="brutalist"] .profile-trigger-card {
+  background-color: #ed356d !important;
+  border-width: 1.5px !important;
+  border-color: var(--border) !important;
+  box-shadow: 2px 2px 0 0 var(--shadow-color) !important;
+  border-radius: 0.375rem !important;
+  color: #ffffff !important;
+  transition: transform 0.1s ease, box-shadow 0.1s ease !important;
+}
+[data-theme="brutalist"] .profile-trigger-card:hover {
+  background-color: #ed356d !important;
+  transform: translate(1px, 1px) !important;
+  box-shadow: 1px 1px 0 0 var(--shadow-color) !important;
+}
+
+/* Dashed upload containers */
+[data-theme="brutalist"] .theme-dashed-upload {
+  border-width: 1.5px !important;
+  border-style: dashed !important;
+  border-color: var(--border) !important;
+  background-color: var(--background) !important;
+  box-shadow: 2.5px 2.5px 0 0 var(--shadow-color) !important;
+  border-radius: 0.5rem !important;
+  color: var(--foreground) !important;
+}
+[data-theme="brutalist"] .theme-dashed-upload:hover {
+  background-color: var(--background) !important;
+  border-color: var(--border) !important;
+}
+
+/* Upload icon circle */
+[data-theme="brutalist"] .theme-upload-icon-container {
+  height: 2.5rem !important; /* h-10 */
+  width: 2.5rem !important; /* w-10 */
+  border-width: 1.5px !important;
+  border-color: var(--border) !important;
+  background-color: var(--background) !important;
+  color: var(--foreground) !important;
+  box-shadow: 1.5px 1.5px 0 0 var(--shadow-color) !important;
+  border-radius: 0.375rem !important;
+}
+
+/* Choice card select grids */
+[data-theme="brutalist"] .choice-card {
+  border-width: 1.5px !important;
+  border-color: var(--border) !important;
+  color: var(--foreground) !important;
+  border-radius: 0.5rem !important;
+  box-shadow: 2px 2px 0 0 var(--shadow-color) !important;
+  background-color: var(--card) !important;
+}
+[data-theme="brutalist"] .choice-card:hover {
+  background-color: var(--card) !important;
+  box-shadow: 2px 2px 0 0 var(--shadow-color) !important;
+}
+[data-theme="brutalist"] .choice-card-active {
+  background-color: var(--accent-pink) !important;
+  color: var(--accent-pink-foreground) !important;
+  box-shadow: 3px 3px 0 0 var(--shadow-color) !important;
+}
+[data-theme="brutalist"] .choice-card-active:hover {
+  background-color: var(--accent-pink) !important;
+}
+
+/* Drawer action buttons */
+[data-theme="brutalist"] .drawer-action-btn {
+  border-width: 1.5px !important;
+  border-color: var(--border) !important;
+  background-color: var(--background) !important;
+  color: var(--foreground) !important;
+  box-shadow: 2px 2px 0 0 var(--shadow-color) !important;
+  border-radius: 0.375rem !important;
+  transition: transform 0.1s ease, box-shadow 0.1s ease;
+}
+[data-theme="brutalist"] .drawer-action-btn:hover {
+  background-color: var(--background) !important;
+  transform: translate(1px, 1px) !important;
+  box-shadow: 1px 1px 0 0 var(--shadow-color) !important;
+}
+[data-theme="brutalist"] .drawer-action-btn:active {
+  transform: translate(2px, 2px) !important;
+  box-shadow: 0px 0px 0 0 var(--shadow-color) !important;
+}
+[data-theme="brutalist"] .drawer-action-btn.text-destructive {
+  border-width: 1.5px !important;
+  border-color: var(--border) !important;
+  background-color: var(--background) !important;
+  box-shadow: 2px 2px 0 0 var(--shadow-color) !important;
+  transition: transform 0.1s ease, box-shadow 0.1s ease;
+}
+[data-theme="brutalist"] .drawer-action-btn.text-destructive:hover {
+  background-color: var(--background) !important;
+  transform: translate(1px, 1px) !important;
+  box-shadow: 1px 1px 0 0 var(--shadow-color) !important;
+}
+[data-theme="brutalist"] .drawer-action-btn.text-destructive:active {
+  transform: translate(2px, 2px) !important;
+  box-shadow: 0px 0px 0 0 var(--shadow-color) !important;
+}
+[data-theme="brutalist"] .drawer-action-btn-active {
+  background-color: var(--accent-pink) !important;
+  border-width: 1.5px !important;
+  border-color: var(--border) !important;
+  color: var(--accent-pink-foreground) !important;
+  box-shadow: 2px 2px 0 0 var(--shadow-color) !important;
+  transition: transform 0.1s ease, box-shadow 0.1s ease;
+}
+[data-theme="brutalist"] .drawer-action-btn-active:hover {
+  background-color: var(--accent-pink) !important;
+  color: var(--accent-pink-foreground) !important;
+  transform: translate(1px, 1px) !important;
+  box-shadow: 1px 1px 0 0 var(--shadow-color) !important;
+}
+[data-theme="brutalist"] .drawer-action-btn-active:active {
+  transform: translate(2px, 2px) !important;
+  box-shadow: 0px 0px 0 0 var(--shadow-color) !important;
+}
+
+/* Settings page row containers (Mode & Design theme) */
+[data-theme="brutalist"] .settings-row-container {
+  border-width: 2px !important;
+  border-color: var(--border) !important;
+  box-shadow: 3.5px 3.5px 0 0 var(--shadow-color) !important;
+  border-radius: var(--radius-card) !important;
+  background-color: var(--card) !important;
+}
+
+[data-theme="brutalist"].dark .settings-row-container {
+  background-color: #09090B !important;
+  border: 2px solid #1D1E28 !important;
+  box-shadow: 4px 4px 0 0 var(--shadow-color) !important;
+}
+
+/* Design theme card buttons in settings */
+[data-theme="brutalist"] .design-theme-card {
+  border-width: 2px !important;
+  border-color: var(--border) !important;
+  box-shadow: 4px 4px 0 0 var(--shadow-color) !important;
+  background-color: var(--card) !important;
+  transition: transform 0.1s ease, box-shadow 0.1s ease !important;
+}
+
+[data-theme="brutalist"].dark .design-theme-card {
+  background-color: #09090B !important;
+  border: 2px solid #1D1E28 !important;
+  box-shadow: 4px 4px 0 0 var(--shadow-color) !important;
+}
+
+[data-theme="brutalist"].dark .design-theme-card[aria-pressed="true"] {
+  background-color: #09090B !important;
+  border: 2px solid #1D1E28 !important;
+  box-shadow: 5px 5px 0 0 var(--shadow-color) !important;
+}
+
+[data-theme="brutalist"] .design-theme-card:hover {
+  transform: translate(1.5px, 1.5px) !important;
+  box-shadow: 2.5px 2.5px 0 0 var(--shadow-color) !important;
+}
+
+/* Force equal white backgrounds for all containers, cards, and popups in light mode */
+[data-theme="brutalist"]:not(.dark) [data-slot="card"],
+[data-theme="brutalist"]:not(.dark) [data-slot="dialog-content"],
+[data-theme="brutalist"]:not(.dark) [data-slot="sheet-content"],
+[data-theme="brutalist"]:not(.dark) [data-slot="popover-content"],
+[data-theme="brutalist"]:not(.dark) [data-slot="dropdown-menu-content"],
+[data-theme="brutalist"]:not(.dark) [data-slot="select-content"],
+[data-theme="brutalist"]:not(.dark) tfoot,
+[data-theme="brutalist"]:not(.dark) tbody,
+[data-theme="brutalist"]:not(.dark) table {
+  background-color: #ffffff !important;
+}
+
+/* Force all table rows to have white background and thick bottom borders in light mode */
+[data-theme="brutalist"]:not(.dark) [data-slot="table-row"] {
+  background-color: #ffffff !important;
+  border-bottom: var(--surface-border-width) solid var(--border) !important;
+}
+
+/* Force all table headers in light mode to have the archived bar background (light pink) and a thick bottom border */
+[data-theme="brutalist"]:not(.dark) [data-slot="table-head"],
+[data-theme="brutalist"]:not(.dark) .nb-table-header,
+[data-theme="brutalist"]:not(.dark) .nb-table-header th,
+[data-theme="brutalist"]:not(.dark) thead,
+[data-theme="brutalist"]:not(.dark) thead tr {
+  background-color: var(--archived-bar-bg) !important;
+  border-bottom: var(--surface-border-width) solid var(--border) !important;
+}
+
+/* Maintain hover background highlight for table rows in light mode */
+[data-theme="brutalist"]:not(.dark) [data-slot="table-row"]:hover {
+  background-color: var(--accent-pink) !important;
+}
+
+/* Removed Dark-mode fully flat policy to allow brutalist shadows to render */
+
+/* =============================================================================
+   ULTRA-PREMIUM DARK MODE NEO-BRUTALISM OVERRIDES (10/10 QUALITY)
+   High contrast, sharp borders, bold badges, vibrant electric pink accents,
+   and hard solid shadows that pop off dark surfaces.
+   ============================================================================= */
+
+/* Dark Mode Cards & Containers */
+[data-theme="brutalist"].dark [data-slot="card"],
+[data-theme="brutalist"].dark .card,
+[data-theme="brutalist"].dark .nb-card {
+  background-color: #09090B !important;
+  border: 2px solid #1D1E28 !important;
+  box-shadow: 5px 5px 0px var(--shadow-color) !important;
+}
+
+/* Dark Mode Table Headers */
+[data-theme="brutalist"].dark [data-slot="table-head"],
+[data-theme="brutalist"].dark .nb-table-header,
+[data-theme="brutalist"].dark .nb-table-header th,
+[data-theme="brutalist"].dark thead,
+[data-theme="brutalist"].dark thead tr {
+  background-color: #27101b !important;
+  color: #ff85b3 !important;
+  border-bottom: 2px solid #1D1E28 !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.02em;
+}
+
+/* Dark Mode Table Rows */
+[data-theme="brutalist"].dark [data-slot="table-row"] {
+  background-color: #09090B !important;
+  border-bottom: 2px solid #1D1E28 !important;
+  transition: background-color 0.15s ease;
+}
+
+[data-theme="brutalist"].dark [data-slot="table-row"]:hover {
+  background-color: #09090B !important;
+}
+
+/* Dark Mode Table Row Action Buttons ("Edit", "Move", "Archive") */
+[data-theme="brutalist"].dark [data-slot="table-row"] [data-slot="button"] {
+  background-color: #09090B !important;
+  color: #ffffff !important;
+  border: 1.5px solid #1D1E28 !important;
+  box-shadow: 2.5px 2.5px 0 0 var(--shadow-color) !important;
+  font-weight: 600 !important;
+  border-radius: 6px !important;
+}
+
+[data-theme="brutalist"].dark [data-slot="table-row"] [data-slot="button"]:hover {
+  background-color: #09090B !important;
+  border-color: #1D1E28 !important;
+  color: #ffffff !important;
+  transform: translate(1px, 1px) !important;
+  box-shadow: 1.5px 1.5px 0 0 var(--shadow-color) !important;
+}
+
+/* Dark Mode Primary Action Buttons ("+ Create Agent", "Save", etc.) */
+[data-theme="brutalist"].dark [data-slot="button"].bg-primary {
+  background-color: #ffffff !important;
+  color: #000000 !important;
+  border: 2px solid var(--border) !important;
+  box-shadow: 4px 4px 0px var(--shadow-color) !important;
+  font-weight: 700 !important;
+}
+
+[data-theme="brutalist"].dark [data-slot="button"].bg-primary:hover {
+  transform: translate(2px, 2px) !important;
+  box-shadow: 2px 2px 0px var(--shadow-color) !important;
+  background-color: #f0f0f5 !important;
+  border-color: var(--border) !important;
+  color: #000000 !important;
+}
+
+/* Dark Mode Inputs & Selects */
+[data-theme="brutalist"].dark [data-slot="input"] {
+  background-color: #09090B !important;
+  border: 2px solid #1D1E28 !important;
+  color: #ffffff !important;
+  box-shadow: 3px 3px 0 0 var(--shadow-color) !important;
+}
+
+[data-theme="brutalist"].dark [data-slot="input"]:focus {
+  border-color: #1D1E28 !important;
+  box-shadow: 2px 2px 0 0 var(--shadow-color) !important;
+  outline: none !important;
+}
+
+/* Dark Mode Badges */
+[data-theme="brutalist"].dark [data-slot="badge"] {
+  background-color: #09090B !important;
+  color: #ffffff !important;
+  border: 1.5px solid #1D1E28 !important;
+  box-shadow: 2px 2px 0 0 var(--shadow-color) !important;
+  font-weight: 700 !important;
+}
+
+/* Dark Mode Sidebar Inner */
+[data-theme="brutalist"].dark .app-sidebar-dock [data-slot="sidebar-inner"] {
+  background-color: #09090B !important;
+  border: 2px solid #1D1E28 !important;
+  box-shadow: 5px 5px 0 0 var(--shadow-color) !important;
+}
+
+/* Dark Mode Active Sidebar Menu Item */
+[data-theme="brutalist"].dark .nb-sidebar-active {
+  background-color: #ff2a75 !important;
+  color: #ffffff !important;
+  border: 1.5px solid var(--border) !important;
+  box-shadow: 3.5px 3.5px 0 0 var(--shadow-color) !important;
+  font-weight: 700 !important;
+}
+
+[data-theme="brutalist"].dark .nb-sidebar-active:hover {
+  background-color: #ff2a75 !important;
+  color: #ffffff !important;
+  border: 1.5px solid var(--border) !important;
+  transform: translate(1.5px, 1.5px) !important;
+  box-shadow: 2px 2px 0 0 var(--shadow-color) !important;
+}
+
+/* Dark Mode Profile User Card */
+[data-theme="brutalist"].dark .profile-trigger-card {
+  background-color: #ff2a75 !important;
+  color: #ffffff !important;
+  border: 1.5px solid var(--border) !important;
+  box-shadow: 3px 3px 0 0 var(--shadow-color) !important;
+  font-weight: 700 !important;
+}
+
+
+
+/* -----------------------------------------------------------------------------
+   WhatsApp screens — pressable list cards
+----------------------------------------------------------------------------- */
+
+/* List cards press down-right on hover like buttons. Light brutalist only; dark
+   brutalist stays flat per the dark shadow policy, so we don't re-enable a shift. */
+[data-theme="brutalist"]:not(.dark) [data-slot="card"].wa-card-interactive {
+  transition: transform 0.1s ease, box-shadow 0.1s ease;
+}
+[data-theme="brutalist"]:not(.dark) [data-slot="card"].wa-card-interactive:hover {
+  transform: translate(3px, 3px) !important;
+  box-shadow: var(--surface-shadow-sm) !important;
+}
+
+[data-theme="brutalist"].dark .design-theme-card {
+  background-color: #09090B !important;
+  border: 2px solid #1D1E28 !important;
+  box-shadow: 4px 4px 0 0 var(--shadow-color) !important;
+}
+
+[data-theme="brutalist"].dark .design-theme-card[aria-pressed="true"] {
+  background-color: #09090B !important;
+  border: 2px solid #1D1E28 !important;
+  box-shadow: 5px 5px 0 0 var(--shadow-color) !important;
+}
+
+[data-theme="brutalist"] .design-theme-card:hover {
+  transform: translate(1.5px, 1.5px) !important;
+  box-shadow: 2.5px 2.5px 0 0 var(--shadow-color) !important;
+}
+
+/* Force equal white backgrounds for all containers, cards, and popups in light mode */
+[data-theme="brutalist"]:not(.dark) [data-slot="card"],
+[data-theme="brutalist"]:not(.dark) [data-slot="dialog-content"],
+[data-theme="brutalist"]:not(.dark) [data-slot="sheet-content"],
+[data-theme="brutalist"]:not(.dark) [data-slot="popover-content"],
+[data-theme="brutalist"]:not(.dark) [data-slot="dropdown-menu-content"],
+[data-theme="brutalist"]:not(.dark) [data-slot="select-content"],
+[data-theme="brutalist"]:not(.dark) tfoot,
+[data-theme="brutalist"]:not(.dark) tbody,
+[data-theme="brutalist"]:not(.dark) table {
+  background-color: #ffffff !important;
+}
+
+/* Force all table rows to have white background and thick bottom borders in light mode */
+[data-theme="brutalist"]:not(.dark) [data-slot="table-row"] {
+  background-color: #ffffff !important;
+  border-bottom: var(--surface-border-width) solid var(--border) !important;
+}
+
+/* Force all table headers in light mode to have the archived bar background (light pink) and a thick bottom border */
+[data-theme="brutalist"]:not(.dark) [data-slot="table-head"],
+[data-theme="brutalist"]:not(.dark) .nb-table-header,
+[data-theme="brutalist"]:not(.dark) .nb-table-header th,
+[data-theme="brutalist"]:not(.dark) thead,
+[data-theme="brutalist"]:not(.dark) thead tr {
+  background-color: var(--archived-bar-bg) !important;
+  border-bottom: var(--surface-border-width) solid var(--border) !important;
+}
+
+/* Maintain hover background highlight for table rows in light mode */
+[data-theme="brutalist"]:not(.dark) [data-slot="table-row"]:hover {
+  background-color: var(--accent-pink) !important;
+}
+
+/* Removed Dark-mode fully flat policy to allow brutalist shadows to render */
+
+/* =============================================================================
+   ULTRA-PREMIUM DARK MODE NEO-BRUTALISM OVERRIDES (10/10 QUALITY)
+   High contrast, sharp borders, bold badges, vibrant electric pink accents,
+   and hard solid shadows that pop off dark surfaces.
+   ============================================================================= */
+
+/* Dark Mode Cards & Containers */
+[data-theme="brutalist"].dark [data-slot="card"],
+[data-theme="brutalist"].dark .card,
+[data-theme="brutalist"].dark .nb-card {
+  background-color: #09090B !important;
+  border: 2px solid #1D1E28 !important;
+  box-shadow: 5px 5px 0px var(--shadow-color) !important;
+}
+
+/* Dark Mode Table Headers */
+[data-theme="brutalist"].dark [data-slot="table-head"],
+[data-theme="brutalist"].dark .nb-table-header,
+[data-theme="brutalist"].dark .nb-table-header th,
+[data-theme="brutalist"].dark thead,
+[data-theme="brutalist"].dark thead tr {
+  background-color: #27101b !important;
+  color: #ff85b3 !important;
+  border-bottom: 2px solid #1D1E28 !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.02em;
+}
+
+/* Dark Mode Table Rows */
+[data-theme="brutalist"].dark [data-slot="table-row"] {
+  background-color: #09090B !important;
+  border-bottom: 2px solid #1D1E28 !important;
+  transition: background-color 0.15s ease;
+}
+
+[data-theme="brutalist"].dark [data-slot="table-row"]:hover {
+  background-color: #09090B !important;
+}
+
+/* Dark Mode Table Row Action Buttons ("Edit", "Move", "Archive") */
+[data-theme="brutalist"].dark [data-slot="table-row"] [data-slot="button"] {
+  background-color: #09090B !important;
+  color: #ffffff !important;
+  border: 1.5px solid #1D1E28 !important;
+  box-shadow: 2.5px 2.5px 0 0 var(--shadow-color) !important;
+  font-weight: 600 !important;
+  border-radius: 6px !important;
+}
+
+[data-theme="brutalist"].dark [data-slot="table-row"] [data-slot="button"]:hover {
+  background-color: #09090B !important;
+  border-color: #1D1E28 !important;
+  color: #ffffff !important;
+  transform: translate(1px, 1px) !important;
+  box-shadow: 1.5px 1.5px 0 0 var(--shadow-color) !important;
+}
+
+/* Dark Mode Primary Action Buttons ("+ Create Agent", "Save", etc.) */
+[data-theme="brutalist"].dark [data-slot="button"].bg-primary {
+  background-color: #ffffff !important;
+  color: #000000 !important;
+  border: 2px solid var(--border) !important;
+  box-shadow: 4px 4px 0px var(--shadow-color) !important;
+  font-weight: 700 !important;
+}
+
+[data-theme="brutalist"].dark [data-slot="button"].bg-primary:hover {
+  transform: translate(2px, 2px) !important;
+  box-shadow: 2px 2px 0px var(--shadow-color) !important;
+  background-color: #f0f0f5 !important;
+  border-color: var(--border) !important;
+  color: #000000 !important;
+}
+
+/* Dark Mode Inputs & Selects */
+[data-theme="brutalist"].dark [data-slot="input"] {
+  background-color: #09090B !important;
+  border: 2px solid #1D1E28 !important;
+  color: #ffffff !important;
+  box-shadow: 3px 3px 0 0 var(--shadow-color) !important;
+}
+
+[data-theme="brutalist"].dark [data-slot="input"]:focus {
+  border-color: #1D1E28 !important;
+  box-shadow: 2px 2px 0 0 var(--shadow-color) !important;
+  outline: none !important;
+}
+
+/* Dark Mode Generic Buttons & Selects */
+[data-theme="brutalist"].dark [data-slot="button"]:not(.bg-primary),
+[data-theme="brutalist"].dark [data-slot="select-trigger"] {
+  background-color: #09090B !important;
+  color: #ffffff !important;
+  border: 2px solid #1D1E28 !important;
+  box-shadow: 3px 3px 0 0 var(--shadow-color) !important;
+}
+
+[data-theme="brutalist"].dark [data-slot="button"]:not(.bg-primary):hover,
+[data-theme="brutalist"].dark [data-slot="select-trigger"]:hover {
+  background-color: #09090B !important;
+  border-color: #1D1E28 !important;
+  transform: translate(1px, 1px) !important;
+  box-shadow: 2px 2px 0 0 var(--shadow-color) !important;
+}
+
+
+/* Dark Mode Badges */
+[data-theme="brutalist"].dark [data-slot="badge"] {
+  background-color: #09090B !important;
+  color: #ffffff !important;
+  border: 1.5px solid #1D1E28 !important;
+  box-shadow: 2px 2px 0 0 var(--shadow-color) !important;
+  font-weight: 700 !important;
+}
+
+/* Dark Mode Sidebar Inner */
+[data-theme="brutalist"].dark .app-sidebar-dock [data-slot="sidebar-inner"] {
+  background-color: #09090B !important;
+  border: 2px solid #1D1E28 !important;
+  box-shadow: 5px 5px 0 0 var(--shadow-color) !important;
+}
+
+/* Dark Mode Active Sidebar Menu Item */
+[data-theme="brutalist"].dark .nb-sidebar-active {
+  background-color: #ff2a75 !important;
+  color: #ffffff !important;
+  border: 1.5px solid var(--border) !important;
+  box-shadow: 3.5px 3.5px 0 0 var(--shadow-color) !important;
+  font-weight: 700 !important;
+}
+
+[data-theme="brutalist"].dark .nb-sidebar-active:hover {
+  background-color: #ff2a75 !important;
+  color: #ffffff !important;
+  border: 1.5px solid var(--border) !important;
+  transform: translate(1.5px, 1.5px) !important;
+  box-shadow: 2px 2px 0 0 var(--shadow-color) !important;
+}
+
+/* Dark Mode Profile User Card */
+[data-theme="brutalist"].dark .profile-trigger-card {
+  background-color: #ff2a75 !important;
+  color: #ffffff !important;
+  border: 1.5px solid var(--border) !important;
+  box-shadow: 3px 3px 0 0 var(--shadow-color) !important;
+  font-weight: 700 !important;
+}
+
+
+
+
+/* -----------------------------------------------------------------------------
+   WhatsApp screens — pressable list cards
+----------------------------------------------------------------------------- */
+
+/* List cards press down-right on hover like buttons. Light brutalist only; dark
+   brutalist stays flat per the dark shadow policy, so we don't re-enable a shift. */
+[data-theme="brutalist"]:not(.dark) [data-slot="card"].wa-card-interactive {
+  transition: transform 0.1s ease, box-shadow 0.1s ease;
+}
+[data-theme="brutalist"]:not(.dark) [data-slot="card"].wa-card-interactive:hover {
+  transform: translate(3px, 3px) !important;
+  box-shadow: var(--surface-shadow-sm) !important;
+}
+
+/* Sub-navigation (Secondary Sidebar) */
+[data-theme="brutalist"] .nb-secondary-sidebar {
+  border-radius: var(--radius-card);
+  border-width: var(--surface-border-width);
+  border-color: var(--border);
+  box-shadow: var(--surface-shadow-lg);
+  background-color: var(--card);
+}
+[data-theme="brutalist"].dark .nb-secondary-sidebar {
+  background-color: var(--card);
+  border-color: var(--border);
+}
+
+[data-theme="brutalist"] .nb-secondary-nav-item {
+  border-radius: var(--radius-button);
+  color: var(--sidebar-foreground);
+  font-weight: 500;
+  border: var(--surface-border-width) solid transparent;
+  transition: transform 0.1s ease, box-shadow 0.1s ease;
+}
+
+[data-theme="brutalist"] .nb-secondary-nav-item:hover:not(.nb-secondary-nav-active) {
+  background-color: var(--accent);
+  color: var(--accent-foreground);
+  border-color: var(--border);
+  transform: translate(1px, 1px);
+  box-shadow: 1px 1px 0 0 var(--shadow-color);
+}
+
+/* Match the main sidebar's active item and profile trigger card for consistency */
+[data-theme="brutalist"] .nb-secondary-nav-active {
+  background-color: #ed356d !important;
+  color: #ffffff !important;
+  border: 1.5px solid var(--sidebar-border) !important;
+  box-shadow: 2px 2px 0 0 var(--shadow-color) !important;
+  font-weight: 700 !important;
+  transition: transform 0.1s ease, box-shadow 0.1s ease !important;
+}
+[data-theme="brutalist"] .nb-secondary-nav-active:hover {
+  background-color: #ed356d !important;
+  transform: translate(1px, 1px) !important;
+  box-shadow: 1px 1px 0 0 var(--shadow-color) !important;
+}
+
+[data-theme="brutalist"].dark .nb-secondary-nav-active {
+  background-color: #ff2a75 !important;
+  color: #ffffff !important;
+}
+[data-theme="brutalist"].dark .nb-secondary-nav-active:hover {
+  background-color: #ff2a75 !important;
+}

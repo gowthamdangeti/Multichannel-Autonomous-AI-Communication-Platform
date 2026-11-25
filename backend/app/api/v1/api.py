@@ -1,5 +1,5 @@
 from fastapi import APIRouter
-from app.api.v1.endpoints import health, auth, agents, workflows, tasks, models, monitoring
+from app.api.v1.endpoints import health, auth, agents, workflows, tasks, models, monitoring, hitl
 
 api_router = APIRouter()
 
@@ -10,3 +10,4 @@ api_router.include_router(workflows.router, prefix="/workflows", tags=["Workflow
 api_router.include_router(tasks.router, prefix="/tasks", tags=["Task Management"])
 api_router.include_router(models.router, prefix="/models", tags=["Model Providers"])
 api_router.include_router(monitoring.router, prefix="/monitoring", tags=["Monitoring & Analytics"])
+api_router.include_router(hitl.router, prefix="/hitl", tags=["Human-in-the-Loop (HITL)"])

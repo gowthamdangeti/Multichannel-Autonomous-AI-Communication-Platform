@@ -4,6 +4,7 @@ from fastapi import FastAPI, WebSocket, WebSocketDisconnect
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.config import settings
+from app.database import init_db
 from app.api.v1.api import api_router
 from app.core.agents.registry import registry
 
@@ -17,6 +18,11 @@ logger = logging.getLogger("autonomous_ai_os")
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     logger.info("Initializing Autonomous AI OS Platform...")
+    try:
+        await init_db()
+        logger.info("Database schema initialized and verified.")
+    except Exception as e:
+        logger.error(f"Database initialization error: {e}", exc_info=True)
     logger.info(f"Loaded {len(registry.list_all())} autonomous agents across departments.")
     yield
     logger.info("Gracefully shutting down Autonomous AI OS Platform.")
@@ -53,11 +59,26 @@ async def root():
         "health_check": f"{settings.API_V1_STR}/health"
     }
 
+@app.get("/health/ready", tags=["Health"])
+@app.get("/health/live", tags=["Health"])
+@app.get("/health", tags=["Health"])
+async def root_health():
+    return {"status": "ready", "platform": settings.PROJECT_NAME}
+
+from app.core.events import ws_manager
+
 # Real-time WebSocket connection for agent state and execution streaming
 @app.websocket("/api/v1/ws")
 async def websocket_endpoint(websocket: WebSocket):
-    await websocket.accept()
-    logger.info("WebSocket client connected to real-time agent stream.")
+    await ws_manager.connect(websocket)
+    try:
+        while True:
+            data = await websocket.receive_text()
+            await websocket.send_json({"type": "pong", "received": data})
+    except WebSocketDisconnect:
+        ws_manager.disconnect(websocket)
+    except Exception:
+        ws_manager.disconnect(websocket)
     try:
         while True:
             data = await websocket.receive_text()

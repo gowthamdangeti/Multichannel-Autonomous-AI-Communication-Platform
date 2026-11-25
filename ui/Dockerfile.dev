@@ -1,0 +1,25 @@
+# Dev image for the Next.js UI — runs `next dev` with hot reload.
+#
+# Source is bind-mounted at runtime (see docker-compose.dev.yaml); node_modules
+# and .next are kept inside the container via anonymous volumes so the host
+# (macOS) copies never shadow the Linux-built dependencies.
+FROM node:22-slim
+
+WORKDIR /app
+
+# Build deps for native npm modules that compile on install.
+RUN apt-get update && apt-get install -y --no-install-recommends python3 make g++ \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install deps first so this layer caches until package.json changes.
+COPY ui/package*.json ./
+RUN --mount=type=cache,target=/root/.npm npm ci
+
+ENV NEXT_TELEMETRY_DISABLED=1
+
+EXPOSE 3000
+
+# `dev` script = next dev --turbopack; --hostname 0.0.0.0 makes it reachable
+# from the host. WATCHPACK_POLLING (set in compose) makes file-watching reliable
+# across the macOS bind mount.
+CMD ["npm", "run", "dev", "--", "--hostname", "0.0.0.0"]

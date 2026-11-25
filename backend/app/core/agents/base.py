@@ -4,13 +4,16 @@ import logging
 from typing import Dict, Any, List, Optional
 from app.schemas.agent import AgentExecutionResult
 from app.schemas.task import TaskContract
+from app.core.tools.registry import tool_registry
+from app.core.tools.base import ToolResult
+from app.core.llm.providers import llm_gateway, LLMResponse
 
 logger = logging.getLogger(__name__)
 
 class BaseAutonomousAgent(abc.ABC):
     """
     Standard base class for all autonomous agents in the Autonomous AI OS workforce.
-    Provides execution lifecycle, tool calling, validation, and structured output formatting.
+    Provides execution lifecycle, tool calling, validation, model abstraction, and structured output formatting.
     """
     slug: str
     name: str
@@ -26,6 +29,41 @@ class BaseAutonomousAgent(abc.ABC):
     def __init__(self, **kwargs):
         for k, v in kwargs.items():
             setattr(self, k, v)
+
+    async def call_llm(
+        self,
+        prompt: str,
+        custom_system_prompt: Optional[str] = None,
+        temperature: float = 0.2
+    ) -> LLMResponse:
+        """Call underlying LLM gateway with agent system prompt and provider fallback."""
+        sys_prompt = custom_system_prompt or self.system_prompt
+        return await llm_gateway.generate(
+            prompt=prompt,
+            system_prompt=sys_prompt,
+            provider=self.model_provider,
+            model=self.model_name,
+            temperature=temperature
+        )
+
+    async def call_tool(
+        self,
+        task: TaskContract,
+        tool_name: str,
+        **kwargs
+    ) -> ToolResult:
+        """Execute a tool while enforcing task-level and agent-level permissions."""
+        if tool_name not in self.tools:
+            return ToolResult(
+                success=False,
+                output=None,
+                error=f"Agent '{self.slug}' is not authorized to use tool '{tool_name}'."
+            )
+        return await tool_registry.execute_tool(
+            tool_name=tool_name,
+            caller_permissions=task.permissions,
+            **kwargs
+        )
 
     @abc.abstractmethod
     async def execute_task(self, task: TaskContract) -> AgentExecutionResult:
