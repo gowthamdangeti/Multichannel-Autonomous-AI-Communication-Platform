@@ -22,12 +22,28 @@ import {
 
 import { useDesignTheme } from "@/context/DesignThemeContext";
 import { PREDEFINED_THEMES, DEFAULT_CUSTOM_THEME } from "@/lib/theme/predefined";
-import { matchClosestTheme } from "@/lib/theme/matcher";
+import { matchClosestTheme, parseColorToRgb } from "@/lib/theme/matcher";
 import type { PredefinedThemeId, ThemeDefinition } from "@/types/theme";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
+
+function toHex(val: number): string {
+  const h = Math.max(0, Math.min(255, Math.round(val))).toString(16);
+  return h.length === 1 ? "0" + h : h;
+}
+
+function ensureHexColor(colorStr: string): string {
+  if (!colorStr) return "#000000";
+  const str = colorStr.trim();
+  if (/^#[0-9a-fA-F]{6}$/.test(str)) return str;
+  if (/^#[0-9a-fA-F]{3}$/.test(str)) {
+    return `#${str[1]}${str[1]}${str[2]}${str[2]}${str[3]}${str[3]}`;
+  }
+  const rgb = parseColorToRgb(str);
+  return `#${toHex(rgb.r)}${toHex(rgb.g)}${toHex(rgb.b)}`;
+}
 
 export function CustomThemeCreator() {
   const {
@@ -356,7 +372,7 @@ export function CustomThemeCreator() {
               <div className="flex items-center gap-2">
                 <input
                   type="color"
-                  value={workingTheme[editTab].primary}
+                  value={ensureHexColor(workingTheme[editTab].primary)}
                   onChange={(e) => updateColor("primary", e.target.value)}
                   className="h-8 w-9 cursor-pointer rounded border border-border bg-transparent p-0.5"
                 />
@@ -374,7 +390,7 @@ export function CustomThemeCreator() {
               <div className="flex items-center gap-2">
                 <input
                   type="color"
-                  value={workingTheme[editTab].background}
+                  value={ensureHexColor(workingTheme[editTab].background)}
                   onChange={(e) => updateColor("background", e.target.value)}
                   className="h-8 w-9 cursor-pointer rounded border border-border bg-transparent p-0.5"
                 />
@@ -392,7 +408,7 @@ export function CustomThemeCreator() {
               <div className="flex items-center gap-2">
                 <input
                   type="color"
-                  value={workingTheme[editTab].card}
+                  value={ensureHexColor(workingTheme[editTab].card)}
                   onChange={(e) => updateColor("card", e.target.value)}
                   className="h-8 w-9 cursor-pointer rounded border border-border bg-transparent p-0.5"
                 />
@@ -410,7 +426,7 @@ export function CustomThemeCreator() {
               <div className="flex items-center gap-2">
                 <input
                   type="color"
-                  value={workingTheme[editTab].sidebar}
+                  value={ensureHexColor(workingTheme[editTab].sidebar)}
                   onChange={(e) => updateColor("sidebar", e.target.value)}
                   className="h-8 w-9 cursor-pointer rounded border border-border bg-transparent p-0.5"
                 />
@@ -428,7 +444,7 @@ export function CustomThemeCreator() {
               <div className="flex items-center gap-2">
                 <input
                   type="color"
-                  value={workingTheme[editTab].accent}
+                  value={ensureHexColor(workingTheme[editTab].accent)}
                   onChange={(e) => updateColor("accent", e.target.value)}
                   className="h-8 w-9 cursor-pointer rounded border border-border bg-transparent p-0.5"
                 />
@@ -446,7 +462,7 @@ export function CustomThemeCreator() {
               <div className="flex items-center gap-2">
                 <input
                   type="color"
-                  value={workingTheme[editTab].border}
+                  value={ensureHexColor(workingTheme[editTab].border)}
                   onChange={(e) => updateColor("border", e.target.value)}
                   className="h-8 w-9 cursor-pointer rounded border border-border bg-transparent p-0.5"
                 />
@@ -464,7 +480,7 @@ export function CustomThemeCreator() {
               <div className="flex items-center gap-2">
                 <input
                   type="color"
-                  value={workingTheme[editTab].foreground}
+                  value={ensureHexColor(workingTheme[editTab].foreground)}
                   onChange={(e) => updateColor("foreground", e.target.value)}
                   className="h-8 w-9 cursor-pointer rounded border border-border bg-transparent p-0.5"
                 />
@@ -482,7 +498,7 @@ export function CustomThemeCreator() {
               <div className="flex items-center gap-2">
                 <input
                   type="color"
-                  value={workingTheme[editTab].destructive}
+                  value={ensureHexColor(workingTheme[editTab].destructive)}
                   onChange={(e) => updateColor("destructive", e.target.value)}
                   className="h-8 w-9 cursor-pointer rounded border border-border bg-transparent p-0.5"
                 />

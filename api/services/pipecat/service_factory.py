@@ -111,19 +111,38 @@ from pipecat.services.openai.stt import (
 from pipecat.services.openai.tts import OpenAITTSService, OpenAITTSSettings
 from pipecat.services.openrouter.llm import OpenRouterLLMService, OpenRouterLLMSettings
 from pipecat.services.rime.tts import RimeTTSService, RimeTTSSettings
-from pipecat.services.sarvam.llm import SarvamLLMService, SarvamLLMSettings
-from pipecat.services.sarvam.stt import SarvamSTTService, SarvamSTTSettings
-from pipecat.services.sarvam.tts import SarvamTTSService, SarvamTTSSettings
-from pipecat.services.smallest.stt import SmallestSTTService, SmallestSTTSettings
-from pipecat.services.smallest.tts import SmallestTTSService, SmallestTTSSettings
-from pipecat.services.soniox.stt import SonioxSTTService, SonioxSTTSettings
+try:
+    from pipecat.services.sarvam.llm import SarvamLLMService, SarvamLLMSettings
+    from pipecat.services.sarvam.stt import SarvamSTTService, SarvamSTTSettings
+    from pipecat.services.sarvam.tts import SarvamTTSService, SarvamTTSSettings
+except (ImportError, Exception):
+    SarvamLLMService = SarvamLLMSettings = None  # type: ignore
+    SarvamSTTService = SarvamSTTSettings = None  # type: ignore
+    SarvamTTSService = SarvamTTSSettings = None  # type: ignore
+
+try:
+    from pipecat.services.smallest.stt import SmallestSTTService, SmallestSTTSettings
+    from pipecat.services.smallest.tts import SmallestTTSService, SmallestTTSSettings
+except (ImportError, Exception):
+    SmallestSTTService = SmallestSTTSettings = None  # type: ignore
+    SmallestTTSService = SmallestTTSSettings = None  # type: ignore
+
+try:
+    from pipecat.services.soniox.stt import SonioxSTTService, SonioxSTTSettings
+except (ImportError, Exception):
+    SonioxSTTService = SonioxSTTSettings = None  # type: ignore
+
 from pipecat.services.speaches.llm import SpeachesLLMService, SpeachesLLMSettings
 from pipecat.services.speaches.stt import SpeachesSTTService, SpeachesSTTSettings
 from pipecat.services.speaches.tts import SpeachesTTSService, SpeachesTTSSettings
-from pipecat.services.speechmatics.stt import (
-    SpeechmaticsSTTService,
-    SpeechmaticsSTTSettings,
-)
+
+try:
+    from pipecat.services.speechmatics.stt import (
+        SpeechmaticsSTTService,
+        SpeechmaticsSTTSettings,
+    )
+except (ImportError, Exception):
+    SpeechmaticsSTTService = SpeechmaticsSTTSettings = None  # type: ignore
 from pipecat.transcriptions.language import Language
 from pipecat.utils.text.xml_function_tag_filter import XMLFunctionTagFilter
 

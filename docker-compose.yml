@@ -29,7 +29,7 @@ x-backend-base: &backend-base
 
 services:
   postgres:
-    image: pgvector/pgvector:pg17
+    image: pgvector/pgvector:pg16
     restart: unless-stopped
     environment:
       POSTGRES_USER: postgres
@@ -65,7 +65,7 @@ services:
       - app-network
 
   minio:
-    image: quay.io/minio/minio:latest
+    image: minio/minio:latest
     restart: unless-stopped
     command: server /data --console-address ":9001"
     environment:
