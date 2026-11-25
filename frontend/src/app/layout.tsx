@@ -91,9 +91,35 @@ export default function RootLayout({
                 }
                 try {
                   var designTheme = localStorage.getItem('design-theme-v2');
-                  var validThemes = ['monochrome', 'brutalist', 'minimalist', 'glassmorphism', 'modernism'];
+                  var validThemes = ['monochrome', 'powder-blue', 'brutalist', 'minimalist', 'glassmorphism', 'modernism', 'custom'];
                   if (designTheme && validThemes.indexOf(designTheme) !== -1) {
                     document.documentElement.setAttribute('data-theme', designTheme);
+                    if (designTheme === 'custom') {
+                      try {
+                        var customDef = JSON.parse(localStorage.getItem('custom-theme-definition') || '{}');
+                        if (customDef && customDef.light && customDef.dark) {
+                          var style = document.createElement('style');
+                          style.id = 'custom-theme-variables';
+                          var lightRules = '';
+                          for (var k in customDef.light) {
+                            var cssVar = k.replace(/[A-Z]/g, function(m){ return '-' + m.toLowerCase(); });
+                            lightRules += '--' + cssVar + ':' + customDef.light[k] + ';';
+                          }
+                          if (customDef.styles && customDef.styles.radius) {
+                            lightRules += '--radius:' + customDef.styles.radius + ';';
+                          }
+                          var darkRules = '';
+                          for (var dk in customDef.dark) {
+                            var dCssVar = dk.replace(/[A-Z]/g, function(m){ return '-' + m.toLowerCase(); });
+                            darkRules += '--' + dCssVar + ':' + customDef.dark[dk] + ';';
+                          }
+                          style.textContent = '[data-theme="custom"],[data-theme="custom"]:root{' + lightRules + '}[data-theme="custom"].dark,.dark[data-theme="custom"]{' + darkRules + '}';
+                          document.head.appendChild(style);
+                        }
+                      } catch (err) {}
+                    }
+                  } else {
+                    document.documentElement.setAttribute('data-theme', 'powder-blue');
                   }
                 } catch (e) {
                   // data-theme="monochrome" from the server-rendered markup stands.

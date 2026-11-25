@@ -4,6 +4,7 @@ import { DesignThemeCards } from "@/components/DesignThemeCards";
 import { DesignThemeSwitcher } from "@/components/DesignThemeSwitcher";
 import { FontFamilySelect } from "@/components/FontFamilySelect";
 import ThemeToggle from "@/components/ThemeSwitcher";
+import { CustomThemeCreator } from "@/components/theme/CustomThemeCreator";
 
 export function ThemeSettings() {
   return (
@@ -47,6 +48,11 @@ export function ThemeSettings() {
           pink accents only on selected navigation, table headers, and archived
           sections.
         </p>
+      </div>
+
+      {/* Custom Theme Studio */}
+      <div className="pt-2">
+        <CustomThemeCreator />
       </div>
     </>
   );

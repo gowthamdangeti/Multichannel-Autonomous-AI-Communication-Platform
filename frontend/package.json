@@ -23,6 +23,7 @@
     "test:chat-agent-format": "node scripts/test-chat-agent-format.mts",
     "test:model-pricing": "node scripts/test-model-pricing.mts",
     "test:provider-usage": "node scripts/test-provider-usage.mts",
+    "test:theme-matcher": "node scripts/test-theme-matcher.mts",
     "test:chat-conversation-analytics": "node scripts/test-chat-conversation-analytics.mts",
     "lint:lead-flow": "bash ../../user_onboarding/scripts/check_lead_flow.sh"
   },
@@ -30,6 +31,7 @@
     "@dagrejs/dagre": "^1.1.4",
     "@hookform/resolvers": "^5.2.2",
     "@monaco-editor/react": "^4.7.0",
+    "@opentelemetry/core": "^1.30.1",
     "@paper-design/shaders-react": "^0.0.82",
     "@radix-ui/react-alert-dialog": "^1.1.15",
     "@radix-ui/react-checkbox": "^1.3.2",
@@ -54,6 +56,7 @@
     "cn": "^0.4.0",
     "date-fns": "^4.1.0",
     "lucide-react": "^0.505.0",
+    "motion": "^14.14.0",
     "next": "^15.3.3",
     "next-themes": "^0.4.6",
     "pino": "^9.9.2",

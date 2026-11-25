@@ -23,6 +23,7 @@
     "test:chat-agent-format": "node scripts/test-chat-agent-format.mts",
     "test:model-pricing": "node scripts/test-model-pricing.mts",
     "test:provider-usage": "node scripts/test-provider-usage.mts",
+    "test:theme-matcher": "node scripts/test-theme-matcher.mts",
     "test:chat-conversation-analytics": "node scripts/test-chat-conversation-analytics.mts",
     "lint:lead-flow": "bash ../../user_onboarding/scripts/check_lead_flow.sh"
   },

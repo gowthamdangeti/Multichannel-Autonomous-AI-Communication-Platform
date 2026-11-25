@@ -12,10 +12,12 @@ import { cn } from "@/lib/utils";
 
 const PREVIEW_LABELS: Record<DesignTheme, string> = {
   monochrome: "Monochrome",
+  "powder-blue": "Powder Blue",
   brutalist: "Neo-Brutalism",
   minimalist: "Minimalist",
   glassmorphism: "Glassmorphism",
   modernism: "Modernism",
+  custom: "Custom Theme",
 };
 
 function MonochromePreview() {
@@ -131,19 +133,106 @@ function ModernismPreview() {
   );
 }
 
+function PowderBluePreview() {
+  return (
+    <div className="flex h-full w-full gap-2 bg-[#f4f8fb] p-2">
+      <div className="w-1/4 space-y-1.5 pt-1">
+        <div className="h-1.5 w-full rounded-full bg-[#0284c7]/40" />
+        <div className="h-1.5 w-3/4 rounded-full bg-[#38bdf8]/30" />
+        <div className="h-1.5 w-3/4 rounded-full bg-[#38bdf8]/20" />
+      </div>
+      <div className="flex flex-1 flex-col gap-1.5 rounded-md bg-white p-1.5 border border-[#bae6fd]">
+        <div className="grid grid-cols-3 gap-1">
+          <div className="h-5 rounded-sm border border-[#bae6fd] bg-[#f0f9ff]" />
+          <div className="h-5 rounded-sm border border-[#bae6fd] bg-[#e0f2fe]" />
+          <div className="h-5 rounded-sm border border-[#bae6fd] bg-[#bae6fd]" />
+        </div>
+        <div className="flex-1 rounded-sm border border-[#bae6fd] bg-[#f0f9ff]" />
+      </div>
+    </div>
+  );
+}
+
+function CustomPreview() {
+  const { customTheme } = useDesignTheme();
+  const light = customTheme.light;
+  return (
+    <div
+      className="flex h-full w-full gap-2 p-2"
+      style={{ backgroundColor: light.background }}
+    >
+      <div className="w-1/4 space-y-1.5 pt-1">
+        <div
+          className="h-1.5 w-full rounded-full opacity-70"
+          style={{ backgroundColor: light.primary }}
+        />
+        <div
+          className="h-1.5 w-3/4 rounded-full opacity-40"
+          style={{ backgroundColor: light.primary }}
+        />
+        <div
+          className="h-1.5 w-3/4 rounded-full opacity-20"
+          style={{ backgroundColor: light.primary }}
+        />
+      </div>
+      <div
+        className="flex flex-1 flex-col gap-1.5 rounded-md p-1.5 border"
+        style={{
+          backgroundColor: light.card,
+          borderColor: light.border,
+          borderRadius: customTheme.styles.radius,
+        }}
+      >
+        <div className="grid grid-cols-3 gap-1">
+          <div
+            className="h-5 rounded-sm border"
+            style={{
+              backgroundColor: light.accent,
+              borderColor: light.border,
+            }}
+          />
+          <div
+            className="h-5 rounded-sm border"
+            style={{
+              backgroundColor: light.secondary,
+              borderColor: light.border,
+            }}
+          />
+          <div
+            className="h-5 rounded-sm border"
+            style={{
+              backgroundColor: light.primary,
+              borderColor: light.border,
+            }}
+          />
+        </div>
+        <div
+          className="flex-1 rounded-sm border"
+          style={{
+            backgroundColor: light.card,
+            borderColor: light.border,
+          }}
+        />
+      </div>
+    </div>
+  );
+}
+
 const PREVIEWS: Record<DesignTheme, React.FC> = {
   monochrome: MonochromePreview,
+  "powder-blue": PowderBluePreview,
   brutalist: NeoBrutalismPreview,
   minimalist: MinimalistPreview,
   glassmorphism: GlassmorphismPreview,
   modernism: ModernismPreview,
+  custom: CustomPreview,
 };
 
 export function DesignThemeCards() {
   const { theme: currentTheme, setTheme } = useDesignTheme();
 
   return (
-    <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
+    <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6">
       {DESIGN_THEMES.map((theme) => {
         const Preview = PREVIEWS[theme];
         const isActive = currentTheme === theme;
