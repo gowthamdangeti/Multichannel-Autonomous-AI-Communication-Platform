@@ -502,7 +502,7 @@ export default function ViewAgentPage() {
                     // not call duration (previous code used duration for both).
                     const metric =
                         filter.attribute.id === "tokenUsage"
-                            ? run.autonomous_ai_os_token_usage || 0
+                            ? (run as any).autonomous_ai_os_token_usage || (run as any).convozent_token_usage || 0
                             : run.call_duration_seconds || 0;
                     if (numRange.min !== null && metric < numRange.min) return false;
                     if (numRange.max !== null && metric > numRange.max) return false;
@@ -914,8 +914,8 @@ export default function ViewAgentPage() {
                                                         {formatDuration(run.call_duration_seconds || 0)}
                                                     </TableCell>
                                                     <TableCell className="text-xs font-medium text-right">
-                                                        {run.autonomous_ai_os_token_usage != null
-                                                            ? run.autonomous_ai_os_token_usage.toLocaleString()
+                                                        {((run as any).autonomous_ai_os_token_usage ?? (run as any).convozent_token_usage) != null
+                                                            ? Number((run as any).autonomous_ai_os_token_usage ?? (run as any).convozent_token_usage).toLocaleString()
                                                             : '—'}
                                                     </TableCell>
                                                     <TableCell>

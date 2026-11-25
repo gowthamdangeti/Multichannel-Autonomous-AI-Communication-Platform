@@ -1787,7 +1787,7 @@ export const unarchiveToolApiV1ToolsToolUuidUnarchivePost = <ThrowOnError extend
 /**
  * Get Current Organization Context
  *
- * Return organization-scoped configuration signals owned by Autonomous AI OS.
+ * Return organization-scoped configuration signals owned by Convozent.
  */
 export const getCurrentOrganizationContextApiV1OrganizationsContextGet = <ThrowOnError extends boolean = false>(options?: Options<GetCurrentOrganizationContextApiV1OrganizationsContextGetData, ThrowOnError>) => (options?.client ?? client).get<GetCurrentOrganizationContextApiV1OrganizationsContextGetResponses, GetCurrentOrganizationContextApiV1OrganizationsContextGetErrors, ThrowOnError>({ url: '/api/v1/organizations/context', ...options });
 
